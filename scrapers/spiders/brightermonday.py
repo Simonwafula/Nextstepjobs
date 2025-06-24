@@ -17,7 +17,7 @@ logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(
 
 # Database setup
 try:
-    conn = sqlite3.connect('jobs.sqlite3')
+    conn = sqlite3.connect('db/jobs.sqlite3')
     cursor = conn.cursor()
     logging.info("Database connection established successfully.")
 except sqlite3.Error as e:
@@ -46,7 +46,7 @@ def insert_data(extracted_data):
         return  # Skip this insertion if critical data is missing
 
     try:
-        with sqlite3.connect('jobs.sqlite3') as conn:
+        with sqlite3.connect('db/jobs.sqlite3') as conn:
             cursor = conn.cursor()
             cursor.execute('''
                 INSERT OR IGNORE INTO jobs_data (title, full_link, content) 

@@ -100,6 +100,7 @@
 
 #====================================================================================================
 # Testing Data - Main Agent and testing sub agent both should log testing data below this section
+<<<<<<< HEAD
 #====================================================================================================
 
 user_problem_statement: "Create a career advising tool for students, university students, graduates, and professionals to analyze job posts and answer questions on job requirements including academic qualifications. The tool should provide personalized career recommendations and job market insights using AI."
@@ -271,3 +272,6 @@ agent_communication:
     message: "Successfully implemented complete career advisor application with AI-powered job analysis and career advice. Backend uses FastAPI with OpenAI integration via emergentintegrations library. Frontend is React-based with modern UI. Ready for backend testing to verify all API endpoints work correctly with OpenAI integration."
   - agent: "main"
     message: "Added anonymous search functionality per user request. Users can now search for career guidance without creating profiles. Implemented new search API endpoint with different search types and popular topics endpoint. Updated frontend with search interface, trending topics, and search results view. Ready to test new anonymous search functionality."
+=======
+#====================================================================================================
+>>>>>>> 1295620 (Initial commit)

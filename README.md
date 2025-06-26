@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # Career Navigator - AI-Powered Career Advisor
 
 Your intelligent career guidance platform that helps students, graduates, and professionals make informed career decisions using AI.
@@ -43,3 +44,6 @@ Required variables:
 ⚠️ **Important**: Never commit `.env` files to version control. They contain sensitive information like API keys.
 
 The `.env` files are already included in `.gitignore` to prevent accidental commits.
+=======
+# Here are your Instructions
+>>>>>>> 1295620 (Initial commit)

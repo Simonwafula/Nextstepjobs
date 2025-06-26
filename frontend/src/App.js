@@ -798,3 +798,12 @@ return (
 } // End of App component
 }
 export default App;
+
+function App() {
+  return (
+    <div className="App">
+      {renderView()}
+    </div>
+  );
+}
+export default App;

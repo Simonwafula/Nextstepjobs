@@ -612,7 +612,6 @@ input:focus, textarea:focus, select:focus {
     transform: translateY(0);
   }
 }
-
 .App-logo {
     height: 40vmin;
     pointer-events: none;
@@ -623,12 +622,6 @@ input:focus, textarea:focus, select:focus {
   outline: none;
   border-color: #3b82f6;
   box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
-}
-
-@media (prefers-reduced-motion: no-preference) {
-    .App-logo {
-        animation: App-logo-spin infinite 20s linear;
-    }
 }
 
 /* Success and error states */
@@ -704,15 +697,6 @@ input:focus, textarea:focus, select:focus {
 
 .App-link {
     color: #61dafb;
-}
-
-@keyframes App-logo-spin {
-    from {
-        transform: rotate(0deg);
-    }
-    to {
-        transform: rotate(360deg);
-    }
 }
 
 /* Dark mode support */

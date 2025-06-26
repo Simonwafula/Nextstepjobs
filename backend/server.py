@@ -28,6 +28,7 @@ client = AsyncIOMotorClient(mongo_url)
 db = client[os.environ['DB_NAME']]
 
 # Create the main app without a prefix
+
 app = FastAPI(
     title="NextStep Job Advisory API",
     description="Comprehensive job advisory platform for students, graduates, and professionals",
@@ -1403,6 +1404,20 @@ async def generate_skills_recommendations(user: Dict, role_analysis: List[Dict])
 @api_router.get("/")
 async def root():
     return {"message": "Career Advisor API - Empowering your career journey with AI"}
+
+# Define Models
+class StatusCheck(BaseModel):
+    id: str = Field(default_factory=lambda: str(uuid.uuid4()))
+    client_name: str
+    timestamp: datetime = Field(default_factory=datetime.utcnow)
+
+class StatusCheckCreate(BaseModel):
+    client_name: str
+
+# Add your routes to the router instead of directly to app
+@api_router.get("/")
+async def root():
+    return {"message": "Hello World"}
 
 @api_router.post("/status", response_model=StatusCheck)
 async def create_status_check(input: StatusCheckCreate):

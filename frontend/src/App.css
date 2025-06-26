@@ -383,6 +383,8 @@ input:focus, textarea:focus, select:focus {
 .App-logo {
     height: 40vmin;
     pointer-events: none;
+}
+
 /* Custom input focus styles */
 input:focus, textarea:focus, select:focus {
   outline: none;
@@ -394,6 +396,8 @@ input:focus, textarea:focus, select:focus {
     .App-logo {
         animation: App-logo-spin infinite 20s linear;
     }
+}
+
 /* Success and error states */
 .success-state {
   background-color: #f0fdf4;
@@ -416,6 +420,8 @@ input:focus, textarea:focus, select:focus {
     justify-content: center;
     font-size: calc(10px + 2vmin);
     color: white;
+}
+
 /* Loading states */
 .loading-overlay {
   position: absolute;
@@ -428,12 +434,6 @@ input:focus, textarea:focus, select:focus {
   align-items: center;
   justify-content: center;
   z-index: 10;
-}
-
-/* Custom checkbox and radio styles */
-.custom-checkbox:checked {
-  background-color: #3b82f6;
-  border-color: #3b82f6;
 }
 
 .custom-radio:checked {
@@ -995,9 +995,6 @@ input:focus, textarea:focus, select:focus {
   .dark-mode .border-gray-300 {
     border-color: #4b5563;
   }
-}
-}
-}
 }
 }
 }

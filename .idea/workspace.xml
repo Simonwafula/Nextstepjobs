@@ -4,7 +4,11 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
+<<<<<<< Updated upstream
     <list default="true" id="5d487098-b563-430c-a4d0-940ed159c215" name="Changes" comment="Initial + Scrapers" />
+=======
+    <list default="true" id="5d487098-b563-430c-a4d0-940ed159c215" name="Changes" comment="Update" />
+>>>>>>> Stashed changes
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />

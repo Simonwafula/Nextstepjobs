@@ -1,3 +1,12 @@
+<<<<<<< HEAD
 .idea/shelf/
 .DS_Store
 *.patch
+=======
+.DS_Store
+.idea/
+.DS_Store
+db/jobs.sqlite3
+db/*.sqlite3
+*.sqlite3
+>>>>>>> dev-bbuild-clean

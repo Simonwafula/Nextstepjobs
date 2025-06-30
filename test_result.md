@@ -167,15 +167,18 @@ backend:
 
   - task: "Market Insights API"
     implemented: true
-    working: "NA"
+    working: true
     file: "/app/backend/server.py"
     stuck_count: 0
     priority: "medium"
-    needs_retesting: true
+    needs_retesting: false
     status_history:
       - working: "NA"
         agent: "main"
         comment: "Implemented market insights endpoint to provide job market trends for specific fields."
+      - working: true
+        agent: "testing"
+        comment: "Successfully tested the market insights API for the 'machine learning' field. The endpoint correctly sends the field query to OpenAI and returns comprehensive job market insights including trends, in-demand skills, salary ranges, and growth outlook."
 
 frontend:
   - task: "User Profile Creation UI"

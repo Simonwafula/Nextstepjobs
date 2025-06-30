@@ -152,15 +152,18 @@ backend:
 
   - task: "Career Advice API"
     implemented: true
-    working: "NA"
+    working: true
     file: "/app/backend/server.py"
     stuck_count: 0
     priority: "high"
-    needs_retesting: true
+    needs_retesting: false
     status_history:
       - working: "NA"
         agent: "main"
         comment: "Implemented personalized career advice endpoint that takes user questions and provides AI-powered guidance based on their profile."
+      - working: true
+        agent: "testing"
+        comment: "Successfully tested the career advice API with a realistic career question. The endpoint correctly retrieves the user profile, sends the question along with profile context to OpenAI, and returns personalized advice. The response is properly stored in MongoDB."
 
   - task: "Market Insights API"
     implemented: true

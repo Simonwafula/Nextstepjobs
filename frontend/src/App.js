@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import "./App.css";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
 import axios from "axios";
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
@@ -21,35 +20,35 @@ function App() {
   const [searchType, setSearchType] = useState('general');
   const [searchResult, setSearchResult] = useState(null);
   const [popularTopics, setPopularTopics] = useState(null);
-const Home = () => {
-  const helloWorldApi = async () => {
-    try {
-      const response = await axios.get(`${API}/`);
-      console.log(response.data.message);
-    } catch (e) {
-      console.error(e, `errored out requesting / api`);
-    }
-  };
+const helloWorldApi = async () => {
+  try {
+    const response = await axios.get(`${API}/`);
+    console.log(response.data.message);
+  } catch (e) {
+    console.error(e, `errored out requesting / api`);
+  }
+};
 
-  // Profile form state
-  const [profileForm, setProfileForm] = useState({
-    name: '',
-    education_level: '',
-    field_of_study: '',
-    skills: '',
-    experience_years: 0,
-    current_role: '',
-    career_interests: ''
-  });
+// Profile form state
+const [profileForm, setProfileForm] = useState({
+  name: '',
+  education_level: '',
+  field_of_study: '',
+  skills: '',
+  experience_years: 0,
+  current_role: '',
+  career_interests: ''
+});
 
-  // Load profiles and popular topics on component mount
-  useEffect(() => {
-    loadProfiles();
-    loadPopularTopics();
-    helloWorldApi();
-  }, []);
+// Load profiles and popular topics on component mount
+useEffect(() => {
+  loadProfiles();
+  loadPopularTopics();
+  helloWorldApi();
+}, []);
 
   const loadProfiles = async () => {
+
     try {
       const response = await axios.get(`${API}/profiles`);
       setProfiles(response.data);
@@ -61,34 +60,6 @@ const Home = () => {
     }
   };
 
-  const loadPopularTopics = async () => {
-    try {
-      const response = await axios.get(`${API}/popular-topics`);
-      setPopularTopics(response.data);
-    } catch (error) {
-      console.error('Error loading popular topics:', error);
-    }
-  };
-
-  const performAnonymousSearch = async (e) => {
-    e.preventDefault();
-    if (!searchQuery.trim()) return;
-
-    setLoading(true);
-    try {
-      const response = await axios.post(`${API}/search`, {
-        query: searchQuery,
-        search_type: searchType
-      });
-      setSearchResult(response.data);
-      setCurrentView('search-result');
-    } catch (error) {
-      console.error('Error performing search:', error);
-      alert('Error performing search. Please try again.');
-    }
-    setLoading(false);
-  };
-
   const createProfile = async (e) => {
     e.preventDefault();
     setLoading(true);
@@ -98,7 +69,7 @@ const Home = () => {
         skills: profileForm.skills.split(',').map(s => s.trim()).filter(s => s),
         career_interests: profileForm.career_interests.split(',').map(s => s.trim()).filter(s => s)
       };
-
+      
       const response = await axios.post(`${API}/profiles`, profileData);
       setUserProfile(response.data);
       setProfiles([...profiles, response.data]);
@@ -125,7 +96,7 @@ const Home = () => {
       alert('Please create a profile first');
       return;
     }
-
+    
     setLoading(true);
     try {
       const response = await axios.post(`${API}/analyze-job`, {
@@ -147,7 +118,7 @@ const Home = () => {
       alert('Please create a profile first');
       return;
     }
-
+    
     setLoading(true);
     try {
       const response = await axios.post(`${API}/career-advice`, {
@@ -173,162 +144,12 @@ const Home = () => {
           <p className="text-xl text-gray-600 max-w-3xl mx-auto mb-8">
             Your AI-powered career advisor that analyzes job descriptions, provides personalized recommendations, and guides your professional journey.
           </p>
-        </div>
-
-        {/* Anonymous Search Section */}
-        <div className="max-w-4xl mx-auto mb-16">
-          <div className="bg-white rounded-2xl shadow-xl p-8">
-            <h2 className="text-2xl font-bold text-center mb-6 text-gray-800">
-              🔍 Ask Any Career Question
-            </h2>
-            <p className="text-center text-gray-600 mb-6">
-              Get instant AI-powered career guidance - no registration required!
-            </p>
-
-            <form onSubmit={performAnonymousSearch} className="space-y-4">
-              <div className="flex gap-4 mb-4">
-                <select
-                  value={searchType}
-                  onChange={(e) => setSearchType(e.target.value)}
-                  className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                >
-                  <option value="general">General Career Advice</option>
-                  <option value="career_path">Career Paths</option>
-                  <option value="skills">Skills Development</option>
-                  <option value="industry">Industry Insights</option>
-                  <option value="academic_pathways">Academic Pathways</option>
-                </select>
-              </div>
-
-              <div className="relative">
-                <textarea
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  placeholder={
-                    searchType === 'academic_pathways' 
-                      ? "Ask about degree programs and careers... e.g., 'What careers can I pursue with a computer science degree?' or 'Which degree should I choose for data science?'"
-                      : "Ask anything about careers... e.g., 'How do I break into data science?' or 'What skills do I need for product management?'"
-                  }
-                  rows="3"
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none"
-                  required
-                />
-              </div>
-
-              <button
-                type="submit"
-                disabled={loading}
-                className="w-full bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white px-8 py-3 rounded-lg font-semibold transition-all transform hover:scale-105 disabled:opacity-50 disabled:transform-none"
-              >
-                {loading ? (
-                  <span className="flex items-center justify-center">
-                    <div className="loading-spinner mr-2"></div>
-                    Searching...
-                  </span>
-                ) : (
-                  'Get Career Guidance 🚀'
-                )}
-              </button>
-            </form>
-          </div>
-        </div>
-
-        {/* Popular Topics Section */}
-        {popularTopics && (
-          <div className="max-w-6xl mx-auto mb-16">
-            <h3 className="text-2xl font-bold text-center mb-8 text-gray-800">
-              🔥 Trending Career Topics
-            </h3>
-            <div className="grid md:grid-cols-4 gap-6">
-              <div className="bg-white p-6 rounded-xl shadow-lg">
-                <h4 className="font-semibold text-lg mb-4 text-blue-600">Hot Careers</h4>
-                <div className="space-y-2">
-                  {popularTopics.trending_careers?.slice(0, 5).map((career, index) => (
-                    <button
-                      key={index}
-                      onClick={() => {
-                        setSearchQuery(`Tell me about ${career} career path`);
-                        setSearchType('career_path');
-                      }}
-                      className="block w-full text-left text-sm text-gray-700 hover:text-blue-600 hover:bg-blue-50 px-2 py-1 rounded transition-colors"
-                    >
-                      {career}
-                    </button>
-                  ))}
-                </div>
-              </div>
-
-              <div className="bg-white p-6 rounded-xl shadow-lg">
-                <h4 className="font-semibold text-lg mb-4 text-green-600">Popular Questions</h4>
-                <div className="space-y-2">
-                  {popularTopics.popular_questions?.slice(0, 5).map((question, index) => (
-                    <button
-                      key={index}
-                      onClick={() => {
-                        setSearchQuery(question);
-                        setSearchType('general');
-                      }}
-                      className="block w-full text-left text-sm text-gray-700 hover:text-green-600 hover:bg-green-50 px-2 py-1 rounded transition-colors"
-                    >
-                      {question}
-                    </button>
-                  ))}
-                </div>
-              </div>
-
-              <div className="bg-white p-6 rounded-xl shadow-lg">
-                <h4 className="font-semibold text-lg mb-4 text-purple-600">Industry Insights</h4>
-                <div className="space-y-2">
-                  {popularTopics.industry_insights?.slice(0, 5).map((industry, index) => (
-                    <button
-                      key={index}
-                      onClick={() => {
-                        setSearchQuery(`What are the career opportunities in ${industry}?`);
-                        setSearchType('industry');
-                      }}
-                      className="block w-full text-left text-sm text-gray-700 hover:text-purple-600 hover:bg-purple-50 px-2 py-1 rounded transition-colors"
-                    >
-                      {industry}
-                    </button>
-                  ))}
-                </div>
-              </div>
-              
-              <div className="bg-white p-6 rounded-xl shadow-lg">
-                <h4 className="font-semibold text-lg mb-4 text-orange-600">Degree Programs</h4>
-                <div className="space-y-2">
-                  {[
-                    "Computer Science",
-                    "Business Administration", 
-                    "Psychology",
-                    "Engineering",
-                    "Data Science"
-                  ].map((degree, index) => (
-                    <button
-                      key={index}
-                      onClick={() => {
-                        setSearchQuery(`What careers can I pursue with a ${degree} degree?`);
-                        setSearchType('academic_pathways');
-                      }}
-                      className="block w-full text-left text-sm text-gray-700 hover:text-orange-600 hover:bg-orange-50 px-2 py-1 rounded transition-colors"
-                    >
-                      {degree}
-                    </button>
-                  ))}
-                </div>
-              </div>
-            </div>
-          </div>
-        )}
-
-        {/* Action Buttons */}
-        <div className="text-center mb-16">
           <div className="flex justify-center space-x-4">
             <button
               onClick={() => setCurrentView('create-profile')}
               className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-3 rounded-lg font-semibold transition-colors"
             >
-              Create Profile for Personalized Advice
+              Get Started
             </button>
             {userProfile && (
               <button
@@ -342,23 +163,23 @@ const Home = () => {
         </div>
 
         <div className="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto">
-          <div className="bg-white p-6 rounded-xl shadow-lg card-hover">
+          <div className="bg-white p-6 rounded-xl shadow-lg">
             <div className="text-4xl mb-4">🎓</div>
             <h3 className="text-xl font-semibold mb-3">For Students</h3>
             <p className="text-gray-600">
               Discover career paths, understand job requirements, and plan your educational journey.
             </p>
           </div>
-
-          <div className="bg-white p-6 rounded-xl shadow-lg card-hover">
+          
+          <div className="bg-white p-6 rounded-xl shadow-lg">
             <div className="text-4xl mb-4">🎯</div>
             <h3 className="text-xl font-semibold mb-3">For Graduates</h3>
             <p className="text-gray-600">
               Find job opportunities that match your qualifications and get insights on companies in your field.
             </p>
           </div>
-
-          <div className="bg-white p-6 rounded-xl shadow-lg card-hover">
+          
+          <div className="bg-white p-6 rounded-xl shadow-lg">
             <div className="text-4xl mb-4">📈</div>
             <h3 className="text-xl font-semibold mb-3">For Professionals</h3>
             <p className="text-gray-600">
@@ -375,7 +196,7 @@ const Home = () => {
       <div className="container mx-auto px-4">
         <div className="max-w-2xl mx-auto bg-white rounded-xl shadow-lg p-8">
           <h2 className="text-3xl font-bold text-center mb-8">Create Your Profile</h2>
-
+          
           <form onSubmit={createProfile} className="space-y-6">
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">Full Name</label>
@@ -530,7 +351,7 @@ const Home = () => {
             <p className="text-gray-600 mb-4">
               Paste a job description to get detailed analysis and personalized recommendations.
             </p>
-
+            
             <form onSubmit={analyzeJob}>
               <textarea
                 value={jobDescription}
@@ -556,7 +377,7 @@ const Home = () => {
             <p className="text-gray-600 mb-4">
               Ask any career-related question and get personalized AI-powered advice.
             </p>
-
+            
             <form onSubmit={getCareerAdvice}>
               <textarea
                 value={careerQuery}
@@ -601,8 +422,8 @@ const Home = () => {
                   <h3 className="font-semibold text-blue-800 mb-2">Match Score</h3>
                   <div className="flex items-center">
                     <div className="w-full bg-blue-200 rounded-full h-2">
-                      <div
-                        className="bg-blue-600 h-2 rounded-full"
+                      <div 
+                        className="bg-blue-600 h-2 rounded-full" 
                         style={{width: `${analysisResult.match_score * 100}%`}}
                       ></div>
                     </div>
@@ -616,7 +437,7 @@ const Home = () => {
                   <h3 className="font-semibold text-gray-800 mb-3">📊 Job Analysis</h3>
                   <div className="bg-gray-50 p-4 rounded-lg">
                     <pre className="whitespace-pre-wrap text-sm text-gray-700">
-                      {typeof analysisResult.analysis === 'object'
+                      {typeof analysisResult.analysis === 'object' 
                         ? JSON.stringify(analysisResult.analysis, null, 2)
                         : analysisResult.analysis
                       }
@@ -628,7 +449,7 @@ const Home = () => {
                   <h3 className="font-semibold text-gray-800 mb-3">💡 Recommendations</h3>
                   <div className="bg-green-50 p-4 rounded-lg">
                     <div className="text-sm text-gray-700 whitespace-pre-wrap">
-                      {Array.isArray(analysisResult.recommendations)
+                      {Array.isArray(analysisResult.recommendations) 
                         ? analysisResult.recommendations.join('\n\n')
                         : analysisResult.recommendations
                       }
@@ -692,86 +513,6 @@ const Home = () => {
     </div>
   );
 
-  const SearchResultView = () => (
-    <div className="min-h-screen bg-gray-50 py-8">
-      <div className="container mx-auto px-4">
-        <div className="max-w-4xl mx-auto">
-          <div className="bg-white rounded-xl shadow-lg p-8">
-            <div className="flex justify-between items-center mb-6">
-              <h2 className="text-2xl font-bold text-gray-800">Career Search Results</h2>
-              <button
-                onClick={() => setCurrentView('home')}
-                className="text-blue-600 hover:text-blue-800"
-              >
-                ← Back to Home
-              </button>
-            </div>
-
-            {searchResult && (
-              <div className="space-y-6">
-                <div>
-                  <h3 className="font-semibold text-gray-800 mb-3">🔍 Your Search</h3>
-                  <div className="bg-blue-50 p-4 rounded-lg">
-                    <p className="text-gray-700 font-medium">{searchResult.query}</p>
-                    <p className="text-sm text-blue-600 mt-1">
-                      Search Type: {searchResult.search_type.replace('_', ' ').toUpperCase()}
-                    </p>
-                  </div>
-                </div>
-
-                <div>
-                  <h3 className="font-semibold text-gray-800 mb-3">💡 AI Career Guidance</h3>
-                  <div className="bg-green-50 p-4 rounded-lg">
-                    <div className="text-gray-700 whitespace-pre-wrap">
-                      {searchResult.response}
-                    </div>
-                  </div>
-                </div>
-
-                {searchResult.suggestions && searchResult.suggestions.length > 0 && (
-                  <div>
-                    <h3 className="font-semibold text-gray-800 mb-3">🎯 Related Topics</h3>
-                    <div className="bg-purple-50 p-4 rounded-lg">
-                      <p className="text-sm text-gray-600 mb-3">You might also be interested in:</p>
-                      <div className="space-y-2">
-                        {searchResult.suggestions.map((suggestion, index) => (
-                          <button
-                            key={index}
-                            onClick={() => {
-                              setSearchQuery(suggestion);
-                              setCurrentView('home');
-                              // Auto-scroll to search form
-                              setTimeout(() => {
-                                document.querySelector('textarea')?.focus();
-                              }, 100);
-                            }}
-                            className="block w-full text-left text-sm text-purple-700 hover:text-purple-900 hover:bg-purple-100 px-3 py-2 rounded transition-colors"
-                          >
-                            📌 {suggestion}
-                          </button>
-                        ))}
-                      </div>
-                    </div>
-                  </div>
-                )}
-
-                <div className="text-center pt-6 border-t border-gray-200">
-                  <p className="text-gray-600 mb-4">Want more personalized advice?</p>
-                  <button
-                    onClick={() => setCurrentView('create-profile')}
-                    className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white px-6 py-3 rounded-lg font-semibold transition-all"
-                  >
-                    Create Profile for Personalized Guidance
-                  </button>
-                </div>
-              </div>
-            )}
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-
   // Render based on current view
   const renderView = () => {
     switch(currentView) {
@@ -783,8 +524,6 @@ const Home = () => {
         return <AnalysisResultView />;
       case 'advice-result':
         return <AdviceResultView />;
-      case 'search-result':
-        return <SearchResultView />;
       default:
         return <HomeView />;
     }
@@ -796,12 +535,18 @@ return (
   </div>
 );
 } // End of App component
-}
 export default App;
 
 function App() {
   return (
     <div className="App">
+      <BrowserRouter>
+        <Routes>
+          <Route path="/" element={<Home />}>
+            <Route index element={<Home />} />
+          </Route>
+        </Routes>
+      </BrowserRouter>
       {renderView()}
     </div>
   );

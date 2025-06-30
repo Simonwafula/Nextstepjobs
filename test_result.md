@@ -107,15 +107,18 @@ user_problem_statement: "Create a career advising tool for students, university 
 backend:
   - task: "User Profile Management API"
     implemented: true
-    working: "NA"
+    working: true
     file: "/app/backend/server.py"
     stuck_count: 0
     priority: "high"
-    needs_retesting: true
+    needs_retesting: false
     status_history:
       - working: "NA"
         agent: "main"
         comment: "Implemented user profile CRUD endpoints with MongoDB storage. Users can create profiles with education, skills, experience, and career interests."
+      - working: true
+        agent: "testing"
+        comment: "Successfully tested all profile management endpoints. Created a test profile, retrieved all profiles, retrieved a specific profile by ID, and updated a profile. All endpoints are working correctly with proper MongoDB integration."
 
   - task: "OpenAI Integration"
     implemented: true

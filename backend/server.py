@@ -527,7 +527,6 @@ async def get_popular_topics():
     
     return topics
 
-
 # Degree Programs to Career Mapping endpoint
 @api_router.get("/degree-programs")
 async def get_degree_programs():
@@ -1400,7 +1399,6 @@ async def generate_skills_recommendations(user: Dict, role_analysis: List[Dict])
         logger.error(f"Error generating skills recommendations: {e}")
         return ["Skills analysis temporarily unavailable"]
 
-
 # Add basic endpoints
 @api_router.get("/")
 async def root():
@@ -1673,7 +1671,6 @@ async def get_market_insights(field: str):
         "insights": insights,
         "generated_at": datetime.utcnow()
     }
-
 
 # Add basic endpoints
 @api_router.get("/")

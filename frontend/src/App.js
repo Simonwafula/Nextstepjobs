@@ -14,12 +14,13 @@ function App() {
   const [careerQuery, setCareerQuery] = useState('');
   const [careerAdvice, setCareerAdvice] = useState(null);
   const [loading, setLoading] = useState(false);
-
+  
   // Anonymous search state
   const [searchQuery, setSearchQuery] = useState('');
   const [searchType, setSearchType] = useState('general');
   const [searchResult, setSearchResult] = useState(null);
   const [popularTopics, setPopularTopics] = useState(null);
+
 const helloWorldApi = async () => {
   try {
     const response = await axios.get(`${API}/`);

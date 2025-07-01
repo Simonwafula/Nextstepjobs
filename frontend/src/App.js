@@ -2775,6 +2775,86 @@ export default App;
     </div>
   );
 
+  const SearchResultView = () => (
+    <div className="min-h-screen bg-gray-50 py-8">
+      <div className="container mx-auto px-4">
+        <div className="max-w-4xl mx-auto">
+          <div className="bg-white rounded-xl shadow-lg p-8">
+            <div className="flex justify-between items-center mb-6">
+              <h2 className="text-2xl font-bold text-gray-800">Career Search Results</h2>
+              <button
+                onClick={() => setCurrentView('home')}
+                className="text-blue-600 hover:text-blue-800"
+              >
+                ← Back to Home
+              </button>
+            </div>
+
+            {searchResult && (
+              <div className="space-y-6">
+                <div>
+                  <h3 className="font-semibold text-gray-800 mb-3">🔍 Your Search</h3>
+                  <div className="bg-blue-50 p-4 rounded-lg">
+                    <p className="text-gray-700 font-medium">{searchResult.query}</p>
+                    <p className="text-sm text-blue-600 mt-1">
+                      Search Type: {searchResult.search_type.replace('_', ' ').toUpperCase()}
+                    </p>
+                  </div>
+                </div>
+
+                <div>
+                  <h3 className="font-semibold text-gray-800 mb-3">💡 AI Career Guidance</h3>
+                  <div className="bg-green-50 p-4 rounded-lg">
+                    <div className="text-gray-700 whitespace-pre-wrap">
+                      {searchResult.response}
+                    </div>
+                  </div>
+                </div>
+
+                {searchResult.suggestions && searchResult.suggestions.length > 0 && (
+                  <div>
+                    <h3 className="font-semibold text-gray-800 mb-3">🎯 Related Topics</h3>
+                    <div className="bg-purple-50 p-4 rounded-lg">
+                      <p className="text-sm text-gray-600 mb-3">You might also be interested in:</p>
+                      <div className="space-y-2">
+                        {searchResult.suggestions.map((suggestion, index) => (
+                          <button
+                            key={index}
+                            onClick={() => {
+                              setSearchQuery(suggestion);
+                              setCurrentView('home');
+                              // Auto-scroll to search form
+                              setTimeout(() => {
+                                document.querySelector('textarea')?.focus();
+                              }, 100);
+                            }}
+                            className="block w-full text-left text-sm text-purple-700 hover:text-purple-900 hover:bg-purple-100 px-3 py-2 rounded transition-colors"
+                          >
+                            📌 {suggestion}
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                )}
+
+                <div className="text-center pt-6 border-t border-gray-200">
+                  <p className="text-gray-600 mb-4">Want more personalized advice?</p>
+                  <button
+                    onClick={() => setCurrentView('create-profile')}
+                    className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white px-6 py-3 rounded-lg font-semibold transition-all"
+                  >
+                    Create Profile for Personalized Guidance
+                  </button>
+                </div>
+              </div>
+            )}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+
   // Render based on current view
   const renderView = () => {
     switch(currentView) {

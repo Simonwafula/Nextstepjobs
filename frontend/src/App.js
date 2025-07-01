@@ -743,6 +743,8 @@ function App() {
         return <AnalysisResultView />;
       case 'advice-result':
         return <AdviceResultView />;
+      case 'search-result':
+        return <SearchResultView />;
       default:
         return <HomeView />;
     }

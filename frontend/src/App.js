@@ -191,7 +191,6 @@ useEffect(() => {
           <p className="text-xl text-gray-600 max-w-3xl mx-auto mb-8">
             Your AI-powered career advisor that analyzes job descriptions, provides personalized recommendations, and guides your professional journey.
           </p>
-
         </div>
 
         {/* Anonymous Search Section */}

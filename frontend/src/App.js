@@ -209,7 +209,6 @@ useEffect(() => {
           <p className="text-xl text-gray-600 max-w-3xl mx-auto mb-8">
             Your AI-powered career advisor that analyzes job descriptions, provides personalized recommendations, and guides your professional journey.
           </p>
-
         </div>
 
         {/* Anonymous Search Section */}
@@ -1688,12 +1687,12 @@ const Home = () => {
           <p className="text-xl text-gray-600 max-w-3xl mx-auto mb-8">
             Your AI-powered career advisor that analyzes job descriptions, provides personalized recommendations, and guides your professional journey.
           </p>
-          <div className="flex justify-center space-x-4">
+                    <div className="flex justify-center space-x-4">
             <button
               onClick={() => setCurrentView('create-profile')}
               className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-3 rounded-lg font-semibold transition-colors"
             >
-              Get Started
+              Create Profile for Personalized Advice
             </button>
             {userProfile && (
               <button
@@ -1707,7 +1706,7 @@ const Home = () => {
         </div>
 
         <div className="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto">
-          <div className="bg-white p-6 rounded-xl shadow-lg">
+          <div className="bg-white p-6 rounded-xl shadow-lg card-hover">
             <div className="text-4xl mb-4">🎓</div>
             <h3 className="text-xl font-semibold mb-3">For Students</h3>
             <p className="text-gray-600">
@@ -1715,7 +1714,7 @@ const Home = () => {
             </p>
           </div>
           
-          <div className="bg-white p-6 rounded-xl shadow-lg">
+          <div className="bg-white p-6 rounded-xl shadow-lg card-hover">
             <div className="text-4xl mb-4">🎯</div>
             <h3 className="text-xl font-semibold mb-3">For Graduates</h3>
             <p className="text-gray-600">
@@ -1723,7 +1722,7 @@ const Home = () => {
             </p>
           </div>
           
-          <div className="bg-white p-6 rounded-xl shadow-lg">
+          <div className="bg-white p-6 rounded-xl shadow-lg card-hover">
             <div className="text-4xl mb-4">📈</div>
             <h3 className="text-xl font-semibold mb-3">For Professionals</h3>
             <p className="text-gray-600">

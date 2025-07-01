@@ -7910,6 +7910,153 @@ async def get_market_insights(field: str):
     }
 
 
+# Anonymous Search Models
+class AnonymousSearchRequest(BaseModel):
+    query: str
+    search_type: Optional[str] = "general"  # general, career_path, skills, industry
+
+class AnonymousSearchResponse(BaseModel):
+    id: str = Field(default_factory=lambda: str(uuid.uuid4()))
+    query: str
+    search_type: str
+    response: str
+    suggestions: List[str] = []
+    created_at: datetime = Field(default_factory=datetime.utcnow)
+
+
+# Anonymous Career Search endpoint
+@api_router.post("/search", response_model=AnonymousSearchResponse)
+async def anonymous_career_search(request: AnonymousSearchRequest):
+    """
+    Public search endpoint for anonymous users to get career guidance
+    without creating a profile. Supports various search types.
+    """
+    
+    # Define system messages based on search type
+    system_messages = {
+        "general": """You are an expert career advisor providing helpful, actionable career guidance. Answer career-related questions with:
+1. Clear, practical advice
+2. Current industry insights
+3. Specific next steps
+4. Educational requirements when relevant
+5. Growth opportunities
+Keep responses comprehensive but concise.""",
+        
+        "career_path": """You are a career path specialist. Help users understand different career trajectories by providing:
+1. Various career options in their area of interest
+2. Educational requirements for each path
+3. Typical career progression
+4. Skills needed at each level
+5. Salary expectations
+6. Industry outlook""",
+        
+        "skills": """You are a skills development advisor. Focus on:
+1. Current in-demand skills in the relevant field
+2. How to develop these skills (courses, certifications, practice)
+3. Skill progression pathways
+4. Time investment needed
+5. Best resources for learning
+6. How skills translate to job opportunities""",
+        
+        "industry": """You are an industry analyst. Provide insights about:
+1. Industry trends and growth
+2. Major companies and employers
+3. Geographic job markets
+4. Salary ranges and compensation
+5. Future outlook and opportunities
+6. Entry points into the industry"""
+    }
+    
+    system_message = system_messages.get(request.search_type, system_messages["general"])
+    
+    # Enhanced user message with context
+    user_message = f"""
+    User Query: {request.query}
+    
+    Please provide comprehensive career guidance addressing this question. If the query is broad, break down your response into actionable sections and provide specific guidance they can follow.
+    """
+    
+    # Get AI response
+    response = await get_ai_response(system_message, user_message)
+    
+    # Generate related suggestions based on the query
+    suggestions_prompt = f"""Based on this career query: "{request.query}", suggest 3-4 related questions or topics the user might want to explore next. Return only the suggestions, one per line."""
+    
+    suggestions_response = await get_ai_response(
+        "You are a career advisor helping users discover related topics of interest.",
+        suggestions_prompt
+    )
+    
+    # Parse suggestions
+    suggestions = [s.strip() for s in suggestions_response.split('\n') if s.strip() and not s.strip().startswith('-')][:4]
+    if not suggestions:
+        suggestions = [
+            "What skills are most in-demand in this field?",
+            "What are the typical career paths?",
+            "What education is required?",
+            "What's the job market outlook?"
+        ]
+    
+    # Save search for analytics (optional)
+    search_response = AnonymousSearchResponse(
+        query=request.query,
+        search_type=request.search_type,
+        response=response,
+        suggestions=suggestions
+    )
+    
+    # Optionally save to database for analytics
+    try:
+        await db.anonymous_searches.insert_one(search_response.dict())
+    except Exception as e:
+        logger.warning(f"Failed to save anonymous search: {e}")
+    
+    return search_response
+
+
+# Popular Career Topics endpoint
+@api_router.get("/popular-topics")
+async def get_popular_topics():
+    """Get popular career topics and trending searches"""
+    
+    # You could make this dynamic by analyzing search history
+    # For now, return curated popular topics
+    topics = {
+        "trending_careers": [
+            "AI/Machine Learning Engineer",
+            "Data Scientist",
+            "Cybersecurity Specialist",
+            "Product Manager",
+            "UX/UI Designer",
+            "Cloud Engineer",
+            "Digital Marketing Specialist",
+            "Software Developer"
+        ],
+        "popular_questions": [
+            "How to break into tech without a CS degree?",
+            "What skills do I need for data science?",
+            "How to transition careers at 30+?",
+            "Remote work opportunities in marketing",
+            "Highest paying entry-level jobs",
+            "How to negotiate salary?",
+            "Best certifications for career growth",
+            "How to build a professional network?"
+        ],
+        "industry_insights": [
+            "Technology",
+            "Healthcare",
+            "Finance",
+            "Education",
+            "Manufacturing",
+            "Renewable Energy",
+            "E-commerce",
+            "Biotechnology"
+        ]
+    }
+    
+    return topics
+
+
 # Add basic endpoints
 @api_router.get("/")
 async def root():

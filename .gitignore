@@ -1,17 +1,10 @@
-<<<<<<< HEAD
-<<<<<<< HEAD
-.idea/shelf/
+
 .DS_Store
 *.patch
-=======
-.DS_Store
-.idea/
 .DS_Store
 db/jobs.sqlite3
 db/*.sqlite3
 *.sqlite3
->>>>>>> dev-bbuild-clean
-=======
 # See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
 
 # IDE and editors
@@ -45,7 +38,7 @@ dist/
 dist
 
 # Environment files (comprehensive coverage)
-
+.env
 *token.json*
 *credentials.json*
 

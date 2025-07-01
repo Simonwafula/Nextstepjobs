@@ -89,6 +89,34 @@ useEffect(() => {
     }
   };
 
+  const loadPopularTopics = async () => {
+    try {
+      const response = await axios.get(`${API}/popular-topics`);
+      setPopularTopics(response.data);
+    } catch (error) {
+      console.error('Error loading popular topics:', error);
+    }
+  };
+
+  const performAnonymousSearch = async (e) => {
+    e.preventDefault();
+    if (!searchQuery.trim()) return;
+    
+    setLoading(true);
+    try {
+      const response = await axios.post(`${API}/search`, {
+        query: searchQuery,
+        search_type: searchType
+      });
+      setSearchResult(response.data);
+      setCurrentView('search-result');
+    } catch (error) {
+      console.error('Error performing search:', error);
+      alert('Error performing search. Please try again.');
+    }
+    setLoading(false);
+  };
+
   const createProfile = async (e) => {
     e.preventDefault();
     setLoading(true);
@@ -173,13 +201,134 @@ useEffect(() => {
           <p className="text-xl text-gray-600 max-w-3xl mx-auto mb-8">
             Your AI-powered career advisor that analyzes job descriptions, provides personalized recommendations, and guides your professional journey.
           </p>
+
+        </div>
+
+        {/* Anonymous Search Section */}
+        <div className="max-w-4xl mx-auto mb-16">
+          <div className="bg-white rounded-2xl shadow-xl p-8">
+            <h2 className="text-2xl font-bold text-center mb-6 text-gray-800">
+              🔍 Ask Any Career Question
+            </h2>
+            <p className="text-center text-gray-600 mb-6">
+              Get instant AI-powered career guidance - no registration required!
+            </p>
+            
+            <form onSubmit={performAnonymousSearch} className="space-y-4">
+              <div className="flex gap-4 mb-4">
+                <select
+                  value={searchType}
+                  onChange={(e) => setSearchType(e.target.value)}
+                  className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                >
+                  <option value="general">General Career Advice</option>
+                  <option value="career_path">Career Paths</option>
+                  <option value="skills">Skills Development</option>
+                  <option value="industry">Industry Insights</option>
+                </select>
+              </div>
+              
+              <div className="relative">
+                <textarea
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  placeholder="Ask anything about careers... e.g., 'How do I break into data science?' or 'What skills do I need for product management?'"
+                  rows="3"
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none"
+                  required
+                />
+              </div>
+              
+              <button
+                type="submit"
+                disabled={loading}
+                className="w-full bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white px-8 py-3 rounded-lg font-semibold transition-all transform hover:scale-105 disabled:opacity-50 disabled:transform-none"
+              >
+                {loading ? (
+                  <span className="flex items-center justify-center">
+                    <div className="loading-spinner mr-2"></div>
+                    Searching...
+                  </span>
+                ) : (
+                  'Get Career Guidance 🚀'
+                )}
+              </button>
+            </form>
+          </div>
+        </div>
+
+        {/* Popular Topics Section */}
+        {popularTopics && (
+          <div className="max-w-6xl mx-auto mb-16">
+            <h3 className="text-2xl font-bold text-center mb-8 text-gray-800">
+              🔥 Trending Career Topics
+            </h3>
+            <div className="grid md:grid-cols-3 gap-8">
+              <div className="bg-white p-6 rounded-xl shadow-lg">
+                <h4 className="font-semibold text-lg mb-4 text-blue-600">Hot Careers</h4>
+                <div className="space-y-2">
+                  {popularTopics.trending_careers?.slice(0, 6).map((career, index) => (
+                    <button
+                      key={index}
+                      onClick={() => {
+                        setSearchQuery(`Tell me about ${career} career path`);
+                        setSearchType('career_path');
+                      }}
+                      className="block w-full text-left text-sm text-gray-700 hover:text-blue-600 hover:bg-blue-50 px-2 py-1 rounded transition-colors"
+                    >
+                      {career}
+                    </button>
+                  ))}
+                </div>
+              </div>
+              
+              <div className="bg-white p-6 rounded-xl shadow-lg">
+                <h4 className="font-semibold text-lg mb-4 text-green-600">Popular Questions</h4>
+                <div className="space-y-2">
+                  {popularTopics.popular_questions?.slice(0, 6).map((question, index) => (
+                    <button
+                      key={index}
+                      onClick={() => {
+                        setSearchQuery(question);
+                        setSearchType('general');
+                      }}
+                      className="block w-full text-left text-sm text-gray-700 hover:text-green-600 hover:bg-green-50 px-2 py-1 rounded transition-colors"
+                    >
+                      {question}
+                    </button>
+                  ))}
+                </div>
+              </div>
+              
+              <div className="bg-white p-6 rounded-xl shadow-lg">
+                <h4 className="font-semibold text-lg mb-4 text-purple-600">Industry Insights</h4>
+                <div className="space-y-2">
+                  {popularTopics.industry_insights?.slice(0, 6).map((industry, index) => (
+                    <button
+                      key={index}
+                      onClick={() => {
+                        setSearchQuery(`What are the career opportunities in ${industry}?`);
+                        setSearchType('industry');
+                      }}
+                      className="block w-full text-left text-sm text-gray-700 hover:text-purple-600 hover:bg-purple-50 px-2 py-1 rounded transition-colors"
+                    >
+                      {industry}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Action Buttons */}
+        <div className="text-center mb-16">
           <div className="flex justify-center space-x-4">
             <button
               onClick={() => setCurrentView('create-profile')}
               className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-3 rounded-lg font-semibold transition-colors"
             >
-              Get Started
-            </button>
+</button>
             {userProfile && (
               <button
                 onClick={() => setCurrentView('dashboard')}
@@ -651,5 +800,11 @@ const renderView = () => {
     </div>
   );
 }
-  }
+}
+return (
+  <div className="App">
+    {renderView()}
+  </div>
+);
+
 export default App;

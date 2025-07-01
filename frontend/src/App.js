@@ -14,12 +14,13 @@ function App() {
   const [careerQuery, setCareerQuery] = useState('');
   const [careerAdvice, setCareerAdvice] = useState(null);
   const [loading, setLoading] = useState(false);
-
+  
   // Anonymous search state
   const [searchQuery, setSearchQuery] = useState('');
   const [searchType, setSearchType] = useState('general');
   const [searchResult, setSearchResult] = useState(null);
   const [popularTopics, setPopularTopics] = useState(null);
+
 const helloWorldApi = async () => {
   try {
     const response = await axios.get(`${API}/`);
@@ -2291,6 +2292,34 @@ function App() {
     } catch (error) {
       console.error('Error loading profiles:', error);
     }
+  };
+
+  const loadPopularTopics = async () => {
+    try {
+      const response = await axios.get(`${API}/popular-topics`);
+      setPopularTopics(response.data);
+    } catch (error) {
+      console.error('Error loading popular topics:', error);
+    }
+  };
+
+  const performAnonymousSearch = async (e) => {
+    e.preventDefault();
+    if (!searchQuery.trim()) return;
+    
+    setLoading(true);
+    try {
+      const response = await axios.post(`${API}/search`, {
+        query: searchQuery,
+        search_type: searchType
+      });
+      setSearchResult(response.data);
+      setCurrentView('search-result');
+    } catch (error) {
+      console.error('Error performing search:', error);
+      alert('Error performing search. Please try again.');
+    }
+    setLoading(false);
   };
 
   const createProfile = async (e) => {

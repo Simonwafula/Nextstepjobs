@@ -264,10 +264,15 @@ metadata:
 
 test_plan:
   current_focus:
+    - "User Profile Management API"
+    - "OpenAI Integration"
+    - "Job Analysis API"
+    - "Career Advice API"
+    - "Market Insights API"
     - "Anonymous Search API"
   stuck_tasks: []
-  test_all: false
-  test_priority: "high_first"
+  test_all: true
+  test_priority: "comprehensive_after_security_fix"
 
 agent_communication:
   - agent: "main"

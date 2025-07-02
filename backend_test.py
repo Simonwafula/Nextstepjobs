@@ -70,7 +70,7 @@ ANONYMOUS_SEARCH_QUERIES = [
     {
         "query": "What careers can I pursue with a psychology degree?",
         "search_type": "academic_pathways"
-    }
+    },
 ]
 
 # Helper functions

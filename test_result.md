@@ -221,6 +221,21 @@ backend:
       - working: false
         agent: "testing"
         comment: "Anonymous Search API endpoints are failing with 500 Internal Server Error due to OpenAI API key authentication issues. The popular_topics endpoint works correctly as it doesn't use OpenAI, but the search endpoint fails because it relies on the OpenAI integration."
+      - working: true
+        agent: "main"
+        comment: "ENHANCED with Degree Programs Feature: Added new 'academic_pathways' search type for university students. Created comprehensive degree-to-career mapping system with new endpoints: /api/degree-programs and /api/degree-career-search. Frontend updated with dedicated Degree Programs section and enhanced Academic Pathways search functionality."
+
+  - task: "Degree Programs Feature"
+    implemented: true
+    working: true
+    file: "/app/backend/server.py, /app/frontend/src/App.js"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: true
+    status_history:
+      - working: "NA"
+        agent: "main"
+        comment: "NEW FEATURE: Implemented comprehensive degree programs to career mapping system for university students. Added 'academic_pathways' search type with specialized AI prompts, /api/degree-programs endpoint with structured career data, and enhanced frontend with dedicated Degree Programs section. Helps students discover career paths based on their academic programs."
 
 frontend:
   - task: "User Profile Creation UI"

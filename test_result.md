@@ -194,6 +194,9 @@ backend:
       - working: "NA"
         agent: "main"
         comment: "Implemented anonymous search endpoint allowing users to get career guidance without creating profiles. Supports different search types: general, career_path, skills, industry. Also added popular topics endpoint."
+      - working: "NA"
+        agent: "main"
+        comment: "After Git history cleaning and API key replacement, needs comprehensive testing to ensure OpenAI integration still works correctly with all endpoints."
 
 frontend:
   - task: "User Profile Creation UI"

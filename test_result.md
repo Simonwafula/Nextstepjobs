@@ -179,9 +179,9 @@ backend:
 
   - task: "Market Insights API"
     implemented: true
-    working: true
+    working: false
     file: "/app/backend/server.py"
-    stuck_count: 0
+    stuck_count: 1
     priority: "medium"
     needs_retesting: false
     status_history:
@@ -191,6 +191,9 @@ backend:
       - working: true
         agent: "testing"
         comment: "Successfully tested market insights endpoint. The API correctly provides comprehensive job market insights for specific fields using OpenAI."
+      - working: false
+        agent: "testing"
+        comment: "Market Insights API is failing with 500 Internal Server Error due to OpenAI API key authentication issues. The endpoint fails when trying to send the field query to OpenAI for market insights."
 
   - task: "Anonymous Search API"
     implemented: true

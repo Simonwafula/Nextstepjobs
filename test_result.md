@@ -146,9 +146,9 @@ backend:
 
   - task: "Job Analysis API"
     implemented: true
-    working: true
+    working: false
     file: "/app/backend/server.py"
-    stuck_count: 0
+    stuck_count: 1
     priority: "high"
     needs_retesting: false
     status_history:
@@ -158,6 +158,9 @@ backend:
       - working: true
         agent: "testing"
         comment: "Successfully tested the job analysis API with a realistic job description. The endpoint correctly retrieves the user profile, sends the job description to OpenAI for analysis, and returns structured results including analysis, recommendations, and match score."
+      - working: false
+        agent: "testing"
+        comment: "Job Analysis API is failing with 500 Internal Server Error due to OpenAI API key authentication issues. The endpoint successfully retrieves the user profile but fails when trying to send the job description to OpenAI for analysis."
 
   - task: "Career Advice API"
     implemented: true

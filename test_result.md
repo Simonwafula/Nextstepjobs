@@ -125,11 +125,11 @@ backend:
 
   - task: "OpenAI Integration"
     implemented: true
-    working: true
+    working: "NA"
     file: "/app/backend/server.py"
     stuck_count: 0
     priority: "high"
-    needs_retesting: false
+    needs_retesting: true
     status_history:
       - working: "NA"
         agent: "main"
@@ -137,6 +137,9 @@ backend:
       - working: true
         agent: "testing"
         comment: "Successfully tested OpenAI integration. The get_ai_response helper function is working correctly with the emergentintegrations library and gpt-4o model. API key is properly configured in environment variables."
+      - working: "NA"
+        agent: "main"
+        comment: "After security fix and API key replacement, needs retesting to verify OpenAI integration works with new API key. Previous key was exposed in Git history and has been completely removed."
 
   - task: "Job Analysis API"
     implemented: true

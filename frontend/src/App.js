@@ -193,7 +193,11 @@ function App() {
                 <textarea
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  placeholder="Ask anything about careers... e.g., 'How do I break into data science?' or 'What skills do I need for product management?'"
+                  placeholder={
+                    searchType === 'academic_pathways' 
+                      ? "Ask about degree programs and careers... e.g., 'What careers can I pursue with a computer science degree?' or 'Which degree should I choose for data science?'"
+                      : "Ask anything about careers... e.g., 'How do I break into data science?' or 'What skills do I need for product management?'"
+                  }
                   rows="3"
                   className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none"
                   required

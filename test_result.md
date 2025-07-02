@@ -122,6 +122,9 @@ backend:
       - working: true
         agent: "testing"
         comment: "Successfully tested all profile management endpoints. Created a test profile, retrieved all profiles, retrieved a specific profile by ID, and updated a profile. All endpoints are working correctly with proper MongoDB integration."
+      - working: true
+        agent: "testing"
+        comment: "Retested all profile management endpoints after the security fix. All endpoints are still working correctly with proper MongoDB integration. These endpoints don't rely on the OpenAI API, so they're not affected by the API key issue."
 
   - task: "OpenAI Integration"
     implemented: true

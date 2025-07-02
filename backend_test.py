@@ -324,7 +324,6 @@ def main():
     test_degree_programs()
     test_degree_career_search()
     
-
     # Test profile creation and get the profile ID
     profile_result = test_profile_creation()
     

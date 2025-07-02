@@ -311,11 +311,12 @@ test_plan:
     - "Career Advice API"
     - "Market Insights API"
     - "Anonymous Search API"
+    - "User Profile Creation UI"
+    - "Job Analysis UI"
+    - "Career Advice UI"
+    - "Dashboard and Navigation"
+    - "Anonymous Search UI"
   stuck_tasks: []
-    - "Job Analysis API"
-    - "Career Advice API"
-    - "Market Insights API"
-    - "Anonymous Search API"
   test_all: true
   test_priority: "comprehensive_after_security_fix"
 

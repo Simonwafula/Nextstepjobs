@@ -795,8 +795,6 @@ return (
     {renderView()}
   </div>
 );
+} // End of App component
 }
-}
-// End of App component
-
 export default App;

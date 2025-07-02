@@ -356,7 +356,6 @@ useEffect(() => {
                     </button>
                   ))}
                 </div>
-              </div>
                     </button>
                   ))}
                 </div>

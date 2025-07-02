@@ -6177,6 +6177,275 @@ async def get_popular_topics():
 
     return topics
 
+# Degree Programs to Career Mapping endpoint
+@api_router.get("/degree-programs")
+async def get_degree_programs():
+    """Get comprehensive mapping of degree programs to career opportunities"""
+    
+    degree_mappings = {
+        "stem_fields": {
+            "Computer Science": {
+                "direct_careers": [
+                    "Software Developer/Engineer",
+                    "Data Scientist",
+                    "AI/Machine Learning Engineer",
+                    "Cybersecurity Specialist",
+                    "DevOps Engineer",
+                    "Product Manager (Technical)",
+                    "Research Scientist"
+                ],
+                "alternative_paths": [
+                    "Digital Marketing Specialist",
+                    "Technical Writer",
+                    "IT Consultant",
+                    "Startup Founder",
+                    "Technical Sales Engineer"
+                ],
+                "skills_gap": [
+                    "Industry-specific domain knowledge",
+                    "Soft skills and communication",
+                    "Project management",
+                    "Cloud platforms proficiency",
+                    "Advanced system design"
+                ]
+            },
+            "Data Science/Statistics": {
+                "direct_careers": [
+                    "Data Scientist",
+                    "Data Analyst",
+                    "Business Intelligence Analyst",
+                    "Research Analyst",
+                    "Quantitative Analyst",
+                    "Machine Learning Engineer"
+                ],
+                "alternative_paths": [
+                    "Product Manager",
+                    "Management Consultant",
+                    "Risk Analyst",
+                    "Marketing Analyst",
+                    "Operations Research Analyst"
+                ],
+                "skills_gap": [
+                    "Domain expertise in target industry",
+                    "Advanced programming skills",
+                    "Big data technologies",
+                    "Data visualization tools",
+                    "Business communication skills"
+                ]
+            },
+            "Engineering (General)": {
+                "direct_careers": [
+                    "Design Engineer",
+                    "Project Engineer",
+                    "Systems Engineer",
+                    "Quality Engineer",
+                    "Manufacturing Engineer",
+                    "Research & Development Engineer"
+                ],
+                "alternative_paths": [
+                    "Technical Product Manager",
+                    "Engineering Consultant",
+                    "Patent Attorney",
+                    "Technical Sales",
+                    "Startup Founder"
+                ],
+                "skills_gap": [
+                    "Industry certifications",
+                    "Project management",
+                    "Modern software tools",
+                    "Business acumen",
+                    "Leadership skills"
+                ]
+            }
+        },
+        "business_fields": {
+            "Business Administration/Management": {
+                "direct_careers": [
+                    "Business Analyst",
+                    "Project Manager",
+                    "Operations Manager",
+                    "HR Manager",
+                    "Marketing Manager",
+                    "Financial Analyst"
+                ],
+                "alternative_paths": [
+                    "Management Consultant",
+                    "Product Manager",
+                    "Entrepreneur",
+                    "Sales Manager",
+                    "Business Development"
+                ],
+                "skills_gap": [
+                    "Industry-specific knowledge",
+                    "Advanced analytics",
+                    "Digital marketing",
+                    "Data analysis tools",
+                    "Technical literacy"
+                ]
+            },
+            "Economics": {
+                "direct_careers": [
+                    "Economic Analyst",
+                    "Financial Analyst",
+                    "Policy Analyst",
+                    "Research Economist",
+                    "Market Research Analyst"
+                ],
+                "alternative_paths": [
+                    "Data Scientist",
+                    "Investment Banking",
+                    "Management Consultant",
+                    "Business Development",
+                    "Government Positions"
+                ],
+                "skills_gap": [
+                    "Programming (Python/R)",
+                    "Advanced statistical software",
+                    "Database management",
+                    "Financial modeling",
+                    "Industry regulations"
+                ]
+            },
+            "Marketing": {
+                "direct_careers": [
+                    "Digital Marketing Specialist",
+                    "Brand Manager",
+                    "Content Marketing Manager",
+                    "Social Media Manager",
+                    "Marketing Analyst"
+                ],
+                "alternative_paths": [
+                    "Product Manager",
+                    "UX Researcher",
+                    "Business Development",
+                    "Sales Manager",
+                    "PR Specialist"
+                ],
+                "skills_gap": [
+                    "Data analytics and metrics",
+                    "Marketing automation tools",
+                    "SEO/SEM expertise",
+                    "A/B testing",
+                    "Customer psychology"
+                ]
+            }
+        },
+        "liberal_arts": {
+            "Psychology": {
+                "direct_careers": [
+                    "Clinical Psychologist",
+                    "Counseling Psychologist",
+                    "UX Researcher",
+                    "HR Specialist",
+                    "Market Research Analyst"
+                ],
+                "alternative_paths": [
+                    "Product Manager",
+                    "Data Analyst",
+                    "Social Media Manager",
+                    "Training Coordinator",
+                    "Sales Representative"
+                ],
+                "skills_gap": [
+                    "Research methodology",
+                    "Statistical analysis software",
+                    "Business knowledge",
+                    "Technology tools",
+                    "Industry certifications"
+                ]
+            },
+            "Communication": {
+                "direct_careers": [
+                    "Public Relations Specialist",
+                    "Content Writer",
+                    "Digital Marketing Manager",
+                    "Social Media Manager",
+                    "Corporate Communications"
+                ],
+                "alternative_paths": [
+                    "UX Writer",
+                    "Product Marketing Manager",
+                    "Training Specialist",
+                    "Event Coordinator",
+                    "Business Analyst"
+                ],
+                "skills_gap": [
+                    "Digital marketing tools",
+                    "Data analysis",
+                    "SEO knowledge",
+                    "Design basics",
+                    "Project management"
+                ]
+            }
+        },
+        "healthcare_fields": {
+            "Biology/Biomedical Sciences": {
+                "direct_careers": [
+                    "Research Scientist",
+                    "Laboratory Technician",
+                    "Quality Control Analyst",
+                    "Biomedical Engineer",
+                    "Clinical Research Coordinator"
+                ],
+                "alternative_paths": [
+                    "Pharmaceutical Sales",
+                    "Science Writer",
+                    "Patent Analyst",
+                    "Regulatory Affairs",
+                    "Biotech Consultant"
+                ],
+                "skills_gap": [
+                    "Regulatory knowledge",
+                    "Business skills",
+                    "Advanced instrumentation",
+                    "Data analysis",
+                    "Project management"
+                ]
+            }
+        }
+    }
+    
+    return degree_mappings
+
+
+# Enhanced Degree-Career Search endpoint
+@api_router.post("/degree-career-search")
+async def degree_career_search(request: dict):
+    """
+    AI-powered search specifically for connecting degrees to careers
+    """
+    degree = request.get('degree', '')
+    career_interest = request.get('career_interest', '')
+    
+    system_message = """You are a specialized academic and career counselor. Help students understand the connection between their degree program and career opportunities. Provide:
+
+1. **Direct Career Paths**: Jobs directly related to the degree
+2. **Alternative Career Paths**: Unexpected but viable career options
+3. **Skills Development**: What skills to develop beyond coursework
+4. **Education Enhancement**: Additional certifications, minors, or courses to consider
+5. **Timeline**: Realistic timeline from graduation to career establishment
+6. **Success Stories**: Examples of graduates who succeeded in various paths
+7. **Action Steps**: Specific next steps the student can take now
+
+Make your response practical, encouraging, and actionable."""
+    
+    user_message = f"""
+    Student's Degree Program: {degree}
+    Career Interest/Area: {career_interest}
+    
+    Please provide comprehensive guidance on how this degree can lead to career success, including both traditional and non-traditional paths.
+    """
+    
+    response = await get_ai_response(system_message, user_message)
+    
+    return {
+        "degree": degree,
+        "career_interest": career_interest,
+        "guidance": response,
+        "generated_at": datetime.utcnow().isoformat()
+    }
+
+
 # Add basic endpoints
 @api_router.get("/")
 async def root():

@@ -349,6 +349,7 @@ test_plan:
     - "Career Advice UI"
     - "Dashboard and Navigation"
     - "Anonymous Search UI"
+    - "Degree Programs Feature"
   stuck_tasks: []
   test_all: true
   test_priority: "comprehensive_after_security_fix"

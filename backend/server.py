@@ -4258,10 +4258,10 @@ async def get_popular_topics():
             "What skills do I need for data science?",
             "How to transition careers at 30+?",
             "Remote work opportunities in marketing",
-            "Highest paying entry-level jobs",
+            "What careers can I pursue with a psychology degree?",
+            "Which degree is best for product management?",
             "How to negotiate salary?",
-            "Best certifications for career growth",
-            "How to build a professional network?"
+            "Best certifications for career growth"
         ],
         "industry_insights": [
             "Technology",

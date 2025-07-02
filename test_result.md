@@ -188,11 +188,11 @@ backend:
 
   - task: "Anonymous Search API"
     implemented: true
-    working: "NA"
+    working: false
     file: "/app/backend/server.py"
-    stuck_count: 0
+    stuck_count: 1
     priority: "high"
-    needs_retesting: true
+    needs_retesting: false
     status_history:
       - working: "NA"
         agent: "main"
@@ -200,6 +200,9 @@ backend:
       - working: "NA"
         agent: "main"
         comment: "After Git history cleaning and API key replacement, needs comprehensive testing to ensure OpenAI integration still works correctly with all endpoints."
+      - working: false
+        agent: "testing"
+        comment: "Anonymous Search API endpoints are failing with 500 Internal Server Error due to OpenAI API key authentication issues. The popular_topics endpoint works correctly as it doesn't use OpenAI, but the search endpoint fails because it relies on the OpenAI integration."
 
 frontend:
   - task: "User Profile Creation UI"

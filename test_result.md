@@ -125,11 +125,11 @@ backend:
 
   - task: "OpenAI Integration"
     implemented: true
-    working: "NA"
+    working: false
     file: "/app/backend/server.py"
-    stuck_count: 0
+    stuck_count: 1
     priority: "high"
-    needs_retesting: true
+    needs_retesting: false
     status_history:
       - working: "NA"
         agent: "main"
@@ -140,6 +140,9 @@ backend:
       - working: "NA"
         agent: "main"
         comment: "After security fix and API key replacement, needs retesting to verify OpenAI integration works with new API key. Previous key was exposed in Git history and has been completely removed."
+      - working: false
+        agent: "testing"
+        comment: "OpenAI integration is failing with a 401 Unauthorized error. The API key in the backend/.env file is being rejected by OpenAI. All endpoints that use the OpenAI API are returning 500 Internal Server Error. The API key needs to be updated with a valid one."
 
   - task: "Job Analysis API"
     implemented: true

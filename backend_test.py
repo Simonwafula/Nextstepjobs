@@ -49,6 +49,26 @@ Salary Range: $140,000 - $180,000 depending on experience
 
 SAMPLE_CAREER_QUESTION = "Given my background in data science with 3 years of experience, what skills should I focus on developing to transition into a more senior machine learning engineering role in the next 2 years?"
 
+# Anonymous search test data
+ANONYMOUS_SEARCH_QUERIES = [
+    {
+        "query": "What are the best career paths for someone with a computer science degree in 2025?",
+        "search_type": "general"
+    },
+    {
+        "query": "How to transition from software development to AI research?",
+        "search_type": "career_path"
+    },
+    {
+        "query": "What skills are most in-demand for data scientists in 2025?",
+        "search_type": "skills"
+    },
+    {
+        "query": "Current trends in the cybersecurity industry",
+        "search_type": "industry"
+    }
+]
+
 # Helper functions
 def print_header(title):
     """Print a formatted header for test sections"""

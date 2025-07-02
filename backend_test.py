@@ -214,10 +214,64 @@ def test_error_handling():
     
     return run_test("Error Handling - Profile Not Found", "get", f"/profiles/{fake_id}", expected_status=404)
 
+def test_anonymous_search():
+    """Test anonymous search endpoint with different search types"""
+    print_header("TESTING ANONYMOUS SEARCH")
+    
+    results = []
+    for i, query_data in enumerate(ANONYMOUS_SEARCH_QUERIES):
+        test_name = f"Anonymous Search ({query_data['search_type']})"
+        result = run_test(test_name, "post", "/search", query_data)
+        results.append(result)
+        
+        # Add a small delay between requests to avoid rate limiting
+        if i < len(ANONYMOUS_SEARCH_QUERIES) - 1:
+            time.sleep(1)
+    
+    return results
+
+def test_popular_topics():
+    """Test popular topics endpoint"""
+    print_header("TESTING POPULAR TOPICS")
+    return run_test("Get Popular Topics", "get", "/popular-topics")
+
+def test_openai_integration():
+    """Test OpenAI integration directly through market insights (lightweight test)"""
+    print_header("TESTING OPENAI INTEGRATION")
+    field = "artificial intelligence"
+    
+    result = run_test(f"OpenAI Integration via Market Insights for {field}", "get", f"/market-insights/{field}")
+    
+    # Verify that we got a meaningful response that looks like it came from OpenAI
+    if result["success"] and "data" in result and "insights" in result["data"]:
+        insights = result["data"]["insights"]
+        
+        # Check if the response is substantial (more than 200 chars) and contains expected keywords
+        is_valid_response = (
+            len(insights) > 200 and
+            any(keyword in insights.lower() for keyword in ["ai", "artificial intelligence", "market", "industry", "skills", "trends"])
+        )
+        
+        if is_valid_response:
+            print("✅ OpenAI integration appears to be working correctly")
+            TEST_RESULTS["OpenAI Integration Validation"] = {"success": True, "data": "Response validation passed"}
+        else:
+            print("❌ OpenAI integration may be failing - response doesn't look like expected AI content")
+            TEST_RESULTS["OpenAI Integration Validation"] = {"success": False, "data": "Response validation failed"}
+    
+    return result
+
 def main():
     """Run all tests in sequence"""
     print_header("CAREER ADVISOR API TESTING")
     print(f"Testing API at: {BASE_URL}")
+    
+    # First test OpenAI integration directly (most critical after API key change)
+    openai_result = test_openai_integration()
+    
+    if not openai_result["success"]:
+        print("❌ OpenAI integration test failed. This is critical after the API key change.")
+        print("Please check the API key in the .env file and ensure it's valid.")
     
     # Test basic health check
     health_result = test_health_check()
@@ -225,6 +279,10 @@ def main():
     if not health_result["success"]:
         print("❌ API health check failed. Aborting remaining tests.")
         return
+    
+    # Test anonymous search endpoints (don't require a profile)
+    test_anonymous_search()
+    test_popular_topics()
     
     # Test profile creation and get the profile ID
     profile_result = test_profile_creation()

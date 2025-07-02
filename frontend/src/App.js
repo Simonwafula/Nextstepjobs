@@ -317,7 +317,6 @@ const Home = () => {
                     </button>
                   ))}
                 </div>
-              </div>
                     </button>
                   ))}
                 </div>

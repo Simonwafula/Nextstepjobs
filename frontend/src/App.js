@@ -226,6 +226,7 @@ useEffect(() => {
                   <option value="career_path">Career Paths</option>
                   <option value="skills">Skills Development</option>
                   <option value="industry">Industry Insights</option>
+                  <option value="academic_pathways">Academic Pathways</option>
                 </select>
               </div>
 

@@ -161,9 +161,9 @@ backend:
 
   - task: "Career Advice API"
     implemented: true
-    working: true
+    working: false
     file: "/app/backend/server.py"
-    stuck_count: 0
+    stuck_count: 1
     priority: "high"
     needs_retesting: false
     status_history:
@@ -173,6 +173,9 @@ backend:
       - working: true
         agent: "testing"
         comment: "Successfully tested the career advice API with a realistic career question. The endpoint correctly retrieves the user profile, sends the question along with profile context to OpenAI, and returns personalized advice. The response is properly stored in MongoDB."
+      - working: false
+        agent: "testing"
+        comment: "Career Advice API is failing with 500 Internal Server Error due to OpenAI API key authentication issues. The endpoint successfully retrieves the user profile but fails when trying to send the question to OpenAI for personalized advice."
 
   - task: "Market Insights API"
     implemented: true

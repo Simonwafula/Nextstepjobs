@@ -305,9 +305,6 @@ function App() {
                     </button>
                   ))}
                 </div>
-                    </button>
-                  ))}
-                </div>
               </div>
             </div>
           </div>

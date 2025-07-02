@@ -240,11 +240,11 @@ const Home = () => {
             <h3 className="text-2xl font-bold text-center mb-8 text-gray-800">
               🔥 Trending Career Topics
             </h3>
-            <div className="grid md:grid-cols-3 gap-8">
+            <div className="grid md:grid-cols-4 gap-6">
               <div className="bg-white p-6 rounded-xl shadow-lg">
                 <h4 className="font-semibold text-lg mb-4 text-blue-600">Hot Careers</h4>
                 <div className="space-y-2">
-                  {popularTopics.trending_careers?.slice(0, 6).map((career, index) => (
+                  {popularTopics.trending_careers?.slice(0, 5).map((career, index) => (
                     <button
                       key={index}
                       onClick={() => {
@@ -262,7 +262,7 @@ const Home = () => {
               <div className="bg-white p-6 rounded-xl shadow-lg">
                 <h4 className="font-semibold text-lg mb-4 text-green-600">Popular Questions</h4>
                 <div className="space-y-2">
-                  {popularTopics.popular_questions?.slice(0, 6).map((question, index) => (
+                  {popularTopics.popular_questions?.slice(0, 5).map((question, index) => (
                     <button
                       key={index}
                       onClick={() => {
@@ -280,7 +280,7 @@ const Home = () => {
               <div className="bg-white p-6 rounded-xl shadow-lg">
                 <h4 className="font-semibold text-lg mb-4 text-purple-600">Industry Insights</h4>
                 <div className="space-y-2">
-                  {popularTopics.industry_insights?.slice(0, 6).map((industry, index) => (
+                  {popularTopics.industry_insights?.slice(0, 5).map((industry, index) => (
                     <button
                       key={index}
                       onClick={() => {
@@ -290,6 +290,34 @@ const Home = () => {
                       className="block w-full text-left text-sm text-gray-700 hover:text-purple-600 hover:bg-purple-50 px-2 py-1 rounded transition-colors"
                     >
                       {industry}
+                    </button>
+                  ))}
+                </div>
+              </div>
+              
+              <div className="bg-white p-6 rounded-xl shadow-lg">
+                <h4 className="font-semibold text-lg mb-4 text-orange-600">Degree Programs</h4>
+                <div className="space-y-2">
+                  {[
+                    "Computer Science",
+                    "Business Administration", 
+                    "Psychology",
+                    "Engineering",
+                    "Data Science"
+                  ].map((degree, index) => (
+                    <button
+                      key={index}
+                      onClick={() => {
+                        setSearchQuery(`What careers can I pursue with a ${degree} degree?`);
+                        setSearchType('academic_pathways');
+                      }}
+                      className="block w-full text-left text-sm text-gray-700 hover:text-orange-600 hover:bg-orange-50 px-2 py-1 rounded transition-colors"
+                    >
+                      {degree}
+                    </button>
+                  ))}
+                </div>
+              </div>
                     </button>
                   ))}
                 </div>

@@ -243,6 +243,31 @@ def test_popular_topics():
     print_header("TESTING POPULAR TOPICS")
     return run_test("Get Popular Topics", "get", "/popular-topics")
 
+def test_degree_programs():
+    """Test degree programs endpoint"""
+    print_header("TESTING DEGREE PROGRAMS")
+    return run_test("Get Degree Programs", "get", "/degree-programs")
+
+def test_degree_career_search():
+    """Test degree-career search endpoint"""
+    print_header("TESTING DEGREE-CAREER SEARCH")
+    
+    # Test with Computer Science degree
+    cs_request = {
+        "degree": "Computer Science",
+        "career_interest": "Data Science"
+    }
+    cs_result = run_test("Degree-Career Search (CS to Data Science)", "post", "/degree-career-search", cs_request)
+    
+    # Test with Psychology degree
+    psych_request = {
+        "degree": "Psychology",
+        "career_interest": "UX Research"
+    }
+    psych_result = run_test("Degree-Career Search (Psychology to UX Research)", "post", "/degree-career-search", psych_request)
+    
+    return [cs_result, psych_result]
+
 def test_openai_integration():
     """Test OpenAI integration directly through market insights (lightweight test)"""
     print_header("TESTING OPENAI INTEGRATION")

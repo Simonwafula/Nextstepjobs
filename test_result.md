@@ -296,8 +296,7 @@ test_plan:
     - "Career Advice API"
     - "Market Insights API"
     - "Anonymous Search API"
-  stuck_tasks:
-    - "OpenAI Integration"
+  stuck_tasks: []
     - "Job Analysis API"
     - "Career Advice API"
     - "Market Insights API"

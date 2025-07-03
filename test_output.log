@@ -1,0 +1,149 @@
+
+================================================================================
+========================== CAREER ADVISOR API TESTING ==========================
+================================================================================
+
+Testing API at: https://1a82c7c6-3042-41ed-94bd-d4b22e97eead.preview.emergentagent.com/api
+
+================================================================================
+========================== TESTING OPENAI INTEGRATION ==========================
+================================================================================
+
+Testing: OpenAI Integration via Market Insights for artificial intelligence...
+✅ PASSED: OpenAI Integration via Market Insights for artificial intelligence
+✅ OpenAI integration appears to be working correctly
+
+================================================================================
+============================= TESTING HEALTH CHECK =============================
+================================================================================
+
+Testing: API Health Check...
+✅ PASSED: API Health Check
+
+================================================================================
+=========================== TESTING ANONYMOUS SEARCH ===========================
+================================================================================
+
+Testing: Anonymous Search (general)...
+✅ PASSED: Anonymous Search (general)
+Testing: Anonymous Search (career_path)...
+✅ PASSED: Anonymous Search (career_path)
+Testing: Anonymous Search (skills)...
+✅ PASSED: Anonymous Search (skills)
+Testing: Anonymous Search (industry)...
+✅ PASSED: Anonymous Search (industry)
+Testing: Anonymous Search (academic_pathways)...
+✅ PASSED: Anonymous Search (academic_pathways)
+Testing: Anonymous Search (academic_pathways)...
+✅ PASSED: Anonymous Search (academic_pathways)
+
+================================================================================
+============================ TESTING POPULAR TOPICS ============================
+================================================================================
+
+Testing: Get Popular Topics...
+✅ PASSED: Get Popular Topics
+
+================================================================================
+=========================== TESTING DEGREE PROGRAMS ============================
+================================================================================
+
+Testing: Get Degree Programs...
+✅ PASSED: Get Degree Programs
+
+================================================================================
+========================= TESTING DEGREE-CAREER SEARCH =========================
+================================================================================
+
+Testing: Degree-Career Search (CS to Data Science)...
+✅ PASSED: Degree-Career Search (CS to Data Science)
+Testing: Degree-Career Search (Psychology to UX Research)...
+✅ PASSED: Degree-Career Search (Psychology to UX Research)
+
+================================================================================
+=========================== TESTING PROFILE CREATION ===========================
+================================================================================
+
+Testing: Create User Profile...
+✅ PASSED: Create User Profile
+Created test profile with ID: 998c56cd-c15b-4cb1-b1fb-2d6d35634db6
+
+================================================================================
+=========================== TESTING GET ALL PROFILES ===========================
+================================================================================
+
+Testing: Get All Profiles...
+✅ PASSED: Get All Profiles
+
+================================================================================
+========================== TESTING GET PROFILE BY ID ===========================
+================================================================================
+
+Testing: Get Profile by ID: 998c56cd-c15b-4cb1-b1fb-2d6d35634db6...
+✅ PASSED: Get Profile by ID: 998c56cd-c15b-4cb1-b1fb-2d6d35634db6
+
+================================================================================
+============================ TESTING PROFILE UPDATE ============================
+================================================================================
+
+Testing: Update Profile: 998c56cd-c15b-4cb1-b1fb-2d6d35634db6...
+✅ PASSED: Update Profile: 998c56cd-c15b-4cb1-b1fb-2d6d35634db6
+
+================================================================================
+============================= TESTING JOB ANALYSIS =============================
+================================================================================
+
+Testing: Analyze Job Description...
+✅ PASSED: Analyze Job Description
+
+================================================================================
+============================ TESTING CAREER ADVICE =============================
+================================================================================
+
+Testing: Get Career Advice...
+✅ PASSED: Get Career Advice
+
+================================================================================
+=========================== TESTING MARKET INSIGHTS ============================
+================================================================================
+
+Testing: Get Market Insights for machine learning...
+✅ PASSED: Get Market Insights for machine learning
+
+================================================================================
+============================ TESTING ERROR HANDLING ============================
+================================================================================
+
+Testing: Error Handling - Profile Not Found...
+❌ FAILED: Error Handling - Profile Not Found
+  Status Code: 404 (Expected: 404)
+
+================================================================================
+================================= TEST SUMMARY =================================
+================================================================================
+
+PASSED: 19/20 (95.0%)
+
+Details:
+✅ PASSED: OpenAI Integration via Market Insights for artificial intelligence
+✅ PASSED: OpenAI Integration Validation
+✅ PASSED: API Health Check
+✅ PASSED: Anonymous Search (general)
+✅ PASSED: Anonymous Search (career_path)
+✅ PASSED: Anonymous Search (skills)
+✅ PASSED: Anonymous Search (industry)
+✅ PASSED: Anonymous Search (academic_pathways)
+✅ PASSED: Get Popular Topics
+✅ PASSED: Get Degree Programs
+✅ PASSED: Degree-Career Search (CS to Data Science)
+✅ PASSED: Degree-Career Search (Psychology to UX Research)
+✅ PASSED: Create User Profile
+✅ PASSED: Get All Profiles
+✅ PASSED: Get Profile by ID: 998c56cd-c15b-4cb1-b1fb-2d6d35634db6
+✅ PASSED: Update Profile: 998c56cd-c15b-4cb1-b1fb-2d6d35634db6
+✅ PASSED: Analyze Job Description
+✅ PASSED: Get Career Advice
+✅ PASSED: Get Market Insights for machine learning
+❌ FAILED: Error Handling - Profile Not Found
+
+

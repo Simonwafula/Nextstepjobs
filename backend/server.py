@@ -791,6 +791,610 @@ Make your response practical, encouraging, and actionable."""
     }
 
 
+# ====================================
+# NEXTSTEP JOB ADVISORY ENDPOINTS
+# ====================================
+
+# Job Scraping and Processing
+@api_router.post("/jobs/scrape")
+async def scrape_jobs(request: JobSearchRequest, background_tasks: BackgroundTasks):
+    """
+    Scrape jobs from multiple sources and process them
+    """
+    try:
+        all_scraped_jobs = []
+        
+        # Scrape from selected sources
+        for source_name in request.sources:
+            if source_name not in scrapers:
+                continue
+                
+            scraper = scrapers[source_name]
+            
+            try:
+                async with scraper:
+                    jobs = await scraper.scrape_job_listings(
+                        search_terms=request.search_terms,
+                        location=request.location,
+                        limit=request.limit_per_source
+                    )
+                    all_scraped_jobs.extend(jobs)
+                    
+            except Exception as e:
+                logger.error(f"Error scraping from {source_name}: {e}")
+                continue
+        
+        # Store initial job records (title + link only)
+        stored_count = 0
+        for job in all_scraped_jobs:
+            try:
+                await db.raw_jobs.insert_one(job)
+                stored_count += 1
+            except Exception as e:
+                logger.warning(f"Error storing job {job.get('id')}: {e}")
+        
+        # Process jobs in background
+        background_tasks.add_task(process_scraped_jobs, [job['id'] for job in all_scraped_jobs])
+        
+        return {
+            "status": "success",
+            "message": f"Scraped {len(all_scraped_jobs)} jobs from {len(request.sources)} sources",
+            "jobs_stored": stored_count,
+            "processing_started": True,
+            "sources_used": request.sources
+        }
+        
+    except Exception as e:
+        logger.error(f"Error in job scraping: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+async def process_scraped_jobs(job_ids: List[str]):
+    """
+    Background task to process scraped jobs through pipeline
+    """
+    try:
+        # Fetch raw jobs
+        raw_jobs = []
+        async for job in db.raw_jobs.find({"id": {"$in": job_ids}}):
+            raw_jobs.append(job)
+        
+        # Process through pipeline
+        processed_jobs = await process_job_batch(raw_jobs, batch_size=3)
+        
+        # Store processed jobs
+        for processed_job in processed_jobs:
+            try:
+                await db.processed_jobs.replace_one(
+                    {"id": processed_job["id"]}, 
+                    processed_job, 
+                    upsert=True
+                )
+            except Exception as e:
+                logger.error(f"Error storing processed job: {e}")
+                
+        logger.info(f"Successfully processed {len(processed_jobs)} jobs")
+        
+    except Exception as e:
+        logger.error(f"Error in background job processing: {e}")
+
+# Job Search and Filtering
+@api_router.post("/jobs/search")
+async def search_jobs(filters: JobFilterRequest, skip: int = 0, limit: int = 20):
+    """
+    Search and filter processed jobs
+    """
+    try:
+        # Build query
+        query = {"processed": True}
+        
+        if filters.industry:
+            query["$or"] = [
+                {"industry": {"$regex": filters.industry, "$options": "i"}},
+                {"ai_industry_category": {"$regex": filters.industry, "$options": "i"}}
+            ]
+            
+        if filters.job_type:
+            query["job_type"] = {"$regex": filters.job_type, "$options": "i"}
+            
+        if filters.experience_level:
+            query["$or"] = [
+                {"experience_level": {"$regex": filters.experience_level, "$options": "i"}},
+                {"ai_role_level": {"$regex": filters.experience_level, "$options": "i"}}
+            ]
+            
+        if filters.location:
+            query["location"] = {"$regex": filters.location, "$options": "i"}
+            
+        if filters.company:
+            query["company"] = {"$regex": filters.company, "$options": "i"}
+            
+        if filters.remote_friendly is not None:
+            query["remote_friendly"] = filters.remote_friendly
+            
+        if filters.skills:
+            query["$or"] = [
+                {"skills": {"$in": filters.skills}},
+                {"ai_skills_analysis": {"$in": filters.skills}}
+            ]
+            
+        if filters.posted_days_ago:
+            cutoff_date = datetime.utcnow() - timedelta(days=filters.posted_days_ago)
+            query["scraped_at"] = {"$gte": cutoff_date}
+            
+        # Salary filtering (if salary data exists)
+        salary_query = []
+        if filters.salary_min:
+            salary_query.append({
+                "$or": [
+                    {"salary.min": {"$gte": filters.salary_min}},
+                    {"salary.amount": {"$gte": filters.salary_min}}
+                ]
+            })
+        if filters.salary_max:
+            salary_query.append({
+                "$or": [
+                    {"salary.max": {"$lte": filters.salary_max}},
+                    {"salary.amount": {"$lte": filters.salary_max}}
+                ]
+            })
+        if salary_query:
+            query["$and"] = query.get("$and", []) + salary_query
+        
+        # Execute search
+        total_count = await db.processed_jobs.count_documents(query)
+        
+        jobs_cursor = db.processed_jobs.find(query).sort("quality_score", -1).skip(skip).limit(limit)
+        jobs = []
+        async for job in jobs_cursor:
+            job["_id"] = str(job["_id"])  # Convert ObjectId to string
+            jobs.append(job)
+        
+        return {
+            "jobs": jobs,
+            "total": total_count,
+            "page": skip // limit + 1,
+            "pages": (total_count + limit - 1) // limit,
+            "filters_applied": filters.dict(exclude_none=True)
+        }
+        
+    except Exception as e:
+        logger.error(f"Error searching jobs: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+# Job Recommendations
+@api_router.post("/jobs/recommendations/{user_id}")
+async def get_job_recommendations(user_id: str, limit: int = 10):
+    """
+    Get personalized job recommendations for a user
+    """
+    try:
+        # Get user profile
+        user = await db.profiles.find_one({"id": user_id})
+        if not user:
+            raise HTTPException(status_code=404, detail="User profile not found")
+        
+        # Build recommendation query based on user profile
+        user_skills = set(skill.lower() for skill in user.get("skills", []))
+        user_interests = set(interest.lower() for interest in user.get("career_interests", []))
+        user_locations = user.get("preferred_locations", [])
+        user_experience = user.get("experience_years", 0)
+        
+        def get_experience_level(years: int) -> str:
+            if years == 0:
+                return "Entry Level"
+            elif years <= 2:
+                return "Junior"
+            elif years <= 5:
+                return "Mid Level"
+            elif years <= 8:
+                return "Senior"
+            else:
+                return "Expert"
+                
+        def get_adjacent_experience_levels(years: int) -> List[str]:
+            current = get_experience_level(years)
+            levels = ["Entry Level", "Junior", "Mid Level", "Senior", "Expert"]
+            try:
+                idx = levels.index(current)
+                adjacent = []
+                if idx > 0:
+                    adjacent.append(levels[idx - 1])
+                if idx < len(levels) - 1:
+                    adjacent.append(levels[idx + 1])
+                return adjacent
+            except ValueError:
+                return []
+        
+        # Create recommendation pipeline
+        pipeline = [
+            {"$match": {"processed": True, "quality_score": {"$gte": 0.5}}},
+            {
+                "$addFields": {
+                    "recommendation_score": {
+                        "$add": [
+                            # Skill matching score (0-40 points)
+                            {
+                                "$multiply": [
+                                    {
+                                        "$size": {
+                                            "$setIntersection": [
+                                                {"$map": {"input": "$skills", "as": "skill", "in": {"$toLower": "$$skill"}}},
+                                                list(user_skills)
+                                            ]
+                                        }
+                                    },
+                                    8  # 8 points per matching skill
+                                ]
+                            },
+                            # Interest matching score (0-30 points)
+                            {
+                                "$cond": [
+                                    {
+                                        "$gt": [
+                                            {
+                                                "$size": {
+                                                    "$setIntersection": [
+                                                        {"$map": {"input": "$career_interests", "as": "interest", "in": {"$toLower": "$$interest"}}},
+                                                        list(user_interests)
+                                                    ]
+                                                }
+                                            },
+                                            0
+                                        ]
+                                    },
+                                    30,
+                                    0
+                                ]
+                            },
+                            # Experience level matching (0-20 points)
+                            {
+                                "$cond": [
+                                    {"$eq": ["$ai_role_level", get_experience_level(user_experience)]},
+                                    20,
+                                    {
+                                        "$cond": [
+                                            {"$in": ["$ai_role_level", get_adjacent_experience_levels(user_experience)]},
+                                            10,
+                                            0
+                                        ]
+                                    }
+                                ]
+                            },
+                            # Location preference (0-10 points)
+                            {
+                                "$cond": [
+                                    {"$in": ["$location", user_locations]} if user_locations else False,
+                                    10,
+                                    0
+                                ]
+                            }
+                        ]
+                    }
+                }
+            },
+            {"$sort": {"recommendation_score": -1, "quality_score": -1}},
+            {"$limit": limit}
+        ]
+        
+        recommendations = []
+        async for job in db.processed_jobs.aggregate(pipeline):
+            job["_id"] = str(job["_id"])
+            recommendations.append(job)
+        
+        return {
+            "recommendations": recommendations,
+            "user_id": user_id,
+            "recommendation_criteria": {
+                "skills_matched": list(user_skills),
+                "interests": list(user_interests),
+                "experience_level": get_experience_level(user_experience),
+                "preferred_locations": user_locations
+            }
+        }
+        
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"Error generating recommendations: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+# Job Market Analysis
+@api_router.post("/market/analysis")
+async def analyze_job_market(request: MarketAnalysisRequest):
+    """
+    Analyze job market trends and insights
+    """
+    try:
+        cutoff_date = datetime.utcnow() - timedelta(days=request.time_period)
+        base_query = {"processed": True, "scraped_at": {"$gte": cutoff_date}}
+        
+        # Apply filters
+        if request.industry:
+            base_query["$or"] = [
+                {"industry": {"$regex": request.industry, "$options": "i"}},
+                {"ai_industry_category": {"$regex": request.industry, "$options": "i"}}
+            ]
+        if request.location:
+            base_query["location"] = {"$regex": request.location, "$options": "i"}
+        if request.job_title:
+            base_query["title"] = {"$regex": request.job_title, "$options": "i"}
+        
+        # Industry distribution
+        industry_pipeline = [
+            {"$match": base_query},
+            {"$group": {"_id": "$industry", "count": {"$sum": 1}}},
+            {"$sort": {"count": -1}},
+            {"$limit": 10}
+        ]
+        
+        # Salary analysis
+        salary_pipeline = [
+            {"$match": {**base_query, "salary": {"$exists": True, "$ne": None}}},
+            {
+                "$group": {
+                    "_id": None,
+                    "avg_salary": {"$avg": {"$ifNull": ["$salary.amount", {"$avg": ["$salary.min", "$salary.max"]}]}},
+                    "min_salary": {"$min": {"$ifNull": ["$salary.amount", "$salary.min"]}},
+                    "max_salary": {"$max": {"$ifNull": ["$salary.amount", "$salary.max"]}},
+                    "count": {"$sum": 1}
+                }
+            }
+        ]
+        
+        # Top skills
+        skills_pipeline = [
+            {"$match": base_query},
+            {"$unwind": "$skills"},
+            {"$group": {"_id": "$skills", "count": {"$sum": 1}}},
+            {"$sort": {"count": -1}},
+            {"$limit": 15}
+        ]
+        
+        # Experience level distribution
+        experience_pipeline = [
+            {"$match": base_query},
+            {"$group": {"_id": "$experience_level", "count": {"$sum": 1}}},
+            {"$sort": {"count": -1}}
+        ]
+        
+        # Company analysis
+        company_pipeline = [
+            {"$match": base_query},
+            {"$group": {"_id": "$company", "count": {"$sum": 1}}},
+            {"$sort": {"count": -1}},
+            {"$limit": 10}
+        ]
+        
+        # Execute all pipelines
+        industry_data = [doc async for doc in db.processed_jobs.aggregate(industry_pipeline)]
+        salary_data = [doc async for doc in db.processed_jobs.aggregate(salary_pipeline)]
+        skills_data = [doc async for doc in db.processed_jobs.aggregate(skills_pipeline)]
+        experience_data = [doc async for doc in db.processed_jobs.aggregate(experience_pipeline)]
+        company_data = [doc async for doc in db.processed_jobs.aggregate(company_pipeline)]
+        
+        # Total jobs count
+        total_jobs = await db.processed_jobs.count_documents(base_query)
+        
+        return {
+            "analysis_period": f"Last {request.time_period} days",
+            "total_jobs_analyzed": total_jobs,
+            "industry_distribution": industry_data,
+            "salary_insights": salary_data[0] if salary_data else None,
+            "top_skills": skills_data,
+            "experience_distribution": experience_data,
+            "top_companies": company_data,
+            "market_trends": await generate_market_insights(request, total_jobs),
+            "generated_at": datetime.utcnow().isoformat()
+        }
+        
+    except Exception as e:
+        logger.error(f"Error in market analysis: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+# Skills Gap Analysis
+@api_router.post("/analysis/skills-gap/{user_id}")
+async def analyze_skills_gap(user_id: str, target_roles: List[str]):
+    """
+    Analyze skills gap between user profile and target roles
+    """
+    try:
+        # Get user profile
+        user = await db.profiles.find_one({"id": user_id})
+        if not user:
+            raise HTTPException(status_code=404, detail="User profile not found")
+        
+        user_skills = set(skill.lower() for skill in user.get("skills", []))
+        
+        # Analyze target roles
+        role_analysis = []
+        for role in target_roles:
+            # Find jobs matching this role
+            role_query = {"processed": True, "title": {"$regex": role, "$options": "i"}}
+            
+            # Get skills required for this role
+            skills_pipeline = [
+                {"$match": role_query},
+                {"$unwind": "$skills"},
+                {"$group": {"_id": "$skills", "frequency": {"$sum": 1}}},
+                {"$sort": {"frequency": -1}},
+                {"$limit": 20}
+            ]
+            
+            role_skills = []
+            async for skill_doc in db.processed_jobs.aggregate(skills_pipeline):
+                role_skills.append({
+                    "skill": skill_doc["_id"],
+                    "frequency": skill_doc["frequency"],
+                    "user_has": skill_doc["_id"].lower() in user_skills
+                })
+            
+            # Calculate gap
+            total_skills = len(role_skills)
+            user_has_skills = sum(1 for skill in role_skills if skill["user_has"])
+            gap_percentage = ((total_skills - user_has_skills) / total_skills * 100) if total_skills > 0 else 0
+            
+            missing_skills = [skill["skill"] for skill in role_skills if not skill["user_has"]][:10]
+            
+            role_analysis.append({
+                "role": role,
+                "skills_analysis": role_skills,
+                "gap_percentage": round(gap_percentage, 2),
+                "missing_skills": missing_skills,
+                "matching_skills": user_has_skills,
+                "total_skills_required": total_skills
+            })
+        
+        # Generate recommendations
+        recommendations = await generate_skills_recommendations(user, role_analysis)
+        
+        return {
+            "user_id": user_id,
+            "current_skills": list(user_skills),
+            "target_roles_analysis": role_analysis,
+            "recommendations": recommendations,
+            "generated_at": datetime.utcnow().isoformat()
+        }
+        
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"Error in skills gap analysis: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+# Saved Jobs Management
+@api_router.post("/jobs/save")
+async def save_job(saved_job: SavedJob):
+    """Save a job to user's collection"""
+    try:
+        # Check if job exists
+        job = await db.processed_jobs.find_one({"id": saved_job.job_id})
+        if not job:
+            raise HTTPException(status_code=404, detail="Job not found")
+        
+        # Check if already saved
+        existing = await db.saved_jobs.find_one({
+            "user_id": saved_job.user_id,
+            "job_id": saved_job.job_id
+        })
+        
+        if existing:
+            # Update existing
+            await db.saved_jobs.update_one(
+                {"_id": existing["_id"]},
+                {"$set": saved_job.dict()}
+            )
+            return {"message": "Job updated in saved collection"}
+        else:
+            # Create new
+            await db.saved_jobs.insert_one(saved_job.dict())
+            return {"message": "Job saved successfully"}
+        
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"Error saving job: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+@api_router.get("/jobs/saved/{user_id}")
+async def get_saved_jobs(user_id: str):
+    """Get user's saved jobs"""
+    try:
+        saved_jobs = []
+        async for saved_job in db.saved_jobs.find({"user_id": user_id}):
+            # Get job details
+            job = await db.processed_jobs.find_one({"id": saved_job["job_id"]})
+            if job:
+                saved_job["job_details"] = job
+                saved_job["_id"] = str(saved_job["_id"])
+                saved_jobs.append(saved_job)
+        
+        return {"saved_jobs": saved_jobs}
+        
+    except Exception as e:
+        logger.error(f"Error fetching saved jobs: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+# Job Alerts
+@api_router.post("/alerts/create")
+async def create_job_alert(alert: JobAlert):
+    """Create a job alert for user"""
+    try:
+        await db.job_alerts.insert_one(alert.dict())
+        return {"message": "Job alert created successfully", "alert_id": alert.id}
+    except Exception as e:
+        logger.error(f"Error creating job alert: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+@api_router.get("/alerts/{user_id}")
+async def get_job_alerts(user_id: str):
+    """Get user's job alerts"""
+    try:
+        alerts = []
+        async for alert in db.job_alerts.find({"user_id": user_id}):
+            alert["_id"] = str(alert["_id"])
+            alerts.append(alert)
+        return {"alerts": alerts}
+    except Exception as e:
+        logger.error(f"Error fetching job alerts: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+# Helper functions
+async def generate_market_insights(request: MarketAnalysisRequest, total_jobs: int) -> str:
+    """Generate AI-powered market insights"""
+    try:
+        prompt = f"""
+        Analyze the job market data for the following criteria:
+        - Industry: {request.industry or 'All industries'}
+        - Location: {request.location or 'All locations'}
+        - Job Title: {request.job_title or 'All positions'}
+        - Time Period: Last {request.time_period} days
+        - Total Jobs Analyzed: {total_jobs}
+        
+        Provide key insights about:
+        1. Market demand trends
+        2. Growth opportunities
+        3. Salary expectations
+        4. Skills in demand
+        5. Career advice for professionals in this area
+        
+        Keep response concise but informative (max 300 words).
+        """
+        
+        response = await get_ai_response(
+            "You are a job market analyst providing insights based on data.",
+            prompt
+        )
+        return response
+    except Exception as e:
+        logger.error(f"Error generating market insights: {e}")
+        return "Market insights temporarily unavailable"
+
+async def generate_skills_recommendations(user: Dict, role_analysis: List[Dict]) -> List[str]:
+    """Generate personalized skills recommendations"""
+    try:
+        # Collect all missing skills across target roles
+        all_missing_skills = []
+        for analysis in role_analysis:
+            all_missing_skills.extend(analysis["missing_skills"])
+        
+        # Count frequency of missing skills
+        skill_frequency = {}
+        for skill in all_missing_skills:
+            skill_frequency[skill] = skill_frequency.get(skill, 0) + 1
+        
+        # Get top missing skills
+        top_missing = sorted(skill_frequency.items(), key=lambda x: x[1], reverse=True)[:8]
+        
+        recommendations = []
+        for skill, frequency in top_missing:
+            recommendations.append(f"Learn {skill} (required in {frequency} target roles)")
+        
+        return recommendations
+    except Exception as e:
+        logger.error(f"Error generating skills recommendations: {e}")
+        return ["Skills analysis temporarily unavailable"]
+
+
 # Add basic endpoints
 @api_router.get("/")
 async def root():

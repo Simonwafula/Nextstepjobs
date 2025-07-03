@@ -862,7 +862,7 @@ const Home = () => {
   const performAnonymousSearch = async (e) => {
     e.preventDefault();
     if (!searchQuery.trim()) return;
-    
+
     setLoading(true);
     try {
       const response = await axios.post(`${API}/search`, {
@@ -887,7 +887,7 @@ const Home = () => {
         skills: profileForm.skills.split(',').map(s => s.trim()).filter(s => s),
         career_interests: profileForm.career_interests.split(',').map(s => s.trim()).filter(s => s)
       };
-      
+
       const response = await axios.post(`${API}/profiles`, profileData);
       setUserProfile(response.data);
       setProfiles([...profiles, response.data]);
@@ -914,7 +914,7 @@ const Home = () => {
       alert('Please create a profile first');
       return;
     }
-    
+
     setLoading(true);
     try {
       const response = await axios.post(`${API}/analyze-job`, {
@@ -936,7 +936,7 @@ const Home = () => {
       alert('Please create a profile first');
       return;
     }
-    
+
     setLoading(true);
     try {
       const response = await axios.post(`${API}/career-advice`, {
@@ -963,6 +963,128 @@ const Home = () => {
             Your AI-powered career advisor that analyzes job descriptions, provides personalized recommendations, and guides your professional journey.
           </p>
                     <div className="flex justify-center space-x-4">
+        </div>
+
+        {/* Anonymous Search Section */}
+        <div className="max-w-4xl mx-auto mb-16">
+          <div className="bg-white rounded-2xl shadow-xl p-8">
+            <h2 className="text-2xl font-bold text-center mb-6 text-gray-800">
+              🔍 Ask Any Career Question
+            </h2>
+            <p className="text-center text-gray-600 mb-6">
+              Get instant AI-powered career guidance - no registration required!
+            </p>
+
+            <form onSubmit={performAnonymousSearch} className="space-y-4">
+              <div className="flex gap-4 mb-4">
+                <select
+                  value={searchType}
+                  onChange={(e) => setSearchType(e.target.value)}
+                  className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                >
+                  <option value="general">General Career Advice</option>
+                  <option value="career_path">Career Paths</option>
+                  <option value="skills">Skills Development</option>
+                  <option value="industry">Industry Insights</option>
+                </select>
+              </div>
+
+              <div className="relative">
+                <textarea
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  placeholder="Ask anything about careers... e.g., 'How do I break into data science?' or 'What skills do I need for product management?'"
+                  rows="3"
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none"
+                  required
+                />
+              </div>
+
+              <button
+                type="submit"
+                disabled={loading}
+                className="w-full bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white px-8 py-3 rounded-lg font-semibold transition-all transform hover:scale-105 disabled:opacity-50 disabled:transform-none"
+              >
+                {loading ? (
+                  <span className="flex items-center justify-center">
+                    <div className="loading-spinner mr-2"></div>
+                    Searching...
+                  </span>
+                ) : (
+                  'Get Career Guidance 🚀'
+                )}
+              </button>
+            </form>
+          </div>
+        </div>
+
+        {/* Popular Topics Section */}
+        {popularTopics && (
+          <div className="max-w-6xl mx-auto mb-16">
+            <h3 className="text-2xl font-bold text-center mb-8 text-gray-800">
+              🔥 Trending Career Topics
+            </h3>
+            <div className="grid md:grid-cols-3 gap-8">
+              <div className="bg-white p-6 rounded-xl shadow-lg">
+                <h4 className="font-semibold text-lg mb-4 text-blue-600">Hot Careers</h4>
+                <div className="space-y-2">
+                  {popularTopics.trending_careers?.slice(0, 6).map((career, index) => (
+                    <button
+                      key={index}
+                      onClick={() => {
+                        setSearchQuery(`Tell me about ${career} career path`);
+                        setSearchType('career_path');
+                      }}
+                      className="block w-full text-left text-sm text-gray-700 hover:text-blue-600 hover:bg-blue-50 px-2 py-1 rounded transition-colors"
+                    >
+                      {career}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              <div className="bg-white p-6 rounded-xl shadow-lg">
+                <h4 className="font-semibold text-lg mb-4 text-green-600">Popular Questions</h4>
+                <div className="space-y-2">
+                  {popularTopics.popular_questions?.slice(0, 6).map((question, index) => (
+                    <button
+                      key={index}
+                      onClick={() => {
+                        setSearchQuery(question);
+                        setSearchType('general');
+                      }}
+                      className="block w-full text-left text-sm text-gray-700 hover:text-green-600 hover:bg-green-50 px-2 py-1 rounded transition-colors"
+                    >
+                      {question}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              <div className="bg-white p-6 rounded-xl shadow-lg">
+                <h4 className="font-semibold text-lg mb-4 text-purple-600">Industry Insights</h4>
+                <div className="space-y-2">
+                  {popularTopics.industry_insights?.slice(0, 6).map((industry, index) => (
+                    <button
+                      key={index}
+                      onClick={() => {
+                        setSearchQuery(`What are the career opportunities in ${industry}?`);
+                        setSearchType('industry');
+                      }}
+                      className="block w-full text-left text-sm text-gray-700 hover:text-purple-600 hover:bg-purple-50 px-2 py-1 rounded transition-colors"
+                    >
+                      {industry}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Action Buttons */}
+        <div className="text-center mb-16">
+          <div className="flex justify-center space-x-4">
             <button
               onClick={() => setCurrentView('create-profile')}
               className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-3 rounded-lg font-semibold transition-colors"
@@ -988,7 +1110,7 @@ const Home = () => {
               Discover career paths, understand job requirements, and plan your educational journey.
             </p>
           </div>
-          
+
           <div className="bg-white p-6 rounded-xl shadow-lg card-hover">
             <div className="text-4xl mb-4">🎯</div>
             <h3 className="text-xl font-semibold mb-3">For Graduates</h3>
@@ -996,7 +1118,7 @@ const Home = () => {
               Find job opportunities that match your qualifications and get insights on companies in your field.
             </p>
           </div>
-          
+
           <div className="bg-white p-6 rounded-xl shadow-lg card-hover">
             <div className="text-4xl mb-4">📈</div>
             <h3 className="text-xl font-semibold mb-3">For Professionals</h3>
@@ -1021,7 +1143,7 @@ export default App;
       <div className="container mx-auto px-4">
         <div className="max-w-2xl mx-auto bg-white rounded-xl shadow-lg p-8">
           <h2 className="text-3xl font-bold text-center mb-8">Create Your Profile</h2>
-          
+
           <form onSubmit={createProfile} className="space-y-6">
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">Full Name</label>
@@ -1126,6 +1248,19 @@ export default App;
           </form>
         </div>
       </div>
+  return (
+    <div>
+      <header className="App-header">
+        <a
+          className="App-link"
+          href="https://emergent.sh"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          <img src="https://avatars.githubusercontent.com/in/1201222?s=120&u=2686cf91179bbafbc7a71bfbc43004cf9ae1acea&v=4" />
+        </a>
+        <p className="mt-5">Building something incredible ~!</p>
+      </header>
     </div>
   );
 
@@ -1176,7 +1311,7 @@ export default App;
             <p className="text-gray-600 mb-4">
               Paste a job description to get detailed analysis and personalized recommendations.
             </p>
-            
+
             <form onSubmit={analyzeJob}>
               <textarea
                 value={jobDescription}
@@ -1202,7 +1337,7 @@ export default App;
             <p className="text-gray-600 mb-4">
               Ask any career-related question and get personalized AI-powered advice.
             </p>
-            
+
             <form onSubmit={getCareerAdvice}>
               <textarea
                 value={careerQuery}
@@ -1247,8 +1382,8 @@ export default App;
                   <h3 className="font-semibold text-blue-800 mb-2">Match Score</h3>
                   <div className="flex items-center">
                     <div className="w-full bg-blue-200 rounded-full h-2">
-                      <div 
-                        className="bg-blue-600 h-2 rounded-full" 
+                      <div
+                        className="bg-blue-600 h-2 rounded-full"
                         style={{width: `${analysisResult.match_score * 100}%`}}
                       ></div>
                     </div>
@@ -1262,7 +1397,7 @@ export default App;
                   <h3 className="font-semibold text-gray-800 mb-3">📊 Job Analysis</h3>
                   <div className="bg-gray-50 p-4 rounded-lg">
                     <pre className="whitespace-pre-wrap text-sm text-gray-700">
-                      {typeof analysisResult.analysis === 'object' 
+                      {typeof analysisResult.analysis === 'object'
                         ? JSON.stringify(analysisResult.analysis, null, 2)
                         : analysisResult.analysis
                       }
@@ -1274,7 +1409,7 @@ export default App;
                   <h3 className="font-semibold text-gray-800 mb-3">💡 Recommendations</h3>
                   <div className="bg-green-50 p-4 rounded-lg">
                     <div className="text-sm text-gray-700 whitespace-pre-wrap">
-                      {Array.isArray(analysisResult.recommendations) 
+                      {Array.isArray(analysisResult.recommendations)
                         ? analysisResult.recommendations.join('\n\n')
                         : analysisResult.recommendations
                       }
@@ -1448,5 +1583,4 @@ function App() {
     </div>
   );
 }
-
 export default App;

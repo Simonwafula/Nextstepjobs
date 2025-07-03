@@ -7,6 +7,7 @@ import logging
 from pathlib import Path
 from pydantic import BaseModel, Field
 from typing import List, Optional, Dict, Any
+from typing import List
 import uuid
 from datetime import datetime, timedelta
 from emergentintegrations.llm.chat import LlmChat, UserMessage
@@ -2731,6 +2732,8 @@ class JobAnalysisRequest(BaseModel):
 
 class JobAnalysisResult(BaseModel):
     id: str = Field(default_factory=lambda: str(uuid.uuid4()))
+    client_name: str
+    timestamp: datetime = Field(default_factory=datetime.utcnow)
     user_id: str
     job_description: str
     analysis: Dict[str, Any]
@@ -2738,10 +2741,13 @@ class JobAnalysisResult(BaseModel):
     match_score: float
     created_at: datetime = Field(default_factory=datetime.utcnow)
 
+class StatusCheckCreate(BaseModel):
+    client_name: str
 class CareerAdviceRequest(BaseModel):
     user_id: str
     query: str
 
+# Add your routes to the router instead of directly to app
 class CareerAdviceResponse(BaseModel):
     id: str = Field(default_factory=lambda: str(uuid.uuid4()))
     user_id: str
@@ -2758,7 +2764,7 @@ async def get_ai_response(system_message: str, user_message: str) -> str:
             session_id=str(uuid.uuid4()),
             system_message=system_message
         ).with_model("openai", "gpt-4o")
-        
+
         message = UserMessage(text=user_message)
         response = await chat.send_message(message)
         return response
@@ -2792,11 +2798,11 @@ async def update_profile(user_id: str, profile_data: UserProfileCreate):
     existing_profile = await db.user_profiles.find_one({"id": user_id})
     if not existing_profile:
         raise HTTPException(status_code=404, detail="Profile not found")
-    
+
     updated_data = profile_data.dict()
     updated_data["id"] = user_id
     updated_data["created_at"] = existing_profile["created_at"]
-    
+
     updated_profile = UserProfile(**updated_data)
     await db.user_profiles.replace_one({"id": user_id}, updated_profile.dict())
     return updated_profile
@@ -2809,9 +2815,9 @@ async def analyze_job(request: JobAnalysisRequest):
     profile = await db.user_profiles.find_one({"id": request.user_id})
     if not profile:
         raise HTTPException(status_code=404, detail="User profile not found")
-    
+
     user_profile = UserProfile(**profile)
-    
+
     # Create system message for job analysis
     system_message = """You are an expert career advisor. Analyze job descriptions and provide detailed insights about:
 1. Required qualifications (education, skills, experience)
@@ -2833,7 +2839,7 @@ Respond in JSON format with the following structure:
     "company_culture": "culture indicators",
     "match_assessment": "detailed assessment of user fit"
 }"""
-    
+
     # Create user message with job description and profile
     user_message = f"""
     Please analyze this job description:
@@ -2849,10 +2855,10 @@ Respond in JSON format with the following structure:
     - Current Role: {user_profile.current_role}
     - Career Interests: {', '.join(user_profile.career_interests)}
     """
-    
+
     # Get AI analysis
     ai_response = await get_ai_response(system_message, user_message)
-    
+
     # Parse AI response (assuming it returns JSON-like text)
     try:
         import json
@@ -2863,18 +2869,18 @@ Respond in JSON format with the following structure:
             "analysis_text": ai_response,
             "parsed": False
         }
-    
+
     # Generate recommendations based on analysis
     recommendations_prompt = f"""Based on the job analysis, provide 3-5 specific recommendations for the user to improve their candidacy for this role. Consider their current profile and what's missing."""
-    
+
     recommendations_response = await get_ai_response(
         "You are a career coach providing actionable advice.",
         recommendations_prompt + f"\n\nJob Analysis: {ai_response}\n\nUser Profile: {user_message}"
     )
-    
+
     # Calculate match score (simplified - you can enhance this)
     match_score = 0.75  # This would be calculated based on actual analysis
-    
+
     # Save analysis result
     result = JobAnalysisResult(
         user_id=request.user_id,
@@ -2883,7 +2889,7 @@ Respond in JSON format with the following structure:
         recommendations=recommendations_response.split('\n') if recommendations_response else [],
         match_score=match_score
     )
-    
+
     await db.job_analyses.insert_one(result.dict())
     return result
 
@@ -2900,9 +2906,9 @@ async def get_career_advice(request: CareerAdviceRequest):
     profile = await db.user_profiles.find_one({"id": request.user_id})
     if not profile:
         raise HTTPException(status_code=404, detail="User profile not found")
-    
+
     user_profile = UserProfile(**profile)
-    
+
     # Create system message for career advice
     system_message = """You are an expert career advisor with deep knowledge of various industries, job markets, and career paths. Provide personalized, actionable career advice based on the user's profile and specific questions. Your advice should be:
 1. Practical and actionable
@@ -2910,7 +2916,7 @@ async def get_career_advice(request: CareerAdviceRequest):
 3. Tailored to their education and experience level
 4. Encouraging yet realistic
 5. Include specific next steps they can take"""
-    
+
     # Create user message with query and profile context
     user_message = f"""
     User Question: {request.query}
@@ -2925,17 +2931,17 @@ async def get_career_advice(request: CareerAdviceRequest):
     
     Please provide detailed career advice addressing their question.
     """
-    
+
     # Get AI advice
     advice = await get_ai_response(system_message, user_message)
-    
+
     # Save advice
     advice_response = CareerAdviceResponse(
         user_id=request.user_id,
         query=request.query,
         advice=advice
     )
-    
+
     await db.career_advice.insert_one(advice_response.dict())
     return advice_response
 
@@ -2955,11 +2961,11 @@ async def get_market_insights(field: str):
 4. Growth outlook
 5. Top companies hiring
 6. Emerging opportunities"""
-    
+
     user_message = f"Provide comprehensive job market insights for the {field} field in 2025."
-    
+
     insights = await get_ai_response(system_message, user_message)
-    
+
     return {
         "field": field,
         "insights": insights,
@@ -4132,7 +4138,7 @@ async def anonymous_career_search(request: AnonymousSearchRequest):
     Public search endpoint for anonymous users to get career guidance
     without creating a profile. Supports various search types.
     """
-    
+
     # Define system messages based on search type
     system_messages = {
         "general": """You are an expert career advisor providing helpful, actionable career guidance. Answer career-related questions with:
@@ -4142,7 +4148,7 @@ async def anonymous_career_search(request: AnonymousSearchRequest):
 4. Educational requirements when relevant
 5. Growth opportunities
 Keep responses comprehensive but concise.""",
-        
+
         "career_path": """You are a career path specialist. Help users understand different career trajectories by providing:
 1. Various career options in their area of interest
 2. Educational requirements for each path
@@ -4150,7 +4156,7 @@ Keep responses comprehensive but concise.""",
 4. Skills needed at each level
 5. Salary expectations
 6. Industry outlook""",
-        
+
         "skills": """You are a skills development advisor. Focus on:
 1. Current in-demand skills in the relevant field
 2. How to develop these skills (courses, certifications, practice)
@@ -4158,7 +4164,7 @@ Keep responses comprehensive but concise.""",
 4. Time investment needed
 5. Best resources for learning
 6. How skills translate to job opportunities""",
-        
+
         "industry": """You are an industry analyst. Provide insights about:
 1. Industry trends and growth
 2. Major companies and employers
@@ -4167,27 +4173,27 @@ Keep responses comprehensive but concise.""",
 5. Future outlook and opportunities
 6. Entry points into the industry"""
     }
-    
+
     system_message = system_messages.get(request.search_type, system_messages["general"])
-    
+
     # Enhanced user message with context
     user_message = f"""
     User Query: {request.query}
     
     Please provide comprehensive career guidance addressing this question. If the query is broad, break down your response into actionable sections and provide specific guidance they can follow.
     """
-    
+
     # Get AI response
     response = await get_ai_response(system_message, user_message)
-    
+
     # Generate related suggestions based on the query
     suggestions_prompt = f"""Based on this career query: "{request.query}", suggest 3-4 related questions or topics the user might want to explore next. Return only the suggestions, one per line."""
-    
+
     suggestions_response = await get_ai_response(
         "You are a career advisor helping users discover related topics of interest.",
         suggestions_prompt
     )
-    
+
     # Parse suggestions
     suggestions = [s.strip() for s in suggestions_response.split('\n') if s.strip() and not s.strip().startswith('-')][:4]
     if not suggestions:
@@ -4197,7 +4203,7 @@ Keep responses comprehensive but concise.""",
             "What education is required?",
             "What's the job market outlook?"
         ]
-    
+
     # Save search for analytics (optional)
     search_response = AnonymousSearchResponse(
         query=request.query,
@@ -4205,13 +4211,13 @@ Keep responses comprehensive but concise.""",
         response=response,
         suggestions=suggestions
     )
-    
+
     # Optionally save to database for analytics
     try:
         await db.anonymous_searches.insert_one(search_response.dict())
     except Exception as e:
         logger.warning(f"Failed to save anonymous search: {e}")
-    
+
     return search_response
 
 
@@ -4219,7 +4225,7 @@ Keep responses comprehensive but concise.""",
 @api_router.get("/popular-topics")
 async def get_popular_topics():
     """Get popular career topics and trending searches"""
-    
+
     # You could make this dynamic by analyzing search history
     # For now, return curated popular topics
     topics = {
@@ -4254,17 +4260,21 @@ async def get_popular_topics():
             "Biotechnology"
         ]
     }
-    
+
     return topics
 
 # Add basic endpoints
 @api_router.get("/")
 async def root():
+    return {"message": "Hello World"}
     return {"message": "Career Advisor API - Empowering your career journey with AI"}
 
-@api_router.get("/health")
-async def health_check():
-    return {"status": "healthy", "service": "career-advisor-api"}
+@api_router.post("/status", response_model=StatusCheck)
+async def create_status_check(input: StatusCheckCreate):
+    status_dict = input.dict()
+    status_obj = StatusCheck(**status_dict)
+    _ = await db.status_checks.insert_one(status_obj.dict())
+    return status_obj
 
 class StatusCheck(BaseModel):
     id: str = Field(default_factory=lambda: str(uuid.uuid4()))

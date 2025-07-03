@@ -5753,22 +5753,72 @@ async def root():
 class UserProfile(BaseModel):
     id: str = Field(default_factory=lambda: str(uuid.uuid4()))
     name: str
+    email: str
     education_level: str  # High School, Bachelor's, Master's, PhD, etc.
     field_of_study: Optional[str] = None
     skills: List[str] = []
     experience_years: int = 0
     current_role: Optional[str] = None
     career_interests: List[str] = []
+    preferred_locations: List[str] = []
+    salary_expectations: Optional[Dict] = None
+    job_preferences: Dict = Field(default_factory=dict)  # remote, job_type, etc.
     created_at: datetime = Field(default_factory=datetime.utcnow)
+    updated_at: datetime = Field(default_factory=datetime.utcnow)
 
 class UserProfileCreate(BaseModel):
     name: str
+    email: str
     education_level: str
     field_of_study: Optional[str] = None
     skills: List[str] = []
     experience_years: int = 0
     current_role: Optional[str] = None
     career_interests: List[str] = []
+    preferred_locations: List[str] = []
+    salary_expectations: Optional[Dict] = None
+    job_preferences: Dict = Field(default_factory=dict)
+
+class JobSearchRequest(BaseModel):
+    search_terms: List[str]
+    location: Optional[str] = None
+    sources: List[str] = Field(default=['indeed', 'brightermonday'])  # Available scrapers
+    limit_per_source: int = 25
+
+class JobFilterRequest(BaseModel):
+    industry: Optional[str] = None
+    job_type: Optional[str] = None
+    experience_level: Optional[str] = None
+    salary_min: Optional[int] = None
+    salary_max: Optional[int] = None
+    location: Optional[str] = None
+    skills: Optional[List[str]] = None
+    remote_friendly: Optional[bool] = None
+    company: Optional[str] = None
+    posted_days_ago: Optional[int] = None
+
+class SavedJob(BaseModel):
+    user_id: str
+    job_id: str
+    saved_at: datetime = Field(default_factory=datetime.utcnow)
+    notes: Optional[str] = None
+    application_status: str = "interested"  # interested, applied, interviewing, rejected, hired
+
+class JobAlert(BaseModel):
+    id: str = Field(default_factory=lambda: str(uuid.uuid4()))
+    user_id: str
+    name: str
+    search_criteria: Dict
+    frequency: str = "daily"  # daily, weekly
+    active: bool = True
+    created_at: datetime = Field(default_factory=datetime.utcnow)
+
+class MarketAnalysisRequest(BaseModel):
+    industry: Optional[str] = None
+    location: Optional[str] = None
+    job_title: Optional[str] = None
+    skills: Optional[List[str]] = None
+    time_period: int = 30  # days
 
 class JobAnalysisRequest(BaseModel):
     user_id: str

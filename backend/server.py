@@ -28,10 +28,25 @@ client = AsyncIOMotorClient(mongo_url)
 db = client[os.environ['DB_NAME']]
 
 # Create the main app without a prefix
-app = FastAPI()
+app = FastAPI(
+    title="NextStep Job Advisory API",
+    description="Comprehensive job advisory platform for students, graduates, and professionals",
+    version="2.0.0"
+)
 
 # Create a router with the /api prefix
 api_router = APIRouter(prefix="/api")
+
+# Configure logging
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
+
+# Initialize scrapers
+scrapers = {
+    'indeed': IndeedScraper(),
+    'linkedin': LinkedInScraper(),
+    'brightermonday': BrighterMondayScraper()
+}
 
 
 # Define Models

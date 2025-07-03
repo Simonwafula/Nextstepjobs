@@ -1,4 +1,4 @@
-from fastapi import FastAPI, APIRouter, HTTPException
+from fastapi import FastAPI, APIRouter, HTTPException, BackgroundTasks
 from dotenv import load_dotenv
 from starlette.middleware.cors import CORSMiddleware
 from motor.motor_asyncio import AsyncIOMotorClient
@@ -8,8 +8,14 @@ from pathlib import Path
 from pydantic import BaseModel, Field
 from typing import List, Optional, Dict, Any
 import uuid
-from datetime import datetime
+from datetime import datetime, timedelta
 from emergentintegrations.llm.chat import LlmChat, UserMessage
+import asyncio
+from scrapers.base_scraper import BaseScraper
+from scrapers.indeed_scraper import IndeedScraper
+from scrapers.linkedin_scraper import LinkedInScraper
+from scrapers.brighter_monday_scraper import BrighterMondayScraper
+from processors.pipeline2 import JobProcessor, process_job_batch
 
 
 ROOT_DIR = Path(__file__).parent

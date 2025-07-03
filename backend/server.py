@@ -1,5 +1,4 @@
 from fastapi import FastAPI, APIRouter, HTTPException, BackgroundTasks
-
 from dotenv import load_dotenv
 from starlette.middleware.cors import CORSMiddleware
 from motor.motor_asyncio import AsyncIOMotorClient
@@ -10,9 +9,8 @@ from pydantic import BaseModel, Field
 from typing import List, Optional, Dict, Any
 
 import uuid
-from datetime import datetime
+from datetime import datetime, timedelta
 from emergentintegrations.llm.chat import LlmChat, UserMessage
-
 import asyncio
 from scrapers.base_scraper import BaseScraper
 from scrapers.indeed_scraper import IndeedScraper
@@ -2201,11 +2199,11 @@ async def get_market_insights(field: str):
 4. Growth outlook
 5. Top companies hiring
 6. Emerging opportunities"""
-
+    
     user_message = f"Provide comprehensive job market insights for the {field} field in 2025."
-
+    
     insights = await get_ai_response(system_message, user_message)
-
+    
     return {
         "field": field,
         "insights": insights,
@@ -2234,7 +2232,7 @@ async def anonymous_career_search(request: AnonymousSearchRequest):
     Public search endpoint for anonymous users to get career guidance
     without creating a profile. Supports various search types.
     """
-
+    
     # Define system messages based on search type
     system_messages = {
         "general": """You are an expert career advisor providing helpful, actionable career guidance. Answer career-related questions with:
@@ -2244,7 +2242,7 @@ async def anonymous_career_search(request: AnonymousSearchRequest):
 4. Educational requirements when relevant
 5. Growth opportunities
 Keep responses comprehensive but concise.""",
-
+        
         "career_path": """You are a career path specialist. Help users understand different career trajectories by providing:
 1. Various career options in their area of interest
 2. Educational requirements for each path
@@ -2252,7 +2250,7 @@ Keep responses comprehensive but concise.""",
 4. Skills needed at each level
 5. Salary expectations
 6. Industry outlook""",
-
+        
         "skills": """You are a skills development advisor. Focus on:
 1. Current in-demand skills in the relevant field
 2. How to develop these skills (courses, certifications, practice)
@@ -2260,7 +2258,7 @@ Keep responses comprehensive but concise.""",
 4. Time investment needed
 5. Best resources for learning
 6. How skills translate to job opportunities""",
-
+        
         "industry": """You are an industry analyst. Provide insights about:
 1. Industry trends and growth
 2. Major companies and employers
@@ -2269,27 +2267,27 @@ Keep responses comprehensive but concise.""",
 5. Future outlook and opportunities
 6. Entry points into the industry"""
     }
-
+    
     system_message = system_messages.get(request.search_type, system_messages["general"])
-
+    
     # Enhanced user message with context
     user_message = f"""
     User Query: {request.query}
     
     Please provide comprehensive career guidance addressing this question. If the query is broad, break down your response into actionable sections and provide specific guidance they can follow.
     """
-
+    
     # Get AI response
     response = await get_ai_response(system_message, user_message)
-
+    
     # Generate related suggestions based on the query
     suggestions_prompt = f"""Based on this career query: "{request.query}", suggest 3-4 related questions or topics the user might want to explore next. Return only the suggestions, one per line."""
-
+    
     suggestions_response = await get_ai_response(
         "You are a career advisor helping users discover related topics of interest.",
         suggestions_prompt
     )
-
+    
     # Parse suggestions
     suggestions = [s.strip() for s in suggestions_response.split('\n') if s.strip() and not s.strip().startswith('-')][:4]
     if not suggestions:
@@ -2299,7 +2297,7 @@ Keep responses comprehensive but concise.""",
             "What education is required?",
             "What's the job market outlook?"
         ]
-
+    
     # Save search for analytics (optional)
     search_response = AnonymousSearchResponse(
         query=request.query,
@@ -2307,13 +2305,13 @@ Keep responses comprehensive but concise.""",
         response=response,
         suggestions=suggestions
     )
-
+    
     # Optionally save to database for analytics
     try:
         await db.anonymous_searches.insert_one(search_response.dict())
     except Exception as e:
         logger.warning(f"Failed to save anonymous search: {e}")
-
+    
     return search_response
 
 
@@ -2321,7 +2319,7 @@ Keep responses comprehensive but concise.""",
 @api_router.get("/popular-topics")
 async def get_popular_topics():
     """Get popular career topics and trending searches"""
-
+    
     # You could make this dynamic by analyzing search history
     # For now, return curated popular topics
     topics = {
@@ -2356,9 +2354,8 @@ async def get_popular_topics():
             "Biotechnology"
         ]
     }
-
+    
     return topics
-
 
 # Add basic endpoints
 @api_router.get("/")
@@ -2902,7 +2899,6 @@ Make your response practical, encouraging, and actionable."""
 # Add basic endpoints
 @api_router.get("/")
 async def root():
-    return {"message": "Hello World"}
     return {"message": "Career Advisor API - Empowering your career journey with AI"}
 
 @api_router.post("/status", response_model=StatusCheck)

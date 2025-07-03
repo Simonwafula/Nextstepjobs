@@ -801,6 +801,8 @@ const renderView = () => {
       return <HomeView />;
   }
 };
+
+function App() {
   return (
     <div>
       {renderView()}
@@ -814,5 +816,4 @@ const renderView = () => {
     </div>
   );
 }
-}
-export default App;
+  export default App;

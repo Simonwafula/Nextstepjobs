@@ -26,7 +26,6 @@ client = AsyncIOMotorClient(mongo_url)
 db = client[os.environ['DB_NAME']]
 
 # Create the main app without a prefix
-
 app = FastAPI(
     title="NextStep Job Advisory API",
     description="Comprehensive job advisory platform for students, graduates, and professionals",

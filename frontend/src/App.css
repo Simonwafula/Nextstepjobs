@@ -617,6 +617,9 @@ input:focus, textarea:focus, select:focus {
     pointer-events: none;
 }
 
+.App-logo {
+    height: 40vmin;
+    pointer-events: none;
 /* Custom input focus styles */
 input:focus, textarea:focus, select:focus {
   outline: none;
@@ -624,6 +627,10 @@ input:focus, textarea:focus, select:focus {
   box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
 }
 
+@media (prefers-reduced-motion: no-preference) {
+    .App-logo {
+        animation: App-logo-spin infinite 20s linear;
+    }
 /* Success and error states */
 .success-state {
   background-color: #f0fdf4;
@@ -648,6 +655,15 @@ input:focus, textarea:focus, select:focus {
   border-radius: 4px;
 }
 
+.App-header {
+    background-color: #0f0f10;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    font-size: calc(10px + 2vmin);
+    color: white;
 /* Loading states */
 .loading-overlay {
   position: absolute;
@@ -697,6 +713,54 @@ input:focus, textarea:focus, select:focus {
 
 .App-link {
     color: #61dafb;
+}
+
+@keyframes App-logo-spin {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+/* Dark mode support */
+@media (prefers-color-scheme: dark) {
+  .dark-mode {
+    background-color: #1f2937;
+    color: #f9fafb;
+  }
+
+  .dark-mode .bg-white {
+    background-color: #374151;
+  }
+
+  .dark-mode .text-gray-800 {
+    color: #f9fafb;
+  }
+
+  .dark-mode .text-gray-600 {
+    color: #d1d5db;
+  }
+
+  .dark-mode .border-gray-300 {
+    border-color: #4b5563;
+  }
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #c1c1c1;
+  border-radius: 4px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
@@ -915,4 +979,8 @@ input:focus, textarea:focus, select:focus {
   }
 }
 }
-}}
+}
+}
+}
+}
+}

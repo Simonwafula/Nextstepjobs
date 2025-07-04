@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from "react";
+import { useEffect } from "react";
 import "./App.css";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 import axios from "axios";
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
@@ -14,21 +16,21 @@ function App() {
   const [careerQuery, setCareerQuery] = useState('');
   const [careerAdvice, setCareerAdvice] = useState(null);
   const [loading, setLoading] = useState(false);
-  
+
   // Anonymous search state
   const [searchQuery, setSearchQuery] = useState('');
   const [searchType, setSearchType] = useState('general');
   const [searchResult, setSearchResult] = useState(null);
   const [popularTopics, setPopularTopics] = useState(null);
-
-const helloWorldApi = async () => {
-  try {
-    const response = await axios.get(`${API}/`);
-    console.log(response.data.message);
-  } catch (e) {
-    console.error(e, `errored out requesting / api`);
-  }
-};
+const Home = () => {
+  const helloWorldApi = async () => {
+    try {
+      const response = await axios.get(`${API}/`);
+      console.log(response.data.message);
+    } catch (e) {
+      console.error(e, `errored out requesting / api`);
+    }
+  };
 
 
 // Profile form state
@@ -62,12 +64,12 @@ useEffect(() => {
     career_interests: ''
   });
 
-// Load profiles and popular topics on component mount
-useEffect(() => {
-  loadProfiles();
-  loadPopularTopics();
-  helloWorldApi();
-}, []);
+  // Load profiles and popular topics on component mount
+  useEffect(() => {
+    loadProfiles();
+    loadPopularTopics();
+    helloWorldApi();
+  }, []);
 
   const loadProfiles = async () => {
     try {
@@ -93,7 +95,7 @@ useEffect(() => {
   const performAnonymousSearch = async (e) => {
     e.preventDefault();
     if (!searchQuery.trim()) return;
-    
+
     setLoading(true);
     try {
       const response = await axios.post(`${API}/search`, {
@@ -118,7 +120,7 @@ useEffect(() => {
         skills: profileForm.skills.split(',').map(s => s.trim()).filter(s => s),
         career_interests: profileForm.career_interests.split(',').map(s => s.trim()).filter(s => s)
       };
-      
+
       const response = await axios.post(`${API}/profiles`, profileData);
       setUserProfile(response.data);
       setProfiles([...profiles, response.data]);
@@ -145,7 +147,7 @@ useEffect(() => {
       alert('Please create a profile first');
       return;
     }
-    
+
     setLoading(true);
     try {
       const response = await axios.post(`${API}/analyze-job`, {
@@ -167,7 +169,7 @@ useEffect(() => {
       alert('Please create a profile first');
       return;
     }
-    
+
     setLoading(true);
     try {
       const response = await axios.post(`${API}/career-advice`, {
@@ -204,7 +206,7 @@ useEffect(() => {
             <p className="text-center text-gray-600 mb-6">
               Get instant AI-powered career guidance - no registration required!
             </p>
-            
+
             <form onSubmit={performAnonymousSearch} className="space-y-4">
               <div className="flex gap-4 mb-4">
                 <select
@@ -218,7 +220,7 @@ useEffect(() => {
                   <option value="industry">Industry Insights</option>
                 </select>
               </div>
-              
+
               <div className="relative">
                 <textarea
                   value={searchQuery}
@@ -229,7 +231,7 @@ useEffect(() => {
                   required
                 />
               </div>
-              
+
               <button
                 type="submit"
                 disabled={loading}
@@ -272,7 +274,7 @@ useEffect(() => {
                   ))}
                 </div>
               </div>
-              
+
               <div className="bg-white p-6 rounded-xl shadow-lg">
                 <h4 className="font-semibold text-lg mb-4 text-green-600">Popular Questions</h4>
                 <div className="space-y-2">
@@ -290,7 +292,7 @@ useEffect(() => {
                   ))}
                 </div>
               </div>
-              
+
               <div className="bg-white p-6 rounded-xl shadow-lg">
                 <h4 className="font-semibold text-lg mb-4 text-purple-600">Industry Insights</h4>
                 <div className="space-y-2">
@@ -1124,8 +1126,7 @@ export default App;
       <div className="container mx-auto px-4">
         <div className="max-w-2xl mx-auto bg-white rounded-xl shadow-lg p-8">
           <h2 className="text-3xl font-bold text-center mb-8">Create Your Profile</h2>
-          
-          <form onSubmit={createProfile} className="space-y-6">
+                    <form onSubmit={createProfile} className="space-y-6">
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">Full Name</label>
               <input
@@ -1229,6 +1230,19 @@ export default App;
           </form>
         </div>
       </div>
+  return (
+    <div>
+      <header className="App-header">
+        <a
+          className="App-link"
+          href="https://emergent.sh"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          <img src="https://avatars.githubusercontent.com/in/1201222?s=120&u=2686cf91179bbafbc7a71bfbc43004cf9ae1acea&v=4" />
+        </a>
+        <p className="mt-5">Building something incredible ~!</p>
+      </header>
     </div>
   );
 
@@ -1279,7 +1293,7 @@ export default App;
             <p className="text-gray-600 mb-4">
               Paste a job description to get detailed analysis and personalized recommendations.
             </p>
-            
+
             <form onSubmit={analyzeJob}>
               <textarea
                 value={jobDescription}
@@ -1305,7 +1319,7 @@ export default App;
             <p className="text-gray-600 mb-4">
               Ask any career-related question and get personalized AI-powered advice.
             </p>
-            
+
             <form onSubmit={getCareerAdvice}>
               <textarea
                 value={careerQuery}
@@ -1350,8 +1364,8 @@ export default App;
                   <h3 className="font-semibold text-blue-800 mb-2">Match Score</h3>
                   <div className="flex items-center">
                     <div className="w-full bg-blue-200 rounded-full h-2">
-                      <div 
-                        className="bg-blue-600 h-2 rounded-full" 
+                      <div
+                        className="bg-blue-600 h-2 rounded-full"
                         style={{width: `${analysisResult.match_score * 100}%`}}
                       ></div>
                     </div>
@@ -1365,7 +1379,7 @@ export default App;
                   <h3 className="font-semibold text-gray-800 mb-3">📊 Job Analysis</h3>
                   <div className="bg-gray-50 p-4 rounded-lg">
                     <pre className="whitespace-pre-wrap text-sm text-gray-700">
-                      {typeof analysisResult.analysis === 'object' 
+                      {typeof analysisResult.analysis === 'object'
                         ? JSON.stringify(analysisResult.analysis, null, 2)
                         : analysisResult.analysis
                       }
@@ -1377,7 +1391,7 @@ export default App;
                   <h3 className="font-semibold text-gray-800 mb-3">💡 Recommendations</h3>
                   <div className="bg-green-50 p-4 rounded-lg">
                     <div className="text-sm text-gray-700 whitespace-pre-wrap">
-                      {Array.isArray(analysisResult.recommendations) 
+                      {Array.isArray(analysisResult.recommendations)
                         ? analysisResult.recommendations.join('\n\n')
                         : analysisResult.recommendations
                       }
@@ -2451,6 +2465,12 @@ function App() {
       </div>
     </div>
   );
+return (
+  <div className="App">
+    {renderView()}
+  </div>
+);
+}
 
 export default App;
   const CreateProfileView = () => (
@@ -2871,9 +2891,17 @@ export default App;
     }
   };
 
+function App() {
   return (
     <div className="App">
       {renderView()}
+      <BrowserRouter>
+        <Routes>
+          <Route path="/" element={<Home />}>
+            <Route index element={<Home />} />
+          </Route>
+        </Routes>
+      </BrowserRouter>
     </div>
   );
 }

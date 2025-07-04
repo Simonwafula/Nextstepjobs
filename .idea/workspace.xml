@@ -63,4 +63,9 @@
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
   </component>
+=======
+  <component name="TaskManager">
+    <servers />
+  </component>
+>>>>>>> 28a2042 (Merge conflict_030725_1936)
 </project>

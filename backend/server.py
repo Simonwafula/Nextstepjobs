@@ -1,4 +1,7 @@
+<<<<<<< HEAD
 # File: backend/server.py
+=======
+>>>>>>> conflict_020725_2247
 from fastapi import FastAPI, APIRouter, HTTPException
 from dotenv import load_dotenv
 from starlette.middleware.cors import CORSMiddleware
@@ -11,10 +14,13 @@ from typing import List, Optional, Dict, Any
 import uuid
 from datetime import datetime
 from emergentintegrations.llm.chat import LlmChat, UserMessage
+<<<<<<< HEAD
 from typing import List
 import uuid
 from datetime import datetime
 
+=======
+>>>>>>> conflict_020725_2247
 
 
 ROOT_DIR = Path(__file__).parent
@@ -33,7 +39,10 @@ api_router = APIRouter(prefix="/api")
 
 
 # Define Models
+<<<<<<< HEAD
 
+=======
+>>>>>>> conflict_020725_2247
 class UserProfile(BaseModel):
     id: str = Field(default_factory=lambda: str(uuid.uuid4()))
     name: str
@@ -456,6 +465,7 @@ async def get_popular_topics():
     
     return topics
 
+<<<<<<< HEAD
 # Add basic endpoints
 @api_router.get("/")
 async def root():
@@ -725,6 +735,8 @@ async def get_market_insights(field: str):
         "insights": insights,
         "generated_at": datetime.utcnow()
     }
+=======
+>>>>>>> conflict_020725_2247
 
 # Degree Programs to Career Mapping endpoint
 @api_router.get("/degree-programs")
@@ -1004,10 +1016,13 @@ async def root():
 async def health_check():
     return {"status": "healthy", "service": "career-advisor-api"}
 
+<<<<<<< HEAD
 @api_router.get("/status", response_model=List[StatusCheck])
 async def get_status_checks():
     status_checks = await db.status_checks.find().to_list(1000)
     return [StatusCheck(**status_check) for status_check in status_checks]
+=======
+>>>>>>> conflict_020725_2247
 
 # Include the router in the main app
 app.include_router(api_router)
@@ -1029,5 +1044,9 @@ logger = logging.getLogger(__name__)
 
 @app.on_event("shutdown")
 async def shutdown_db_client():
+<<<<<<< HEAD
     client.close()
 
+=======
+    client.close()
+>>>>>>> conflict_020725_2247

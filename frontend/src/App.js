@@ -779,6 +779,7 @@ function App() {
     }
   };
 
+<<<<<<< HEAD
 return (
   <div className="App">
     {renderView()}
@@ -788,3 +789,13 @@ return (
 
 export default App;
 
+=======
+  return (
+    <div className="App">
+      {renderView()}
+    </div>
+  );
+}
+
+export default App;
+>>>>>>> conflict_020725_2247

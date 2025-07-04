@@ -219,6 +219,7 @@ input:focus, textarea:focus, select:focus {
   .dark-mode .border-gray-300 {
     border-color: #4b5563;
   }
+<<<<<<< HEAD
 }
 
 /* Custom scrollbar */
@@ -438,4 +439,6 @@ input:focus, textarea:focus, select:focus {
   .dark-mode .border-gray-300 {
     border-color: #4b5563;
   }
+=======
+>>>>>>> conflict_020725_2247
 }

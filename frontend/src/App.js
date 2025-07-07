@@ -32,8 +32,6 @@ const Home = () => {
     }
   };
 
-<<<<<<< HEAD
-=======
 const helloWorldApi = async () => {
   try {
     const response = await axios.get(`${API}/`);
@@ -42,7 +40,6 @@ const helloWorldApi = async () => {
     console.error(e, `errored out requesting / api`);
   }
 };
->>>>>>> conflict_030725_1936
 
 // Profile form state
 const [profileForm, setProfileForm] = useState({

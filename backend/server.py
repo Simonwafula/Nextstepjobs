@@ -883,7 +883,7 @@ async def generate_skills_recommendations(user: Dict, role_analysis: List[Dict])
 # Add basic endpoints
 @api_router.get("/")
 async def root():
-    return {"message": "Career Advisor API - Empowering your career journey with AI"}
+    return {"message": "Nextstep API - Empowering your career journey with AI"}
 
 # Define Models
 class UserProfile(BaseModel):

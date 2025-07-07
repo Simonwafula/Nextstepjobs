@@ -7,6 +7,7 @@ import asyncio
 import aiohttp
 from bs4 import BeautifulSoup
 from typing import Dict, List, Optional, Any
+<<<<<<< HEAD
 import os
 import re
 import sqlite3
@@ -47,6 +48,15 @@ logging.basicConfig(
         logging.StreamHandler()
     ]
 )
+=======
+import re
+import logging
+from datetime import datetime, timedelta
+import json
+from emergentintegrations.llm.chat import LlmChat, UserMessage
+import os
+
+>>>>>>> update/main
 logger = logging.getLogger(__name__)
 
 class JobProcessor:
@@ -54,11 +64,16 @@ class JobProcessor:
     Advanced job processing pipeline for NextStep
     Extracts structured information from job listings
     """
+<<<<<<< HEAD
 
+=======
+    
+>>>>>>> update/main
     def __init__(self):
         self.session = None
         self.ai_client = None
         self._init_ai_client()
+<<<<<<< HEAD
 
     def _init_ai_client(self):
         """Initialize AI client for content processing"""
@@ -757,6 +772,16 @@ class AcademicDetailsProcessor:
         except Exception as e:
             logger.error(f"Failed to initialize AI client: {e}")
 
+=======
+        
+    def _init_ai_client(self):
+        """Initialize AI client for content processing"""
+        try:
+            self.ai_client = LlmChat(api_key=os.environ.get('OPENAI_API_KEY'))
+        except Exception as e:
+            logger.error(f"Failed to initialize AI client: {e}")
+            
+>>>>>>> update/main
     async def __aenter__(self):
         """Async context manager entry"""
         connector = aiohttp.TCPConnector(limit=10, limit_per_host=3)
@@ -769,11 +794,16 @@ class AcademicDetailsProcessor:
             }
         )
         return self
+<<<<<<< HEAD
 
+=======
+        
+>>>>>>> update/main
     async def __aexit__(self, exc_type, exc_val, exc_tb):
         """Async context manager exit"""
         if self.session:
             await self.session.close()
+<<<<<<< HEAD
 
     async def process_job(self, job_record: Dict) -> Dict:
         """
@@ -782,17 +812,32 @@ class AcademicDetailsProcessor:
         Args:
             job_record: Basic job data with title and link
 
+=======
+            
+    async def process_job(self, job_record: Dict) -> Dict:
+        """
+        Process a single job record and extract structured information
+        
+        Args:
+            job_record: Basic job data with title and link
+            
+>>>>>>> update/main
         Returns:
             Processed job data with extracted information
         """
         try:
             logger.info(f"Processing job: {job_record.get('title', 'Unknown')}")
+<<<<<<< HEAD
 
+=======
+            
+>>>>>>> update/main
             # Fetch full job content
             job_content = await self._fetch_job_content(job_record['link'])
             if not job_content:
                 logger.warning(f"Failed to fetch content for {job_record['link']}")
                 return self._create_failed_record(job_record, "Failed to fetch content")
+<<<<<<< HEAD
 
             # Extract structured information
             extracted_data = await self._extract_job_information(job_content, job_record)
@@ -899,6 +944,27 @@ class AcademicDetailsProcessor:
                 ORDER BY jd.id \
                 """
 
+=======
+            
+            # Extract structured information
+            extracted_data = await self._extract_job_information(job_content, job_record)
+            
+            # Enhance with AI analysis
+            ai_enhanced_data = await self._enhance_with_ai(extracted_data, job_content)
+            
+            # Create final processed record
+            processed_record = self._create_processed_record(job_record, extracted_data, ai_enhanced_data)
+            
+            logger.info(f"Successfully processed job: {processed_record['title']}")
+            return processed_record
+            
+        except Exception as e:
+            logger.error(f"Error processing job {job_record.get('link', 'Unknown')}: {e}")
+            return self._create_failed_record(job_record, str(e))
+            
+    async def _fetch_job_content(self, job_url: str) -> Optional[str]:
+        """Fetch full job posting content"""
+>>>>>>> update/main
         try:
             async with self.session.get(job_url) as response:
                 if response.status == 200:
@@ -906,6 +972,7 @@ class AcademicDetailsProcessor:
                 else:
                     logger.warning(f"HTTP {response.status} for {job_url}")
                     return None
+<<<<<<< HEAD
             rows = input_conn.execute(query, (self.max_retries,)).fetchall()
             logger.info(f"Found {len(rows)} jobs to process")
             return rows
@@ -1113,11 +1180,18 @@ class AcademicDetailsProcessor:
             logger.error(f"Error fetching {job_url}: {e}")
             return None
 
+=======
+        except Exception as e:
+            logger.error(f"Error fetching {job_url}: {e}")
+            return None
+            
+>>>>>>> update/main
     async def _extract_job_information(self, html_content: str, job_record: Dict) -> Dict:
         """
         Extract structured information from job posting HTML
         """
         soup = BeautifulSoup(html_content, 'html.parser')
+<<<<<<< HEAD
 
         # Remove script and style elements
         for script in soup(["script", "style"]):
@@ -1126,6 +1200,16 @@ class AcademicDetailsProcessor:
         # Get clean text
         text_content = soup.get_text(separator=' ', strip=True)
 
+=======
+        
+        # Remove script and style elements
+        for script in soup(["script", "style"]):
+            script.decompose()
+            
+        # Get clean text
+        text_content = soup.get_text(separator=' ', strip=True)
+        
+>>>>>>> update/main
         # Initialize extracted data
         extracted = {
             'title': job_record.get('title', ''),
@@ -1143,9 +1227,15 @@ class AcademicDetailsProcessor:
             'industry': self._extract_industry(text_content),
             'full_text': text_content[:5000]  # Limit text length
         }
+<<<<<<< HEAD
 
         return extracted
 
+=======
+        
+        return extracted
+        
+>>>>>>> update/main
     def _extract_company(self, soup: BeautifulSoup, text: str) -> str:
         """Extract company name"""
         # Try structured selectors first
@@ -1153,26 +1243,44 @@ class AcademicDetailsProcessor:
             '.company-name', '.company', '[data-testid="company-name"]',
             '.employer-name', '.job-company', 'span.companyName'
         ]
+<<<<<<< HEAD
 
+=======
+        
+>>>>>>> update/main
         for selector in company_selectors:
             elem = soup.select_one(selector)
             if elem:
                 return elem.get_text(strip=True)
+<<<<<<< HEAD
 
+=======
+                
+>>>>>>> update/main
         # Fallback to text pattern matching
         company_patterns = [
             r'Company:\s*([^\n]+)',
             r'Employer:\s*([^\n]+)',
             r'Organization:\s*([^\n]+)'
         ]
+<<<<<<< HEAD
 
+=======
+        
+>>>>>>> update/main
         for pattern in company_patterns:
             match = re.search(pattern, text, re.IGNORECASE)
             if match:
                 return match.group(1).strip()
+<<<<<<< HEAD
 
         return "Unknown"
 
+=======
+                
+        return "Unknown"
+        
+>>>>>>> update/main
     def _extract_location(self, soup: BeautifulSoup, text: str) -> str:
         """Extract job location"""
         # Try structured selectors
@@ -1180,20 +1288,34 @@ class AcademicDetailsProcessor:
             '.location', '.job-location', '[data-testid="job-location"]',
             '.workplace-location', '.job-address'
         ]
+<<<<<<< HEAD
 
+=======
+        
+>>>>>>> update/main
         for selector in location_selectors:
             elem = soup.select_one(selector)
             if elem:
                 return elem.get_text(strip=True)
+<<<<<<< HEAD
 
+=======
+                
+>>>>>>> update/main
         # Pattern matching for Kenyan locations
         kenyan_cities = ['Nairobi', 'Mombasa', 'Kisumu', 'Nakuru', 'Eldoret', 'Thika', 'Machakos']
         for city in kenyan_cities:
             if city.lower() in text.lower():
                 return city
+<<<<<<< HEAD
 
         return "Kenya"
 
+=======
+                
+        return "Kenya"
+        
+>>>>>>> update/main
     def _extract_job_type(self, text: str) -> str:
         """Extract job type (Full-time, Part-time, Contract, etc.)"""
         job_types = {
@@ -1204,14 +1326,24 @@ class AcademicDetailsProcessor:
             'remote': ['remote', 'work from home', 'wfh'],
             'freelance': ['freelance', 'consultant', 'independent']
         }
+<<<<<<< HEAD
 
+=======
+        
+>>>>>>> update/main
         text_lower = text.lower()
         for job_type, keywords in job_types.items():
             if any(keyword in text_lower for keyword in keywords):
                 return job_type.title()
+<<<<<<< HEAD
 
         return "Full-time"  # Default
 
+=======
+                
+        return "Full-time"  # Default
+        
+>>>>>>> update/main
     def _extract_experience_level(self, text: str) -> str:
         """Extract required experience level"""
         experience_patterns = [
@@ -1224,9 +1356,15 @@ class AcademicDetailsProcessor:
             (r'manager', 'Manager'),
             (r'director', 'Director')
         ]
+<<<<<<< HEAD
 
         text_lower = text.lower()
 
+=======
+        
+        text_lower = text.lower()
+        
+>>>>>>> update/main
         # Check for specific year requirements
         years_match = re.search(r'(\d+)[\+\-\s]*years?\s+experience', text_lower)
         if years_match:
@@ -1241,27 +1379,45 @@ class AcademicDetailsProcessor:
                 return "Senior"
             else:
                 return "Expert"
+<<<<<<< HEAD
 
+=======
+                
+>>>>>>> update/main
         # Check for level keywords
         for pattern, level in experience_patterns[1:]:
             if re.search(pattern, text_lower):
                 return level
+<<<<<<< HEAD
 
         return "Mid Level"  # Default
 
+=======
+                
+        return "Mid Level"  # Default
+        
+>>>>>>> update/main
     def _extract_salary(self, soup: BeautifulSoup, text: str) -> Optional[Dict]:
         """Extract salary information"""
         # Try structured selectors
         salary_selectors = [
             '.salary', '.compensation', '.pay', '.salaryText'
         ]
+<<<<<<< HEAD
 
+=======
+        
+>>>>>>> update/main
         for selector in salary_selectors:
             elem = soup.select_one(selector)
             if elem:
                 salary_text = elem.get_text(strip=True)
                 return self._parse_salary(salary_text)
+<<<<<<< HEAD
 
+=======
+                
+>>>>>>> update/main
         # Pattern matching for salary
         salary_patterns = [
             r'salary:?\s*([^\n]+)',
@@ -1271,29 +1427,51 @@ class AcademicDetailsProcessor:
             r'\$\s*[\d,]+',
             r'[\d,]+\s*-\s*[\d,]+\s*(?:per|/)\s*(?:month|year)'
         ]
+<<<<<<< HEAD
 
+=======
+        
+>>>>>>> update/main
         for pattern in salary_patterns:
             match = re.search(pattern, text, re.IGNORECASE)
             if match:
                 return self._parse_salary(match.group(0))
+<<<<<<< HEAD
 
         return None
 
+=======
+                
+        return None
+        
+>>>>>>> update/main
     def _parse_salary(self, salary_text: str) -> Dict:
         """Parse salary text into structured format"""
         # Extract numbers
         numbers = re.findall(r'[\d,]+', salary_text.replace(',', ''))
         currency = 'KSH'
+<<<<<<< HEAD
 
+=======
+        
+>>>>>>> update/main
         if '$' in salary_text:
             currency = 'USD'
         elif 'kes' in salary_text.lower():
             currency = 'KES'
+<<<<<<< HEAD
 
         period = 'month'
         if any(word in salary_text.lower() for word in ['year', 'annual', 'yearly']):
             period = 'year'
 
+=======
+            
+        period = 'month'
+        if any(word in salary_text.lower() for word in ['year', 'annual', 'yearly']):
+            period = 'year'
+            
+>>>>>>> update/main
         if len(numbers) >= 2:
             return {
                 'min': int(numbers[0]),
@@ -1309,25 +1487,40 @@ class AcademicDetailsProcessor:
                 'period': period,
                 'raw': salary_text
             }
+<<<<<<< HEAD
 
         return {'raw': salary_text}
 
+=======
+            
+        return {'raw': salary_text}
+        
+>>>>>>> update/main
     def _extract_description(self, soup: BeautifulSoup) -> str:
         """Extract job description"""
         description_selectors = [
             '.job-description', '.description', '.job-details',
             '.job-summary', '.overview', '.about-role'
         ]
+<<<<<<< HEAD
 
+=======
+        
+>>>>>>> update/main
         for selector in description_selectors:
             elem = soup.select_one(selector)
             if elem:
                 return elem.get_text(separator=' ', strip=True)[:2000]
+<<<<<<< HEAD
 
+=======
+                
+>>>>>>> update/main
         # Fallback to main content
         main_content = soup.find('main') or soup.find('body')
         if main_content:
             return main_content.get_text(separator=' ', strip=True)[:2000]
+<<<<<<< HEAD
 
         return ""
 
@@ -1335,12 +1528,25 @@ class AcademicDetailsProcessor:
         """Extract job requirements"""
         requirements = []
 
+=======
+            
+        return ""
+        
+    def _extract_requirements(self, text: str) -> List[str]:
+        """Extract job requirements"""
+        requirements = []
+        
+>>>>>>> update/main
         # Look for requirements sections
         req_sections = re.findall(
             r'(?:requirements?|qualifications?|must have|essential)[:\n](.*?)(?=\n[A-Z]|\n\n|$)',
             text, re.IGNORECASE | re.DOTALL
         )
+<<<<<<< HEAD
 
+=======
+        
+>>>>>>> update/main
         for section in req_sections:
             # Split by bullet points or line breaks
             items = re.split(r'[•\n]\s*', section.strip())
@@ -1348,9 +1554,15 @@ class AcademicDetailsProcessor:
                 clean_item = item.strip()
                 if len(clean_item) > 10 and len(clean_item) < 200:
                     requirements.append(clean_item)
+<<<<<<< HEAD
 
         return requirements[:10]  # Limit to 10 requirements
 
+=======
+                    
+        return requirements[:10]  # Limit to 10 requirements
+        
+>>>>>>> update/main
     def _extract_skills(self, text: str) -> List[str]:
         """Extract required skills"""
         # Common tech skills patterns
@@ -1362,6 +1574,7 @@ class AcademicDetailsProcessor:
             r'\b(?:HTML|CSS|SASS|Bootstrap|Tailwind)\b',
             r'\b(?:Machine Learning|AI|Data Science|Analytics|Statistics)\b'
         ]
+<<<<<<< HEAD
 
         skills = set()
         text_lower = text.lower()
@@ -1370,14 +1583,30 @@ class AcademicDetailsProcessor:
             matches = re.findall(pattern, text, re.IGNORECASE)
             skills.update(matches)
 
+=======
+        
+        skills = set()
+        text_lower = text.lower()
+        
+        for pattern in skill_patterns:
+            matches = re.findall(pattern, text, re.IGNORECASE)
+            skills.update(matches)
+            
+>>>>>>> update/main
         # Add soft skills
         soft_skills = ['communication', 'leadership', 'teamwork', 'problem solving', 'analytical']
         for skill in soft_skills:
             if skill in text_lower:
                 skills.add(skill.title())
+<<<<<<< HEAD
 
         return list(skills)[:15]  # Limit to 15 skills
 
+=======
+                
+        return list(skills)[:15]  # Limit to 15 skills
+        
+>>>>>>> update/main
     def _extract_benefits(self, text: str) -> List[str]:
         """Extract job benefits"""
         benefits_keywords = [
@@ -1388,6 +1617,7 @@ class AcademicDetailsProcessor:
             'training', 'professional development', 'certification',
             'gym', 'wellness', 'transport', 'parking'
         ]
+<<<<<<< HEAD
 
         found_benefits = []
         text_lower = text.lower()
@@ -1398,37 +1628,68 @@ class AcademicDetailsProcessor:
 
         return found_benefits[:10]
 
+=======
+        
+        found_benefits = []
+        text_lower = text.lower()
+        
+        for benefit in benefits_keywords:
+            if benefit in text_lower:
+                found_benefits.append(benefit.title())
+                
+        return found_benefits[:10]
+        
+>>>>>>> update/main
     def _extract_deadline(self, soup: BeautifulSoup, text: str) -> Optional[str]:
         """Extract application deadline"""
         deadline_selectors = [
             '.deadline', '.closing-date', '.application-deadline'
         ]
+<<<<<<< HEAD
 
+=======
+        
+>>>>>>> update/main
         for selector in deadline_selectors:
             elem = soup.select_one(selector)
             if elem:
                 return elem.get_text(strip=True)
+<<<<<<< HEAD
 
+=======
+                
+>>>>>>> update/main
         # Pattern matching
         deadline_patterns = [
             r'deadline:?\s*([^\n]+)',
             r'closing date:?\s*([^\n]+)',
             r'apply by:?\s*([^\n]+)'
         ]
+<<<<<<< HEAD
 
+=======
+        
+>>>>>>> update/main
         for pattern in deadline_patterns:
             match = re.search(pattern, text, re.IGNORECASE)
             if match:
                 return match.group(1).strip()
+<<<<<<< HEAD
 
         return None
 
+=======
+                
+        return None
+        
+>>>>>>> update/main
     def _extract_education(self, text: str) -> List[str]:
         """Extract education requirements"""
         education_levels = [
             'Bachelor', 'Master', 'PhD', 'Doctorate', 'Degree',
             'Diploma', 'Certificate', 'Associate'
         ]
+<<<<<<< HEAD
 
         found_education = []
         text_lower = text.lower()
@@ -1439,6 +1700,18 @@ class AcademicDetailsProcessor:
 
         return found_education
 
+=======
+        
+        found_education = []
+        text_lower = text.lower()
+        
+        for level in education_levels:
+            if level.lower() in text_lower:
+                found_education.append(level)
+                
+        return found_education
+        
+>>>>>>> update/main
     def _extract_industry(self, text: str) -> str:
         """Extract industry/sector"""
         industries = {
@@ -1452,6 +1725,7 @@ class AcademicDetailsProcessor:
             'Retail': ['retail', 'e-commerce', 'store', 'merchandise'],
             'Consulting': ['consulting', 'advisory', 'strategy', 'management consulting']
         }
+<<<<<<< HEAD
 
         text_lower = text.lower()
 
@@ -1681,6 +1955,26 @@ class AcademicDetailsProcessor:
             # Prepare content for AI analysis
             content_summary = full_content[:3000]  # Limit content length
 
+=======
+        
+        text_lower = text.lower()
+        
+        for industry, keywords in industries.items():
+            if any(keyword in text_lower for keyword in keywords):
+                return industry
+                
+        return "General"
+        
+    async def _enhance_with_ai(self, extracted_data: Dict, full_content: str) -> Dict:
+        """Use AI to enhance and validate extracted information"""
+        if not self.ai_client:
+            return {}
+            
+        try:
+            # Prepare content for AI analysis
+            content_summary = full_content[:3000]  # Limit content length
+            
+>>>>>>> update/main
             prompt = f"""
             Analyze this job posting and extract/enhance the following information:
             
@@ -1700,9 +1994,15 @@ class AcademicDetailsProcessor:
             
             Return only valid JSON.
             """
+<<<<<<< HEAD
 
             response = await self.ai_client.chat([UserMessage(content=prompt)])
 
+=======
+            
+            response = await self.ai_client.chat([UserMessage(content=prompt)])
+            
+>>>>>>> update/main
             # Parse AI response
             try:
                 ai_data = json.loads(response.content)
@@ -1710,11 +2010,19 @@ class AcademicDetailsProcessor:
             except json.JSONDecodeError:
                 logger.warning("Failed to parse AI response as JSON")
                 return {}
+<<<<<<< HEAD
 
         except Exception as e:
             logger.error(f"Error in AI enhancement: {e}")
             return {}
 
+=======
+                
+        except Exception as e:
+            logger.error(f"Error in AI enhancement: {e}")
+            return {}
+            
+>>>>>>> update/main
     def _create_processed_record(self, original_record: Dict, extracted_data: Dict, ai_data: Dict) -> Dict:
         """Create final processed job record"""
         processed_record = {
@@ -1723,7 +2031,11 @@ class AcademicDetailsProcessor:
             'source': original_record['source'],
             'scraped_at': original_record['scraped_at'],
             'link': original_record['link'],
+<<<<<<< HEAD
 
+=======
+            
+>>>>>>> update/main
             # Processed data
             'title': extracted_data.get('title', original_record.get('title', '')),
             'company': extracted_data.get('company', 'Unknown'),
@@ -1738,7 +2050,11 @@ class AcademicDetailsProcessor:
             'deadline': extracted_data.get('deadline'),
             'education': extracted_data.get('education', []),
             'industry': extracted_data.get('industry', 'General'),
+<<<<<<< HEAD
 
+=======
+            
+>>>>>>> update/main
             # AI-enhanced data
             'ai_skills_analysis': ai_data.get('skills_analysis', []),
             'ai_experience_summary': ai_data.get('experience_summary', ''),
@@ -1747,12 +2063,17 @@ class AcademicDetailsProcessor:
             'growth_potential': ai_data.get('growth_potential', 'Medium'),
             'ai_industry_category': ai_data.get('industry_category', ''),
             'key_responsibilities': ai_data.get('key_responsibilities', []),
+<<<<<<< HEAD
 
+=======
+            
+>>>>>>> update/main
             # Metadata
             'processed': True,
             'processed_at': datetime.utcnow(),
             'quality_score': self._calculate_quality_score(extracted_data, ai_data)
         }
+<<<<<<< HEAD
 
         return processed_record
 
@@ -1760,6 +2081,15 @@ class AcademicDetailsProcessor:
         """Calculate quality score for processed job (0-1)"""
         score = 0.0
 
+=======
+        
+        return processed_record
+        
+    def _calculate_quality_score(self, extracted_data: Dict, ai_data: Dict) -> float:
+        """Calculate quality score for processed job (0-1)"""
+        score = 0.0
+        
+>>>>>>> update/main
         # Check completeness of key fields
         if extracted_data.get('title'): score += 0.2
         if extracted_data.get('company') and extracted_data['company'] != 'Unknown': score += 0.1
@@ -1769,9 +2099,15 @@ class AcademicDetailsProcessor:
         if extracted_data.get('salary'): score += 0.1
         if ai_data.get('skills_analysis'): score += 0.1
         if ai_data.get('key_responsibilities'): score += 0.1
+<<<<<<< HEAD
 
         return min(1.0, score)
 
+=======
+        
+        return min(1.0, score)
+        
+>>>>>>> update/main
     def _create_failed_record(self, original_record: Dict, error_message: str) -> Dict:
         """Create record for failed processing"""
         return {
@@ -1786,6 +2122,7 @@ class AcademicDetailsProcessor:
             'processed_at': datetime.utcnow(),
             'quality_score': 0.0
         }
+<<<<<<< HEAD
             logger.error(f"Error exporting career insights: {e}")
             return False
         finally:
@@ -1968,30 +2305,54 @@ if __name__ == "__main__":
         asyncio.run(main_async())
     else:
         main()
+=======
+
+
+>>>>>>> update/main
 # Convenience function for processing batches
 async def process_job_batch(job_records: List[Dict], batch_size: int = 5) -> List[Dict]:
     """
     Process a batch of job records
     """
     processed_jobs = []
+<<<<<<< HEAD
 
+=======
+    
+>>>>>>> update/main
     async with JobProcessor() as processor:
         # Process jobs in smaller batches to avoid overwhelming servers
         for i in range(0, len(job_records), batch_size):
             batch = job_records[i:i + batch_size]
+<<<<<<< HEAD
 
             # Process batch concurrently
             tasks = [processor.process_job(job) for job in batch]
             batch_results = await asyncio.gather(*tasks, return_exceptions=True)
 
+=======
+            
+            # Process batch concurrently
+            tasks = [processor.process_job(job) for job in batch]
+            batch_results = await asyncio.gather(*tasks, return_exceptions=True)
+            
+>>>>>>> update/main
             for result in batch_results:
                 if isinstance(result, Exception):
                     logger.error(f"Batch processing error: {result}")
                 else:
                     processed_jobs.append(result)
+<<<<<<< HEAD
 
             # Small delay between batches
             if i + batch_size < len(job_records):
                 await asyncio.sleep(2)
 
+=======
+                    
+            # Small delay between batches
+            if i + batch_size < len(job_records):
+                await asyncio.sleep(2)
+                
+>>>>>>> update/main
     return processed_jobs

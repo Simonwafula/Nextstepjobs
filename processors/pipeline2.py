@@ -21,7 +21,6 @@ class JobProcessor:
         self.ai_client = None
         self._init_ai_client()
     
-        """Initialize AI client for content processing"""
 
 # Enhanced data models with validation
 class JobClassification(BaseModel):

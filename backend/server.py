@@ -1302,7 +1302,7 @@ async def get_popular_topics():
 # Add basic endpoints
 @api_router.get("/")
 async def root():
-    return {"message": "Career Advisor API - Empowering your career journey with AI"}
+    return {"message": "Nextstep API - Empowering your career journey with AI"}
 
 @api_router.get("/health")
 async def health_check():

@@ -198,7 +198,7 @@ useEffect(() => {
       <div className="container mx-auto px-4 py-16">
         <div className="text-center mb-16">
           <h1 className="text-5xl font-bold text-gray-800 mb-6">
-            🎯 Career Navigator
+            🎯 Nextstep
           </h1>
           <p className="text-xl text-gray-600 max-w-3xl mx-auto mb-8">
             Your AI-powered career advisor that analyzes job descriptions, provides personalized recommendations, and guides your professional journey.
@@ -930,7 +930,7 @@ const Home = () => {
       <div className="container mx-auto px-4 py-16">
         <div className="text-center mb-16">
           <h1 className="text-5xl font-bold text-gray-800 mb-6">
-            🎯 Career Navigator
+            🎯 Nextstep
           </h1>
           <p className="text-xl text-gray-600 max-w-3xl mx-auto mb-8">
             Your AI-powered career advisor that analyzes job descriptions, provides personalized recommendations, and guides your professional journey.
@@ -1665,7 +1665,7 @@ function App() {
       <div className="container mx-auto px-4 py-16">
         <div className="text-center mb-16">
           <h1 className="text-5xl font-bold text-gray-800 mb-6">
-            🎯 Career Navigator
+            🎯 Nextstep
           </h1>
           <p className="text-xl text-gray-600 max-w-3xl mx-auto mb-8">
             Your AI-powered career advisor that analyzes job descriptions, provides personalized recommendations, and guides your professional journey.

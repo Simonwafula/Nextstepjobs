@@ -16,22 +16,11 @@ import os
 logger = logging.getLogger(__name__)
 
 class JobProcessor:
-    """
-    Advanced job processing pipeline for NextStep
-    Extracts structured information from job listings
-    """
-<<<<<<< HEAD
-
-=======
-    
->>>>>>> update/main
     def __init__(self):
         self.session = None
         self.ai_client = None
         self._init_ai_client()
-<<<<<<< HEAD
-
-    def _init_ai_client(self):
+    
         """Initialize AI client for content processing"""
 
 # Enhanced data models with validation

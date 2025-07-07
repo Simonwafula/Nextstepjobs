@@ -1311,7 +1311,6 @@ async def health_check():
 class StatusCheck(BaseModel):
     id: str = Field(default_factory=lambda: str(uuid.uuid4()))
     name: str
->>>>>>> conflict_030725_1936
     education_level: str  # High School, Bachelor's, Master's, PhD, etc.
     field_of_study: Optional[str] = None
     skills: List[str] = []

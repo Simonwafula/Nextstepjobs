@@ -7,56 +7,12 @@ import asyncio
 import aiohttp
 from bs4 import BeautifulSoup
 from typing import Dict, List, Optional, Any
-<<<<<<< HEAD
-import os
-import re
-import sqlite3
-import logging
-import asyncio
-from datetime import datetime, timedelta
-import json
-from typing import List, Optional, Literal, Dict, Any
-from datetime import datetime
-
-from dotenv import load_dotenv
-from langchain_core.prompts import PromptTemplate
-from langchain_openai import OpenAI
-from langchain_core.output_parsers import PydanticOutputParser
-from langchain_core.runnables import RunnableSequence
-from pydantic import BaseModel, Field, validator
-from emergentintegrations.llm.chat import LlmChat, UserMessage
-import os
-
-# Load environment variables
-load_dotenv()
-
-# Regex patterns for abbreviation normalization
-BS_RE = re.compile(r"\bB\.S\.\b", re.IGNORECASE)
-BA_RE = re.compile(r"\bB\.A\.\b", re.IGNORECASE)
-MS_RE = re.compile(r"\bM\.S\.\b", re.IGNORECASE)
-MA_RE = re.compile(r"\bM\.A\.\b", re.IGNORECASE)
-PHD_RE = re.compile(r"\bPh\.D\.\b", re.IGNORECASE)
-WHITESPACE_RE = re.compile(r"\s+")
-URL_RE = re.compile(r'http[s]?://(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*\\(\\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+')
-
-# Configure logging
-logging.basicConfig(
-    level=logging.INFO,
-    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
-    handlers=[
-        logging.FileHandler('pipeline.log'),
-        logging.StreamHandler()
-    ]
-)
-=======
 import re
 import logging
 from datetime import datetime, timedelta
 import json
 from emergentintegrations.llm.chat import LlmChat, UserMessage
 import os
-
->>>>>>> update/main
 logger = logging.getLogger(__name__)
 
 class JobProcessor:

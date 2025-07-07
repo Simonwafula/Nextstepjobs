@@ -22,9 +22,12 @@ def resolve_conflicts_in_file(filepath, prefer_update=True):
     
     print(f"Resolving conflicts in {filepath}")
     
-    # Pattern to match conflict blocks
+    # Pattern to match conflict blocks - improved to handle more cases
     # This handles both update/main and conflict_030725_1936 patterns
-    conflict_pattern = r'<<<<<<< HEAD\n(.*?)\n=======\n(.*?)\n>>>>>>> (?:update/main|conflict_030725_1936)'
+    conflict_patterns = [
+        r'<<<<<<< HEAD\n(.*?)\n=======\n(.*?)\n>>>>>>> update/main',
+        r'<<<<<<< HEAD\n(.*?)\n=======\n(.*?)\n>>>>>>> conflict_030725_1936'
+    ]
     
     def replace_conflict(match):
         head_content = match.group(1)
@@ -35,8 +38,10 @@ def resolve_conflicts_in_file(filepath, prefer_update=True):
         else:
             return head_content
     
-    # Resolve conflicts
-    resolved_content = re.sub(conflict_pattern, replace_conflict, content, flags=re.DOTALL)
+    # Resolve conflicts using multiple patterns
+    resolved_content = content
+    for pattern in conflict_patterns:
+        resolved_content = re.sub(pattern, replace_conflict, resolved_content, flags=re.DOTALL)
     
     # Write back the resolved content
     try:

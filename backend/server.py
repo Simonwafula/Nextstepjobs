@@ -1850,7 +1850,6 @@ async def create_status_check(input: StatusCheckCreate):
     return status_obj
 
 <<<<<<< HEAD
-class StatusCheck(BaseModel):
     id: str = Field(default_factory=lambda: str(uuid.uuid4()))
     name: str
     education_level: str  # High School, Bachelor's, Master's, PhD, etc.

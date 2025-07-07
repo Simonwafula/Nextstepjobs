@@ -298,7 +298,7 @@ def test_openai_integration():
 
 def main():
     """Run all tests in sequence"""
-    print_header("CAREER ADVISOR API TESTING")
+    print_header("NEXTSTEP API TESTING")
     print(f"Testing API at: {BASE_URL}")
     
     # First test OpenAI integration directly (most critical after API key change)

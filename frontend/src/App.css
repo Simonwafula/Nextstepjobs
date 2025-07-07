@@ -1,4 +1,5 @@
 .App {
+<<<<<<< HEAD
     text-align: center;}
 
 /* Custom scrollbar */
@@ -514,6 +515,8 @@ input:focus, textarea:focus, select:focus {
   .dark-mode .border-gray-300 {
     border-color: #4b5563;
   }
+=======
+>>>>>>> conflict_030725_1936
     text-align: center;
 }
 
@@ -987,6 +990,7 @@ input:focus, textarea:focus, select:focus {
   .dark-mode .text-gray-600 {
     color: #d1d5db;
   }
+<<<<<<< HEAD
   
   .dark-mode .bg-white {
     background-color: #374151;
@@ -1483,6 +1487,8 @@ input:focus, textarea:focus, select:focus {
   .dark-mode .text-gray-600 {
     color: #d1d5db;
   }
+=======
+>>>>>>> conflict_030725_1936
   
   .dark-mode .bg-white {
     background-color: #374151;

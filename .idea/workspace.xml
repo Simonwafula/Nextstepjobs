@@ -28,6 +28,10 @@
     "ModuleVcsDetector.initialDetectionPerformed": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "RunOnceActivity.git.unshallow": "true",
+<<<<<<< HEAD
+=======
+    "git-widget-placeholder": "conflict__030725__1936",
+>>>>>>> conflict_030725_1936
     "last_opened_file_path": "/Users/hp/PycharmProjects/Nextstepjobs",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",

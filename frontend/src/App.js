@@ -32,6 +32,17 @@ const Home = () => {
     }
   };
 
+<<<<<<< HEAD
+=======
+const helloWorldApi = async () => {
+  try {
+    const response = await axios.get(`${API}/`);
+    console.log(response.data.message);
+  } catch (e) {
+    console.error(e, `errored out requesting / api`);
+  }
+};
+>>>>>>> conflict_030725_1936
 
 // Profile form state
 const [profileForm, setProfileForm] = useState({
@@ -776,6 +787,7 @@ useEffect(() => {
     </div>
   );
 
+<<<<<<< HEAD
 // Render based on current view
 const renderView = () => {
   switch(currentView) {
@@ -1535,6 +1547,8 @@ export default App;
     </div>
   );
 
+=======
+>>>>>>> conflict_030725_1936
   // Render based on current view
   const renderView = () => {
     switch(currentView) {
@@ -1559,6 +1573,7 @@ const Home = () => {
   useEffect(() => {
     loadProfiles();
     loadPopularTopics();
+<<<<<<< HEAD
   }, []);
 
   const loadProfiles = async () => {
@@ -2293,6 +2308,8 @@ export default App;
   };
 
 function App() {
+=======
+>>>>>>> conflict_030725_1936
   }, []);
 
   const loadProfiles = async () => {

@@ -6,16 +6,9 @@ import time
 from typing import Dict, Any, Optional
 
 # Configuration
-<<<<<<< HEAD
 # BASE_URL = "https://c846ca70-b4df-41ce-b222-270f7fb0d991.preview.emergentagent.com/api"
 
 BASE_URL = "https://c846ca70-b4df-41ce-b222-270f7fb0d991.preview.emergentagent.com/api"
-
-=======
-# BASE_URL = "https://1a82c7c6-3042-41ed-94bd-d4b22e97eead.preview.emergentagent.com/api"
-
-BASE_URL = "https://aabffe8a-f81f-4bb8-9e4d-df17ec9e94ba.preview.emergentagent.com/api"
->>>>>>> conflict_030725_1936
 TEST_RESULTS = {}
 
 # Test data

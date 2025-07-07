@@ -1840,7 +1840,7 @@ Make your response practical, encouraging, and actionable."""
 # Add basic endpoints
 @api_router.get("/")
 async def root():
-    return {"message": "Career Advisor API - Empowering your career journey with AI"}
+    return {"message": "Nextstep API - Empowering your career journey with AI"}
 
 @api_router.post("/status", response_model=StatusCheck)
 async def create_status_check(input: StatusCheckCreate):

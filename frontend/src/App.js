@@ -809,7 +809,6 @@ const Home = () => {
   useEffect(() => {
     loadProfiles();
     loadPopularTopics();
-<<<<<<< HEAD
   }, []);
 
   const loadProfiles = async () => {

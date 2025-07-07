@@ -1306,7 +1306,7 @@ async def root():
 
 @api_router.get("/health")
 async def health_check():
-    return {"status": "healthy", "service": "career-advisor-api"}
+    return {"status": "healthy", "service": "nextstep-api"}
 
 class StatusCheck(BaseModel):
     id: str = Field(default_factory=lambda: str(uuid.uuid4()))

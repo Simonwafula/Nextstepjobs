@@ -1,15 +1,17 @@
-# Career Navigator - AI-Powered Career Advisor
+# NextStep - Your AI-Powered Career Evolution Partner 🚀
 
-Your intelligent career guidance platform that helps students, graduates, and professionals make informed career decisions using AI.
+Transform your professional journey with NextStep - the intelligent career guidance platform that empowers students, graduates, and professionals to make informed career decisions using cutting-edge AI technology.
 
-## Features
+## ✨ Features
 
-- 🔍 **Anonymous Career Search** - Get instant career guidance without registration
-- 👤 **Personalized Profiles** - Create detailed profiles for tailored advice
-- 📋 **Job Analysis** - AI-powered analysis of job descriptions
-- 💡 **Career Advice** - Personalized guidance based on your background
-- 📊 **Market Insights** - Industry trends and opportunities
-- 🔥 **Trending Topics** - Popular career questions and hot job roles
+- 🔮 **Anonymous Career Search** - Get instant AI-powered career guidance without registration
+- 👤 **Personalized Profiles** - Create detailed profiles for tailored career advice
+- 📋 **Smart Job Analysis** - AI-powered analysis of job descriptions with match scoring
+- 💡 **Career Advice Engine** - Personalized guidance based on your unique background
+- 📊 **Market Insights** - Industry trends, salary data, and future opportunities
+- 🔥 **Trending Topics** - Popular career questions and hot job roles for 2025
+- 🎯 **Skills Development** - Personalized skill recommendations and learning paths
+- 🌟 **Industry Intelligence** - Deep insights into career paths and growth opportunities
 
 ## Environment Setup
 

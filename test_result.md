@@ -303,8 +303,13 @@ test_plan:
     - "Anonymous Search API"
     - "OpenAI Integration"
     - "Popular Topics API"
+    - "User Profile Creation UI"
+    - "Job Analysis UI"
+    - "Career Advice UI"
+    - "Dashboard and Navigation"
+    - "Anonymous Search UI"
   stuck_tasks: []
-  test_all: false
+  test_all: true
   test_priority: "high_first"
 
 agent_communication:

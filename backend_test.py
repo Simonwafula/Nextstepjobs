@@ -6,7 +6,7 @@ import time
 from typing import Dict, Any, Optional
 
 # Configuration
-BASE_URL = "https://aabffe8a-f81f-4bb8-9e4d-df17ec9e94ba.preview.emergentagent.com/api"
+BASE_URL = "https://5b3a5c9a-6404-4135-8757-1eb6a9993556.preview.emergentagent.com/api"
 TEST_RESULTS = {}
 
 # Test data

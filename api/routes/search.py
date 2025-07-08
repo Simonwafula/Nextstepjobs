@@ -1,24 +1,35 @@
-# api/routes/search.py
-@app.route('/api/search')
-def search_jobs():
+from fastapi import APIRouter
+
+router = APIRouter()
+
+
+@router.get("/api/search")
+async def search_jobs():
     """Universal search endpoint"""
+    pass
 
 
-@app.route('/api/careers/<category>')
-def explore_careers():
+@router.get("/api/careers/{category}")
+async def explore_careers(category: str):
     """Explore careers by category"""
+    pass
 
 
-@app.route('/api/recommendations/student')
-def student_recommendations():
+@router.get("/api/recommendations/student")
+async def student_recommendations():
     """Career recommendations for students"""
+    pass
 
 
-@app.route('/api/recommendations/graduate')
-def graduate_recommendations():
+@router.get("/api/recommendations/graduate")
+async def graduate_recommendations():
     """Job recommendations for graduates"""
+    pass
 
 
-@app.route('/api/recommendations/professional')
-def professional_recommendations():
+@router.get("/api/recommendations/professional")
+async def professional_recommendations():
     """Career advancement recommendations"""
+    pass
+
+__all__ = ["router"]

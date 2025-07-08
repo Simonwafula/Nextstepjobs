@@ -2,121 +2,168 @@
   text-align: left;
 }
 
-/* Custom scrollbar */
-::-webkit-scrollbar {
-  width: 8px;
-}
-
-::-webkit-scrollbar-track {
-  background: #f1f1f1;
-  border-radius: 4px;
-}
-
-::-webkit-scrollbar-thumb {
-  background: #c1c1c1;
-  border-radius: 4px;
-}
-
-::-webkit-scrollbar-thumb:hover {
-  background: #a8a8a8;
-}
-
-/* Form animations */
-.form-input:focus {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.15);
-}
-
-/* Loading spinner */
-.loading-spinner {
+/* NextStep custom animations and effects */
+.nextstep-spinner {
   display: inline-block;
   width: 20px;
   height: 20px;
-  border: 3px solid #f3f3f3;
-  border-top: 3px solid #3498db;
+  border: 3px solid rgba(255, 255, 255, 0.3);
+  border-top: 3px solid #ffffff;
   border-radius: 50%;
-  animation: spin 1s linear infinite;
+  animation: nextstep-spin 1s linear infinite;
 }
 
-@keyframes spin {
+@keyframes nextstep-spin {
   0% { transform: rotate(0deg); }
   100% { transform: rotate(360deg); }
 }
 
-/* Card hover effects */
-.card-hover {
+/* Gradient animations */
+@keyframes gradient-flow {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+.gradient-animate {
+  background: linear-gradient(-45deg, #667eea, #764ba2, #f093fb, #f5576c, #4facfe, #00f2fe);
+  background-size: 400% 400%;
+  animation: gradient-flow 8s ease infinite;
+}
+
+/* Floating animations */
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-20px); }
+}
+
+.float-animation {
+  animation: float 6s ease-in-out infinite;
+}
+
+/* Pulse effect for important elements */
+@keyframes pulse-glow {
+  0%, 100% { 
+    box-shadow: 0 0 20px rgba(147, 51, 234, 0.4);
+    transform: scale(1);
+  }
+  50% { 
+    box-shadow: 0 0 40px rgba(147, 51, 234, 0.8);
+    transform: scale(1.05);
+  }
+}
+
+.pulse-glow {
+  animation: pulse-glow 3s ease-in-out infinite;
+}
+
+/* Custom scrollbar with NextStep branding */
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: linear-gradient(to bottom, #f3f4f6, #e5e7eb);
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(to bottom, #8b5cf6, #ec4899);
+  border-radius: 10px;
   transition: all 0.3s ease;
 }
 
-.card-hover:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(to bottom, #7c3aed, #db2777);
 }
 
-/* Button animations */
-.btn-primary {
+/* Enhanced form focus effects */
+.form-focus:focus {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(147, 51, 234, 0.25);
+  border-color: #8b5cf6;
+}
+
+/* Card hover effects with NextStep styling */
+.nextstep-card {
+  transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  position: relative;
+  overflow: hidden;
+}
+
+.nextstep-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  transition: left 0.5s ease;
+}
+
+.nextstep-card:hover::before {
+  left: 100%;
+}
+
+.nextstep-card:hover {
+  transform: translateY(-8px) scale(1.02);
+  box-shadow: 0 20px 40px rgba(147, 51, 234, 0.15);
+}
+
+/* Button animations with NextStep branding */
+.nextstep-button {
   position: relative;
   overflow: hidden;
   transition: all 0.3s ease;
+  background: linear-gradient(45deg, #8b5cf6, #ec4899);
+  background-size: 200% 200%;
+  animation: gradient-shift 3s ease infinite;
 }
 
-.btn-primary:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+@keyframes gradient-shift {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
 }
 
-.btn-primary:active {
-  transform: translateY(0);
+.nextstep-button:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 10px 30px rgba(147, 51, 234, 0.4);
 }
 
-/* Progress bar animation */
-@keyframes progressBar {
-  0% { width: 0%; }
-  100% { width: var(--progress-width); }
+.nextstep-button:active {
+  transform: translateY(-1px);
 }
 
-.progress-bar {
-  animation: progressBar 1s ease-out;
-}
-
-/* Responsive design */
-@media (max-width: 768px) {
-  .container {
-    padding-left: 1rem;
-    padding-right: 1rem;
-  }
-  
-  .text-5xl {
-    font-size: 2.5rem;
-  }
-  
-  .text-xl {
-    font-size: 1.125rem;
-  }
-}
-
-/* Gradient backgrounds */
-.gradient-bg-1 {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-}
-
-.gradient-bg-2 {
-  background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
-}
-
-.gradient-bg-3 {
-  background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+/* Loading overlay with NextStep branding */
+.nextstep-loading {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(45deg, rgba(139, 92, 246, 0.9), rgba(236, 72, 153, 0.9));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 50;
+  backdrop-filter: blur(10px);
 }
 
 /* Text animations */
-.fade-in {
-  animation: fadeIn 0.6s ease-in;
+.text-glow {
+  text-shadow: 0 0 10px rgba(147, 51, 234, 0.5);
 }
 
-@keyframes fadeIn {
+.fade-in-up {
+  animation: fadeInUp 0.8s ease-out;
+}
+
+@keyframes fadeInUp {
   from {
     opacity: 0;
-    transform: translateY(20px);
+    transform: translateY(30px);
   }
   to {
     opacity: 1;
@@ -124,88 +171,102 @@
   }
 }
 
-/* Custom input focus styles */
-input:focus, textarea:focus, select:focus {
+/* Enhanced input styles */
+.nextstep-input {
+  position: relative;
+  transition: all 0.3s ease;
+}
+
+.nextstep-input:focus {
   outline: none;
-  border-color: #3b82f6;
-  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+  border-color: #8b5cf6;
+  box-shadow: 0 0 0 4px rgba(139, 92, 246, 0.1);
+  background: rgba(255, 255, 255, 0.95);
 }
 
-/* Success and error states */
-.success-state {
-  background-color: #f0fdf4;
-  border-color: #16a34a;
-  color: #15803d;
+.nextstep-input:focus + .input-label {
+  color: #8b5cf6;
+  transform: scale(0.85) translateY(-25px);
 }
 
-.error-state {
-  background-color: #fef2f2;
-  border-color: #dc2626;
-  color: #dc2626;
+/* Progress bar with NextStep styling */
+.nextstep-progress {
+  background: linear-gradient(45deg, #8b5cf6, #ec4899);
+  animation: progress-fill 2s ease-out;
 }
 
-/* Loading states */
-.loading-overlay {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: rgba(255, 255, 255, 0.8);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 10;
+@keyframes progress-fill {
+  0% { width: 0%; }
+  100% { width: var(--progress-width); }
 }
 
-/* Custom checkbox and radio styles */
-.custom-checkbox:checked {
-  background-color: #3b82f6;
-  border-color: #3b82f6;
-}
-
-.custom-radio:checked {
-  background-color: #3b82f6;
-  border-color: #3b82f6;
-}
-
-/* Tooltip styles */
-.tooltip {
+/* Tooltip with NextStep branding */
+.nextstep-tooltip {
   position: relative;
 }
 
-.tooltip::before {
+.nextstep-tooltip::before {
   content: attr(data-tooltip);
   position: absolute;
   bottom: 100%;
   left: 50%;
   transform: translateX(-50%);
-  background: #1f2937;
+  background: linear-gradient(45deg, #6366f1, #8b5cf6);
   color: white;
-  padding: 0.5rem;
-  border-radius: 0.25rem;
+  padding: 0.75rem 1rem;
+  border-radius: 0.75rem;
   font-size: 0.875rem;
   white-space: nowrap;
   opacity: 0;
   visibility: hidden;
-  transition: all 0.3s;
+  transition: all 0.3s ease;
+  box-shadow: 0 10px 30px rgba(99, 102, 241, 0.3);
 }
 
-.tooltip:hover::before {
+.nextstep-tooltip:hover::before {
   opacity: 1;
   visibility: visible;
-  transform: translateX(-50%) translateY(-0.5rem);
+  transform: translateX(-50%) translateY(-10px);
 }
 
-/* Dark mode support */
+/* Mobile responsive enhancements */
+@media (max-width: 768px) {
+  .container {
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+  
+  .text-6xl {
+    font-size: 2.5rem;
+  }
+  
+  .text-4xl {
+    font-size: 1.875rem;
+  }
+  
+  .text-3xl {
+    font-size: 1.5rem;
+  }
+  
+  .nextstep-card {
+    margin-bottom: 1rem;
+  }
+  
+  .nextstep-button {
+    padding: 0.875rem 1.5rem;
+  }
+}
+
+/* Dark mode support with NextStep colors */
 @media (prefers-color-scheme: dark) {
   .dark-mode {
-    background-color: #1f2937;
+    background: linear-gradient(135deg, #1e1b4b, #312e81);
     color: #f9fafb;
   }
   
   .dark-mode .bg-white {
-    background-color: #374151;
+    background: rgba(30, 27, 75, 0.8);
+    backdrop-filter: blur(10px);
   }
   
   .dark-mode .text-gray-800 {
@@ -216,7 +277,74 @@ input:focus, textarea:focus, select:focus {
     color: #d1d5db;
   }
   
-  .dark-mode .border-gray-300 {
-    border-color: #4b5563;
+  .dark-mode .border-purple-200 {
+    border-color: #6366f1;
   }
+}
+
+/* Success and error states with NextStep branding */
+.nextstep-success {
+  background: linear-gradient(45deg, #10b981, #059669);
+  color: white;
+  border: none;
+}
+
+.nextstep-error {
+  background: linear-gradient(45deg, #ef4444, #dc2626);
+  color: white;
+  border: none;
+}
+
+/* Backdrop blur effects */
+.nextstep-backdrop {
+  backdrop-filter: blur(20px);
+  background: rgba(255, 255, 255, 0.85);
+}
+
+/* Custom selection colors */
+::selection {
+  background: linear-gradient(45deg, #8b5cf6, #ec4899);
+  color: white;
+}
+
+::-moz-selection {
+  background: linear-gradient(45deg, #8b5cf6, #ec4899);
+  color: white;
+}
+
+/* Enhanced focus states for accessibility */
+.nextstep-focus:focus {
+  outline: 3px solid #8b5cf6;
+  outline-offset: 2px;
+}
+
+/* Smooth transitions for all interactive elements */
+* {
+  transition: color 0.3s ease, background-color 0.3s ease, border-color 0.3s ease, transform 0.3s ease;
+}
+
+/* Logo animation */
+.logo-animate {
+  animation: logo-pulse 2s ease-in-out infinite;
+}
+
+@keyframes logo-pulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+}
+
+/* Glassmorphism effect */
+.glass-effect {
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+/* Enhanced shadow effects */
+.nextstep-shadow {
+  box-shadow: 0 25px 50px -12px rgba(147, 51, 234, 0.25);
+}
+
+.nextstep-shadow:hover {
+  box-shadow: 0 32px 64px -12px rgba(147, 51, 234, 0.4);
 }

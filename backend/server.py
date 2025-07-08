@@ -403,40 +403,47 @@ Keep responses comprehensive but concise.""",
 # Popular Career Topics endpoint
 @api_router.get("/popular-topics")
 async def get_popular_topics():
-    """Get popular career topics and trending searches"""
+    """Get popular career topics and trending searches - NextStep curated content"""
     
-    # You could make this dynamic by analyzing search history
-    # For now, return curated popular topics
+    # NextStep curated trending content for 2025
     topics = {
         "trending_careers": [
-            "AI/Machine Learning Engineer",
-            "Data Scientist",
-            "Cybersecurity Specialist",
-            "Product Manager",
-            "UX/UI Designer",
-            "Cloud Engineer",
-            "Digital Marketing Specialist",
-            "Software Developer"
+            "AI/ML Engineer 🤖",
+            "Data Scientist 📊",
+            "Cybersecurity Specialist 🔒",
+            "Product Manager 📱",
+            "UX/UI Designer 🎨",
+            "Cloud Engineer ☁️",
+            "DevOps Engineer 🚀",
+            "Digital Marketing Specialist 📈",
+            "Full-Stack Developer 💻",
+            "Blockchain Developer 🔗",
+            "IoT Engineer 🌐",
+            "Renewable Energy Engineer 🌱"
         ],
         "popular_questions": [
-            "How to break into tech without a CS degree?",
-            "What skills do I need for data science?",
-            "How to transition careers at 30+?",
-            "Remote work opportunities in marketing",
-            "Highest paying entry-level jobs",
-            "How to negotiate salary?",
-            "Best certifications for career growth",
-            "How to build a professional network?"
+            "How to break into AI without a technical background? 🤖",
+            "What skills will be most valuable in 2025? 🚀",
+            "How to transition careers at 30+? 🔄",
+            "Remote work opportunities in emerging fields 🏠",
+            "Highest paying entry-level jobs in tech 💰",
+            "How to negotiate salary like a pro? 💼",
+            "Best certifications for career acceleration 📜",
+            "Building a professional network in the digital age 🤝",
+            "Upskilling vs. reskilling: Which is right for me? 📚",
+            "How to future-proof my career? 🔮"
         ],
         "industry_insights": [
-            "Technology",
-            "Healthcare",
-            "Finance",
-            "Education",
-            "Manufacturing",
-            "Renewable Energy",
-            "E-commerce",
-            "Biotechnology"
+            "Artificial Intelligence & Machine Learning 🤖",
+            "Green Technology & Sustainability 🌱",
+            "Healthcare & Biotechnology 🏥",
+            "Fintech & Cryptocurrency 💳",
+            "EdTech & Online Learning 📚",
+            "Space Technology & Aerospace 🚀",
+            "E-commerce & Digital Marketing 🛒",
+            "Cybersecurity & Privacy 🔒",
+            "Virtual Reality & Metaverse 🥽",
+            "Robotics & Automation 🤖"
         ]
     }
     
@@ -446,11 +453,19 @@ async def get_popular_topics():
 # Add basic endpoints
 @api_router.get("/")
 async def root():
-    return {"message": "Career Advisor API - Empowering your career journey with AI"}
+    return {
+        "message": "Welcome to NextStep API - Your AI-powered career evolution partner! 🚀", 
+        "tagline": "Transforming professional journeys with intelligent insights",
+        "version": "2.0.0"
+    }
 
 @api_router.get("/health")
 async def health_check():
-    return {"status": "healthy", "service": "career-advisor-api"}
+    return {
+        "status": "healthy", 
+        "service": "nextstep-api",
+        "message": "NextStep is ready to accelerate your career! ✨"
+    }
 
 
 # Include the router in the main app

@@ -21,7 +21,13 @@ client = AsyncIOMotorClient(mongo_url)
 db = client[os.environ['DB_NAME']]
 
 # Create the main app without a prefix
-app = FastAPI()
+app = FastAPI(
+    title="NextStep API",
+    description="Your AI-powered career evolution partner - transforming professional journeys with intelligent insights",
+    version="2.0.0",
+    docs_url="/api/docs",
+    redoc_url="/api/redoc"
+)
 
 # Create a router with the /api prefix
 api_router = APIRouter(prefix="/api")

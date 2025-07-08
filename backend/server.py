@@ -362,11 +362,13 @@ Present industry insights in an engaging way that helps users make informed deci
     
     system_message = system_messages.get(request.search_type, system_messages["general"])
     
-    # Enhanced user message with context
+    # Enhanced user message with NextStep context
     user_message = f"""
     User Query: {request.query}
     
-    Please provide comprehensive career guidance addressing this question. If the query is broad, break down your response into actionable sections and provide specific guidance they can follow.
+    As NextStep's AI career advisor, provide comprehensive and inspiring career guidance addressing this question. If the query is broad, break down your response into actionable sections with specific steps they can take to accelerate their career journey. 
+    
+    Remember: You're helping someone take their NEXT STEP toward career success! Make it motivational, practical, and forward-looking for 2025 and beyond.
     """
     
     # Get AI response

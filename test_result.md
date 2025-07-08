@@ -265,6 +265,7 @@ metadata:
 test_plan:
   current_focus:
     - "Anonymous Search API"
+    - "OpenAI Integration"
   stuck_tasks: []
   test_all: false
   test_priority: "high_first"

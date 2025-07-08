@@ -375,10 +375,10 @@ Present industry insights in an engaging way that helps users make informed deci
     response = await get_ai_response(system_message, user_message)
     
     # Generate related suggestions based on the query
-    suggestions_prompt = f"""Based on this career query: "{request.query}", suggest 3-4 related questions or topics the user might want to explore next. Return only the suggestions, one per line."""
+    suggestions_prompt = f"""Based on this career query: "{request.query}", suggest 3-4 related questions or topics the user might want to explore next to accelerate their career journey. Make suggestions specific, actionable, and forward-looking. Return only the suggestions, one per line."""
     
     suggestions_response = await get_ai_response(
-        "You are a career advisor helping users discover related topics of interest.",
+        "You are NextStep's career advisor helping users discover their next career moves and related opportunities.",
         suggestions_prompt
     )
     
@@ -386,10 +386,10 @@ Present industry insights in an engaging way that helps users make informed deci
     suggestions = [s.strip() for s in suggestions_response.split('\n') if s.strip() and not s.strip().startswith('-')][:4]
     if not suggestions:
         suggestions = [
-            "What skills are most in-demand in this field?",
-            "What are the typical career paths?",
-            "What education is required?",
-            "What's the job market outlook?"
+            "What skills are most in-demand in this field for 2025?",
+            "What are the fastest-growing career paths in this area?",
+            "What education or certifications can accelerate my progress?",
+            "What's the salary potential and growth outlook?"
         ]
     
     # Save search for analytics (optional)

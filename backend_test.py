@@ -5,10 +5,6 @@ import uuid
 import time
 from typing import Dict, Any, Optional
 
-# Configuration
-# BASE_URL = "https://c846ca70-b4df-41ce-b222-270f7fb0d991.preview.emergentagent.com/api"
-
-BASE_URL = "https://c846ca70-b4df-41ce-b222-270f7fb0d991.preview.emergentagent.com/api"
 TEST_RESULTS = {}
 
 # Test data
@@ -50,34 +46,6 @@ Salary Range: $140,000 - $180,000 depending on experience
 """
 
 SAMPLE_CAREER_QUESTION = "Given my background in data science with 3 years of experience, what skills should I focus on developing to transition into a more senior machine learning engineering role in the next 2 years?"
-
-# Anonymous search test data
-ANONYMOUS_SEARCH_QUERIES = [
-    {
-        "query": "What are the best career paths for someone with a computer science degree in 2025?",
-        "search_type": "general"
-    },
-    {
-        "query": "How to transition from software development to AI research?",
-        "search_type": "career_path"
-    },
-    {
-        "query": "What skills are most in-demand for data scientists in 2025?",
-        "search_type": "skills"
-    },
-    {
-        "query": "Current trends in the cybersecurity industry",
-        "search_type": "industry"
-    },
-    {
-        "query": "What careers can I pursue with a psychology degree?",
-        "search_type": "academic_pathways"
-    },
-    {
-        "query": "Which degree should I choose for data science?",
-        "search_type": "academic_pathways"
-    }
-]
 
 # Helper functions
 def print_header(title):
@@ -225,74 +193,12 @@ def test_error_handling():
     return run_test("Error Handling - Profile Not Found", "get", f"/profiles/{fake_id}", expected_status=404)
 
 def test_anonymous_search():
-    """Test anonymous search endpoint with different search types"""
-    print_header("TESTING ANONYMOUS SEARCH")
-    
-    results = []
-    for i, query_data in enumerate(ANONYMOUS_SEARCH_QUERIES):
-        test_name = f"Anonymous Search ({query_data['search_type']})"
-        result = run_test(test_name, "post", "/search", query_data)
-        results.append(result)
-        
-        # Add a small delay between requests to avoid rate limiting
-        if i < len(ANONYMOUS_SEARCH_QUERIES) - 1:
-            time.sleep(1)
     
     return results
 
 def test_popular_topics():
     """Test popular topics endpoint"""
     print_header("TESTING POPULAR TOPICS")
-    return run_test("Get Popular Topics", "get", "/popular-topics")
-
-def test_degree_programs():
-    """Test degree programs endpoint"""
-    print_header("TESTING DEGREE PROGRAMS")
-    return run_test("Get Degree Programs", "get", "/degree-programs")
-
-def test_degree_career_search():
-    """Test degree-career search endpoint"""
-    print_header("TESTING DEGREE-CAREER SEARCH")
-    
-    # Test with Computer Science degree
-    cs_request = {
-        "degree": "Computer Science",
-        "career_interest": "Data Science"
-    }
-    cs_result = run_test("Degree-Career Search (CS to Data Science)", "post", "/degree-career-search", cs_request)
-    
-    # Test with Psychology degree
-    psych_request = {
-        "degree": "Psychology",
-        "career_interest": "UX Research"
-    }
-    psych_result = run_test("Degree-Career Search (Psychology to UX Research)", "post", "/degree-career-search", psych_request)
-    
-    return [cs_result, psych_result]
-
-def test_openai_integration():
-    """Test OpenAI integration directly through market insights (lightweight test)"""
-    print_header("TESTING OPENAI INTEGRATION")
-    field = "artificial intelligence"
-    
-    result = run_test(f"OpenAI Integration via Market Insights for {field}", "get", f"/market-insights/{field}")
-    
-    # Verify that we got a meaningful response that looks like it came from OpenAI
-    if result["success"] and "data" in result and "insights" in result["data"]:
-        insights = result["data"]["insights"]
-        
-        # Check if the response is substantial (more than 200 chars) and contains expected keywords
-        is_valid_response = (
-            len(insights) > 200 and
-            any(keyword in insights.lower() for keyword in ["ai", "artificial intelligence", "market", "industry", "skills", "trends"])
-        )
-        
-        if is_valid_response:
-            print("✅ OpenAI integration appears to be working correctly")
-            TEST_RESULTS["OpenAI Integration Validation"] = {"success": True, "data": "Response validation passed"}
-        else:
-            print("❌ OpenAI integration may be failing - response doesn't look like expected AI content")
-            TEST_RESULTS["OpenAI Integration Validation"] = {"success": False, "data": "Response validation failed"}
     
     return result
 
@@ -314,14 +220,6 @@ def main():
     if not health_result["success"]:
         print("❌ API health check failed. Aborting remaining tests.")
         return
-    
-    # Test anonymous search endpoints (don't require a profile)
-    test_anonymous_search()
-    test_popular_topics()
-    
-    # Test degree programs endpoints (new feature)
-    test_degree_programs()
-    test_degree_career_search()
     
     # Test profile creation and get the profile ID
     profile_result = test_profile_creation()

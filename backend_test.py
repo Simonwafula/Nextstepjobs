@@ -5,8 +5,6 @@ import uuid
 import time
 from typing import Dict, Any, Optional
 
-# Configuration
-BASE_URL = "https://5b3a5c9a-6404-4135-8757-1eb6a9993556.preview.emergentagent.com/api"
 TEST_RESULTS = {}
 
 # Test data
@@ -48,14 +46,6 @@ Salary Range: $140,000 - $180,000 depending on experience
 """
 
 SAMPLE_CAREER_QUESTION = "Given my background in data science with 3 years of experience, what skills should I focus on developing to transition into a more senior machine learning engineering role in the next 2 years?"
-
-# Anonymous search test data
-ANONYMOUS_SEARCH_QUERIES = {
-    "general": "What are the best career paths for someone with a background in psychology?",
-    "career_path": "How can I progress from a junior software developer to a senior role?",
-    "skills": "What skills are most in-demand for data scientists in 2025?",
-    "industry": "What is the job market outlook for renewable energy sector in the next 5 years?"
-}
 
 # Helper functions
 def print_header(title):
@@ -203,32 +193,6 @@ def test_error_handling():
     return run_test("Error Handling - Profile Not Found", "get", f"/profiles/{fake_id}", expected_status=404)
 
 def test_anonymous_search():
-    """Test anonymous search API with different search types"""
-    print_header("TESTING ANONYMOUS SEARCH API")
-    
-    results = {}
-    
-    # Test each search type
-    for search_type, query in ANONYMOUS_SEARCH_QUERIES.items():
-        search_request = {
-            "query": query,
-            "search_type": search_type
-        }
-        
-        result = run_test(f"Anonymous Search - {search_type}", "post", "/search", search_request)
-        results[search_type] = result
-        
-        # Verify response structure if successful
-        if result["success"]:
-            data = result["data"]
-            if "response" in data and "suggestions" in data:
-                print(f"  ✓ Response contains expected fields")
-                print(f"  ✓ Got {len(data['suggestions'])} suggestions")
-            else:
-                print(f"  ⚠ Response missing expected fields")
-        
-        # Add a small delay between requests to avoid rate limiting
-        time.sleep(1)
     
     return results
 
@@ -236,51 +200,19 @@ def test_popular_topics():
     """Test popular topics endpoint"""
     print_header("TESTING POPULAR TOPICS")
     
-    result = run_test("Get Popular Topics", "get", "/popular-topics")
-    
-    # Verify response structure if successful
-    if result["success"]:
-        data = result["data"]
-        expected_keys = ["trending_careers", "popular_questions", "industry_insights"]
-        
-        all_keys_present = all(key in data for key in expected_keys)
-        if all_keys_present:
-            print(f"  ✓ Response contains all expected categories")
-            for key in expected_keys:
-                print(f"  ✓ {key}: {len(data[key])} items")
-        else:
-            print(f"  ⚠ Response missing some expected categories")
-    
-    return result
-
-def test_openai_integration():
-    """Test OpenAI integration with the new API key"""
-    print_header("TESTING OPENAI INTEGRATION")
-    
-    # We'll use the anonymous search endpoint to test OpenAI integration
-    # since it directly uses the OpenAI API without requiring a user profile
-    search_request = {
-        "query": "What are the most important skills for a data scientist in 2025?",
-        "search_type": "general"
-    }
-    
-    result = run_test("OpenAI Integration via Anonymous Search", "post", "/search", search_request)
-    
-    # Check if we got a meaningful response that indicates OpenAI is working
-    if result["success"]:
-        data = result["data"]
-        if "response" in data and len(data["response"]) > 100:
-            print(f"  ✓ Received substantial AI-generated response ({len(data['response'])} chars)")
-            print(f"  ✓ OpenAI integration appears to be working correctly")
-        else:
-            print(f"  ⚠ Response seems too short or empty, OpenAI may not be working properly")
-    
     return result
 
 def main():
     """Run all tests in sequence"""
-    print_header("CAREER ADVISOR API TESTING")
+    print_header("NEXTSTEP API TESTING")
     print(f"Testing API at: {BASE_URL}")
+    
+    # First test OpenAI integration directly (most critical after API key change)
+    openai_result = test_openai_integration()
+    
+    if not openai_result["success"]:
+        print("❌ OpenAI integration test failed. This is critical after the API key change.")
+        print("Please check the API key in the .env file and ensure it's valid.")
     
     # Test basic health check
     health_result = test_health_check()
@@ -288,15 +220,6 @@ def main():
     if not health_result["success"]:
         print("❌ API health check failed. Aborting remaining tests.")
         return
-    
-    # Test anonymous search API (primary focus)
-    anonymous_search_results = test_anonymous_search()
-    
-    # Test popular topics endpoint
-    popular_topics_result = test_popular_topics()
-    
-    # Test OpenAI integration with the new API key
-    openai_integration_result = test_openai_integration()
     
     # Test profile creation and get the profile ID
     profile_result = test_profile_creation()

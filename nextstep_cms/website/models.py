@@ -198,7 +198,7 @@ class BlogPage(CoderedWebPage):
         FieldPanel('author'),
         FieldPanel('read_time'),
         FieldPanel('category'),
-        FieldPanel('tags'),
+        FieldPanel('article_tags'),
         FieldPanel('article_body'),
     ]
     

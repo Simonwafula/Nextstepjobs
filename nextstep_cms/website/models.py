@@ -74,7 +74,7 @@ class HomePage(CoderedWebPage):
     hero_title = models.CharField(max_length=255, default="NextStep - Your AI-Powered Career Evolution Partner")
     hero_subtitle = models.TextField(default="Transform your professional journey with intelligent career guidance using cutting-edge AI technology.")
     hero_cta_text = models.CharField(max_length=100, default="Start Your Journey")
-    hero_cta_url = models.URLField(blank=True, default="/career-advice/")
+    hero_cta_url = models.CharField(max_length=200, blank=True, default="/")
     
     # Features Section
     features_title = models.CharField(max_length=255, default="✨ Key Features")

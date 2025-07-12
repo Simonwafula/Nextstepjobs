@@ -190,7 +190,7 @@ class BlogPage(CoderedWebPage):
         ],
         default='career_advice'
     )
-    tags = models.CharField(max_length=500, blank=True, help_text="Comma-separated tags")
+    article_tags = models.CharField(max_length=500, blank=True, help_text="Comma-separated tags")
     
     content_panels = CoderedWebPage.content_panels + [
         FieldPanel('excerpt'),

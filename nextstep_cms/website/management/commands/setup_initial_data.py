@@ -29,7 +29,7 @@ class Command(BaseCommand):
             hero_title='NextStep - Your AI-Powered Career Evolution Partner 🚀',
             hero_subtitle='Transform your professional journey with intelligent career guidance using cutting-edge AI technology.',
             hero_cta_text='Start Your Journey',
-            hero_cta_url='/career-advice/',
+            hero_cta_url='/',
             features_title='✨ Key Features',
             features_description='Empower your career with our comprehensive AI-driven platform'
         )

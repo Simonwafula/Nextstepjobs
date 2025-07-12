@@ -19,8 +19,7 @@ from .serializers import (
     CareerAdviceRequestSerializer, SkillGapAnalysisRequestSerializer,
     DegreeCareerSearchSerializer
 )
-from emergentintegrations.llm.chat import LlmChat
-from emergentintegrations.llm import UserMessage
+from emergentintegrations.llm.chat import LlmChat, UserMessage
 
 
 class CareerPathViewSet(viewsets.ReadOnlyModelViewSet):

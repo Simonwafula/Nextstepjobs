@@ -5,8 +5,8 @@ from . import views
 router = DefaultRouter()
 router.register(r'jobs', views.JobPostingViewSet)
 router.register(r'companies', views.CompanyViewSet)
-router.register(r'saved-jobs', views.SavedJobViewSet)
-router.register(r'job-alerts', views.JobAlertViewSet)
+router.register(r'saved-jobs', views.SavedJobViewSet, basename='saved-jobs')
+router.register(r'job-alerts', views.JobAlertViewSet, basename='job-alerts')
 
 urlpatterns = [
     path('', include(router.urls)),

@@ -304,6 +304,7 @@ class MarketAnalysisView(APIView):
         avg_salary = None
         
         # Get top companies
+        from django.db import models
         top_companies = (
             base_query.values('company__name')
             .annotate(job_count=models.Count('id'))

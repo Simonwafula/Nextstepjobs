@@ -11,7 +11,7 @@ router.register(r'job-alerts', views.JobAlertViewSet, basename='job-alerts')
 urlpatterns = [
     path('', include(router.urls)),
     path('jobs/search/', views.JobSearchView.as_view(), name='job-search'),
-    path('jobs/scrape/', views.ScrapeJobsView.as_view(), name='scrape-jobs'),
+    # path('jobs/scrape/', views.ScrapeJobsView.as_view(), name='scrape-jobs'),
     path('jobs/<uuid:job_id>/recommendations/<uuid:user_id>/', views.JobRecommendationsView.as_view(), name='job-recommendations'),
     path('jobs/<uuid:job_id>/match/<uuid:user_id>/', views.JobMatchView.as_view(), name='job-match'),
     path('market/analysis/', views.MarketAnalysisView.as_view(), name='market-analysis'),

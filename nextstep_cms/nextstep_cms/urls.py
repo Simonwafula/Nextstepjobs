@@ -12,14 +12,24 @@ urlpatterns = [
     # Admin
     path("django-admin/", admin.site.urls),
     path("admin/", include(crx_admin_urls)),
+    
+    # API Endpoints
+    path("api/", include("career.api.urls")),
+    path("api/", include("jobs.api.urls")),
+    path("api/", include("profiles.api.urls")),
+    path("api/", include("ai_engine.api.urls")),
+    
     # Documents
     path("docs/", include(wagtaildocs_urls)),
+    
     # Search
     path("search/", include(crx_search_urls)),
+    
     # For anything not caught by a more specific rule above, hand over to
     # the page serving mechanism. This should be the last pattern in
     # the list:
     path("", include(crx_urls)),
+    
     # Alternatively, if you want pages to be served from a subpath
     # of your site, rather than the site root:
     #    path("pages/", include(crx_urls)),

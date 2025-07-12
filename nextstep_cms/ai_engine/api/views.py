@@ -17,7 +17,8 @@ from .serializers import (
     AIJobAnalysisSerializer, AnonymousSearchSerializer, AIConfigurationSerializer,
     AIFeedbackSerializer, JobAnalysisRequestSerializer, AnonymousSearchRequestSerializer
 )
-from emergentintegrations import LlmChat, UserMessage
+from emergentintegrations.llm.chat import LlmChat
+from emergentintegrations.llm import UserMessage
 
 
 class AIConfigurationViewSet(viewsets.ModelViewSet):

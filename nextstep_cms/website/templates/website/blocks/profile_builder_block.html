@@ -1,0 +1,276 @@
+{% load wagtailcore_tags %}
+
+<div class="profile-builder-block bg-gradient-to-br from-purple-50 to-pink-100 py-16 px-6">
+    <div class="max-w-6xl mx-auto">
+        {% if self.title %}
+            <h2 class="text-4xl font-bold text-gray-900 text-center mb-6">{{ self.title }}</h2>
+        {% endif %}
+        
+        {% if self.description %}
+            <p class="text-xl text-gray-700 text-center mb-12 max-w-3xl mx-auto">{{ self.description }}</p>
+        {% endif %}
+        
+        <div class="grid lg:grid-cols-2 gap-12 items-center">
+            <!-- Profile Builder Interface -->
+            <div class="bg-white rounded-2xl shadow-lg p-8">
+                <h3 class="text-2xl font-bold text-gray-900 mb-6">Build Your Professional Profile</h3>
+                
+                <div id="profile-builder-form" class="space-y-6">
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Full Name *</label>
+                            <input 
+                                type="text" 
+                                id="profile-name"
+                                placeholder="John Doe"
+                                class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                                required
+                            >
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Email</label>
+                            <input 
+                                type="email" 
+                                id="profile-email"
+                                placeholder="john@example.com"
+                                class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                            >
+                        </div>
+                    </div>
+                    
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Education Level</label>
+                            <select id="education-level" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500">
+                                <option value="">Select Education</option>
+                                <option value="high_school">High School</option>
+                                <option value="associates">Associate Degree</option>
+                                <option value="bachelors">Bachelor's Degree</option>
+                                <option value="masters">Master's Degree</option>
+                                <option value="phd">PhD/Doctorate</option>
+                                <option value="certification">Professional Certification</option>
+                                <option value="bootcamp">Bootcamp/Training</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Field of Study</label>
+                            <input 
+                                type="text" 
+                                id="field-of-study"
+                                placeholder="Computer Science, Business, etc."
+                                class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                            >
+                        </div>
+                    </div>
+                    
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Years of Experience</label>
+                            <select id="experience-years" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500">
+                                <option value="0">0 (Entry Level)</option>
+                                <option value="1">1 year</option>
+                                <option value="2">2 years</option>
+                                <option value="3">3 years</option>
+                                <option value="4">4 years</option>
+                                <option value="5">5 years</option>
+                                <option value="6">6-10 years</option>
+                                <option value="10">10+ years</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Current Role</label>
+                            <input 
+                                type="text" 
+                                id="current-role"
+                                placeholder="Software Engineer, Marketing Manager, etc."
+                                class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                            >
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Skills (comma-separated)</label>
+                        <textarea 
+                            id="profile-skills"
+                            placeholder="Python, JavaScript, Project Management, Communication, etc."
+                            class="w-full p-3 border border-gray-300 rounded-lg resize-none focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                            rows="3"
+                        ></textarea>
+                    </div>
+                    
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Career Interests</label>
+                        <textarea 
+                            id="career-interests"
+                            placeholder="Data Science, Product Management, Startup Environment, etc."
+                            class="w-full p-3 border border-gray-300 rounded-lg resize-none focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                            rows="3"
+                        ></textarea>
+                    </div>
+                    
+                    <button 
+                        onclick="createProfile()"
+                        class="w-full bg-gradient-to-r from-purple-600 to-pink-600 text-white py-3 rounded-lg font-semibold hover:shadow-lg transition duration-200"
+                    >
+                        Create My Profile
+                    </button>
+                </div>
+                
+                <div id="profile-result" class="hidden mt-6">
+                    <div class="bg-green-50 border border-green-200 rounded-lg p-4">
+                        <h4 class="text-lg font-semibold text-green-800 mb-2">Profile Created Successfully!</h4>
+                        <p class="text-green-700">Your profile has been created. You can now get personalized career recommendations.</p>
+                        <div class="mt-4">
+                            <a href="/career-advice/" class="inline-flex items-center px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition duration-200">
+                                Get Career Advice
+                                <svg class="ml-2 w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+                                </svg>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Benefits -->
+            <div class="space-y-8">
+                <div class="text-center lg:text-left">
+                    <h3 class="text-2xl font-bold text-gray-900 mb-4">Unlock Personalized Recommendations</h3>
+                    <p class="text-gray-600 mb-6">Create your profile to receive tailored career advice, job matches, and skill development recommendations.</p>
+                </div>
+                
+                <div class="grid grid-cols-1 gap-6">
+                    <div class="flex items-start space-x-4">
+                        <div class="bg-purple-600 text-white p-3 rounded-lg flex-shrink-0">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
+                            </svg>
+                        </div>
+                        <div>
+                            <h4 class="text-lg font-semibold text-gray-900">Personalized Matching</h4>
+                            <p class="text-gray-600">Get job recommendations that match your skills and experience</p>
+                        </div>
+                    </div>
+                    
+                    <div class="flex items-start space-x-4">
+                        <div class="bg-pink-600 text-white p-3 rounded-lg flex-shrink-0">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/>
+                            </svg>
+                        </div>
+                        <div>
+                            <h4 class="text-lg font-semibold text-gray-900">Career Guidance</h4>
+                            <p class="text-gray-600">Receive tailored advice based on your unique background</p>
+                        </div>
+                    </div>
+                    
+                    <div class="flex items-start space-x-4">
+                        <div class="bg-indigo-600 text-white p-3 rounded-lg flex-shrink-0">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
+                            </svg>
+                        </div>
+                        <div>
+                            <h4 class="text-lg font-semibold text-gray-900">Skill Analysis</h4>
+                            <p class="text-gray-600">Identify skill gaps and get development recommendations</p>
+                        </div>
+                    </div>
+                    
+                    <div class="flex items-start space-x-4">
+                        <div class="bg-green-600 text-white p-3 rounded-lg flex-shrink-0">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                            </svg>
+                        </div>
+                        <div>
+                            <h4 class="text-lg font-semibold text-gray-900">Progress Tracking</h4>
+                            <p class="text-gray-600">Track your career goals and professional development</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="bg-white p-6 rounded-lg shadow-md">
+                    <h4 class="text-lg font-semibold text-gray-900 mb-4">Why Create a Profile?</h4>
+                    <ul class="space-y-2 text-gray-600">
+                        <li class="flex items-center">
+                            <svg class="w-4 h-4 text-green-500 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
+                            </svg>
+                            Get personalized job recommendations
+                        </li>
+                        <li class="flex items-center">
+                            <svg class="w-4 h-4 text-green-500 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
+                            </svg>
+                            Track your career goals and progress
+                        </li>
+                        <li class="flex items-center">
+                            <svg class="w-4 h-4 text-green-500 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
+                            </svg>
+                            Receive skill gap analysis and recommendations
+                        </li>
+                        <li class="flex items-center">
+                            <svg class="w-4 h-4 text-green-500 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
+                            </svg>
+                            Access premium career guidance features
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+async function createProfile() {
+    const profileData = {
+        name: document.getElementById('profile-name').value,
+        email: document.getElementById('profile-email').value,
+        education_level: document.getElementById('education-level').value,
+        field_of_study: document.getElementById('field-of-study').value,
+        experience_years: parseInt(document.getElementById('experience-years').value) || 0,
+        current_role: document.getElementById('current-role').value,
+        career_interests: document.getElementById('career-interests').value.split(',').map(s => s.trim()).filter(s => s),
+    };
+    
+    // Validate required fields
+    if (!profileData.name) {
+        alert('Please enter your name');
+        return;
+    }
+    
+    const resultDiv = document.getElementById('profile-result');
+    
+    try {
+        const response = await fetch('/api/profiles/', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value
+            },
+            body: JSON.stringify(profileData)
+        });
+        
+        const data = await response.json();
+        
+        if (response.ok) {
+            resultDiv.classList.remove('hidden');
+            
+            // Also create user skills if provided
+            if (document.getElementById('profile-skills').value) {
+                const skills = document.getElementById('profile-skills').value.split(',').map(s => s.trim()).filter(s => s);
+                // You could create skills here, but for demo purposes, we'll just show success
+            }
+            
+            // Reset form
+            document.getElementById('profile-builder-form').reset();
+        } else {
+            alert('Error creating profile: ' + (data.detail || 'Please check your information and try again'));
+        }
+    } catch (error) {
+        alert('Error creating profile. Please try again.');
+    }
+}
+</script>

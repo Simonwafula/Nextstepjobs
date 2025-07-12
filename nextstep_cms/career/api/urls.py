@@ -4,7 +4,7 @@ from . import views
 
 router = DefaultRouter()
 router.register(r'career-paths', views.CareerPathViewSet)
-router.register(r'career-goals', views.CareerGoalViewSet)
+router.register(r'career-goals', views.CareerGoalViewSet, basename='career-goals')
 router.register(r'market-insights', views.MarketInsightViewSet)
 
 urlpatterns = [

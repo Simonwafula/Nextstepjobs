@@ -10,7 +10,9 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.2/ref/settings/
 """
 
+import os
 from pathlib import Path
+from decouple import config
 
 
 # Build paths inside the project like this: BASE_DIR / "subdir".
@@ -26,6 +28,13 @@ BASE_DIR = Path(__file__).resolve().parent.parent.parent
 INSTALLED_APPS = [
     # This project
     "website",
+    
+    # Career guidance apps
+    "career",
+    "jobs", 
+    "profiles",
+    "ai_engine",
+    
     # Wagtail CRX (CodeRed Extensions)
     "coderedcms",
     "django_bootstrap5",
@@ -33,6 +42,14 @@ INSTALLED_APPS = [
     "taggit",
     "wagtailcache",
     "wagtailseo",
+    
+    # Django REST Framework
+    "rest_framework",
+    "corsheaders",
+    
+    # Django Extensions
+    "django_extensions",
+    
     # Wagtail
     "wagtail.contrib.forms",
     "wagtail.contrib.redirects",
@@ -47,6 +64,7 @@ INSTALLED_APPS = [
     "wagtail.contrib.settings",
     "wagtail.contrib.table_block",
     "wagtail.admin",
+    
     # Django
     "django.contrib.admin",
     "django.contrib.auth",
@@ -58,19 +76,26 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
-    # Save pages to cache. Must be FIRST.
+    # CORS
+    "corsheaders.middleware.CorsMiddleware",
+    
+    # Save pages to cache. Must be FIRST after CORS.
     "wagtailcache.cache.UpdateCacheMiddleware",
+    
     # Common functionality
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.common.CommonMiddleware",
+    
     # Security
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
     "django.middleware.security.SecurityMiddleware",
+    
     # CMS functionality
     "wagtail.contrib.redirects.middleware.RedirectMiddleware",
+    
     # Fetch from cache. Must be LAST.
     "wagtailcache.cache.FetchFromCacheMiddleware",
 ]
@@ -101,8 +126,12 @@ WSGI_APPLICATION = "nextstep_cms.wsgi.application"
 
 DATABASES = {
     "default": {
-        "ENGINE": "django.db.backends.sqlite3",
-        "NAME": BASE_DIR / "db.sqlite3",
+        "ENGINE": "django.db.backends.postgresql",
+        "NAME": config("DB_NAME", default="nextstep_db"),
+        "USER": config("DB_USER", default="nextstep_user"),
+        "PASSWORD": config("DB_PASSWORD", default="nextstep_password"),
+        "HOST": config("DB_HOST", default="localhost"),
+        "PORT": config("DB_PORT", default="5432"),
     }
 }
 
@@ -131,7 +160,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = "en-us"
 
-TIME_ZONE = "America/New_York"
+TIME_ZONE = "UTC"
 
 USE_I18N = False
 
@@ -181,3 +210,47 @@ TAGGIT_CASE_INSENSITIVE = True
 # Sets default for primary key IDs
 # See https://docs.djangoproject.com/en/5.2/ref/models/fields/#bigautofield
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
+
+# REST Framework Configuration
+REST_FRAMEWORK = {
+    "DEFAULT_PAGINATION_CLASS": "rest_framework.pagination.PageNumberPagination",
+    "PAGE_SIZE": 20,
+    "DEFAULT_AUTHENTICATION_CLASSES": [
+        "rest_framework.authentication.SessionAuthentication",
+    ],
+    "DEFAULT_PERMISSION_CLASSES": [
+        "rest_framework.permissions.IsAuthenticatedOrReadOnly",
+    ],
+}
+
+# CORS Configuration
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:3000",
+    "http://127.0.0.1:3000",
+    "https://nextstep.emergent.dev",
+]
+
+CORS_ALLOW_CREDENTIALS = True
+
+
+# Celery Configuration
+CELERY_BROKER_URL = config("CELERY_BROKER_URL", default="redis://localhost:6379/0")
+CELERY_RESULT_BACKEND = config("CELERY_RESULT_BACKEND", default="redis://localhost:6379/0")
+CELERY_TASK_SERIALIZER = "json"
+CELERY_RESULT_SERIALIZER = "json"
+CELERY_ACCEPT_CONTENT = ["json"]
+CELERY_TIMEZONE = "UTC"
+
+
+# AI Integration Settings
+OPENAI_API_KEY = config("OPENAI_API_KEY", default="")
+
+
+# Cache Configuration
+CACHES = {
+    "default": {
+        "BACKEND": "django.core.cache.backends.redis.RedisCache",
+        "LOCATION": config("REDIS_URL", default="redis://127.0.0.1:6379/1"),
+    }
+}

@@ -29,6 +29,12 @@ INSTALLED_APPS = [
     # This project
     "website",
     
+    # Career guidance apps
+    "career",
+    "jobs", 
+    "profiles",
+    "ai_engine",
+    
     # Wagtail CRX (CodeRed Extensions)
     "coderedcms",
     "django_bootstrap5",

@@ -13,6 +13,12 @@ urlpatterns = [
     path("django-admin/", admin.site.urls),
     path("admin/", include(crx_admin_urls)),
     
+    # API Endpoints
+    path("api/", include("profiles.api.urls")),
+    path("api/", include("jobs.api.urls")),
+    path("api/", include("career.api.urls")),
+    path("api/", include("ai_engine.api.urls")),
+    
     # Documents
     path("docs/", include(wagtaildocs_urls)),
     

@@ -1,2 +1,10 @@
 coderedcms==5.0.*
 wagtail==6.4.*
+psycopg2-binary
+djangorestframework
+django-cors-headers
+celery
+redis
+python-decouple
+django-extensions
+emergentintegrations

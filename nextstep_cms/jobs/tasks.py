@@ -7,7 +7,8 @@ from typing import List, Dict, Any
 
 from .models import JobPosting, ProcessedJob, Company
 from ai_engine.models import AIConfiguration
-from emergentintegrations import LlmChat, UserMessage
+from emergentintegrations.llm.chat import LlmChat
+from emergentintegrations.llm import UserMessage
 
 logger = logging.getLogger(__name__)
 

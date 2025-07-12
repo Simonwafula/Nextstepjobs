@@ -2,437 +2,419 @@
 
 Transform your professional journey with NextStep - the intelligent career guidance platform that empowers students, graduates, and professionals to make informed career decisions using cutting-edge AI technology.
 
-## ✨ Features
-
-- 🔮 **Anonymous Career Search** - Get instant AI-powered career guidance without registration
-- 👤 **Personalized Profiles** - Create detailed profiles for tailored career advice
-- 📋 **Smart Job Analysis** - AI-powered analysis of job descriptions with match scoring
-- 💡 **Career Advice Engine** - Personalized guidance based on your unique background
-- 📊 **Market Insights** - Industry trends, salary data, and future opportunities
-- 🔥 **Trending Topics** - Popular career questions and hot job roles for 2025
-- 🎯 **Skills Development** - Personalized skill recommendations and learning paths
-- 🌟 **Industry Intelligence** - Deep insights into career paths and growth opportunities
+**Now powered by Django + Wagtail CRX for enterprise-grade content management and scalability!**
 
 ## ✨ Key Features
 
-### 🔍 **Job Intelligence & Analysis**
-- **Smart Job Scraping**: Automated job collection from multiple sources (LinkedIn, Indeed, BrighterMonday)
-- **AI-Powered Job Analysis**: Detailed breakdown of job requirements, qualifications, and company culture
-- **Job-Profile Matching**: Intelligent matching between user profiles and job opportunities
-- **Market Insights**: Real-time job market trends and salary analysis
+### 🔮 **Anonymous Career Search**
+Get instant AI-powered career guidance without registration - perfect for quick career exploration and advice.
 
-### 👤 **Personalized Career Guidance**
-- **User Profiling**: Comprehensive user profiles with skills, experience, and career interests
-- **Career Path Recommendations**: AI-suggested career trajectories based on user background
-- **Skills Gap Analysis**: Identification of missing skills for target roles
-- **Anonymous Career Search**: Get career guidance without registration
+### 👤 **Comprehensive User Profiles**
+Create detailed profiles with skills, experience, education, and career goals for personalized recommendations.
 
-### 🎓 **Educational Pathways**
-- **Degree-to-Career Mapping**: Comprehensive mapping of academic programs to career opportunities
-- **Skills Development Recommendations**: Personalized learning suggestions
-- **Industry Insights**: In-depth analysis of different industry sectors
+### 📋 **AI-Powered Job Analysis**
+Advanced job description analysis with requirement extraction, match scoring, and improvement recommendations.
 
-### 📊 **Advanced Analytics**
-- **Job Market Analysis**: Trends, salary ranges, and growth opportunities
-- **Skills Demand Tracking**: Most in-demand skills across industries
-- **Company Analysis**: Insights into hiring patterns and company culture
+### 💡 **Intelligent Career Advice Engine**
+Personalized guidance based on your unique background, goals, and market trends.
+
+### 📊 **Real-Time Market Insights**
+Industry trends, salary data, skills demand, and future opportunities across sectors.
+
+### 🎯 **Skills Development Recommendations**
+Personalized skill gap analysis and learning path suggestions.
+
+### 🏢 **Job Intelligence & Matching**
+Smart job scraping, processing, and matching with AI-powered compatibility scoring.
+
+### 📝 **Rich Content Management**
+Blog articles, career guides, industry insights, and trending topics managed through Wagtail CRX.
+
+## 🏗️ Architecture Overview
+
+NextStep is built on a modern, scalable architecture:
+
+- **Backend**: Django + Wagtail CRX for robust content management and APIs
+- **Database**: PostgreSQL for relational data with SQLite fallback for development
+- **AI Integration**: Advanced AI capabilities using Emergent Integrations
+- **Background Processing**: Celery for job scraping and analysis tasks
+- **Frontend**: Wagtail CRX with interactive React components
+- **APIs**: Django REST Framework for comprehensive API access
 
 ## 🚀 Technology Stack
 
-### Backend
-- **FastAPI**: High-performance Python web framework
-- **MongoDB**: NoSQL database for flexible data storage
-- **Motor**: Async MongoDB driver
-- **Emergent Integrations**: AI/LLM integration capabilities
-- **Beautiful Soup**: Web scraping for job data
-- **Pydantic**: Data validation and serialization
+### Backend Framework
+- **Django 5.2+**: Robust Python web framework
+- **Wagtail CRX (CodeRedCMS)**: Enterprise content management system
+- **Django REST Framework**: Comprehensive API development
+- **PostgreSQL**: Production-ready relational database
+- **Celery**: Distributed task queue for background processing
 
-### Frontend
-- **React**: Modern JavaScript UI library
-- **Tailwind CSS**: Utility-first CSS framework
-- **Axios**: HTTP client for API communication
-- **React Router**: Client-side routing
+### Frontend & UI
+- **Wagtail CRX**: Rich content management interface
+- **React Components**: Interactive career tools and widgets
+- **Tailwind CSS**: Modern utility-first CSS framework
+- **Progressive Enhancement**: Works with and without JavaScript
 
 ### AI & Processing
-- **OpenAI GPT Integration**: Advanced natural language processing
-- **Custom Job Processing Pipeline**: Intelligent job data extraction and analysis
-- **Real-time Data Processing**: Async job processing and analysis
+- **Emergent Integrations**: Advanced AI/LLM integration
+- **OpenAI GPT-4**: Natural language processing and analysis
+- **Background Task Processing**: Async job analysis and matching
+- **Real-time Career Guidance**: Instant AI-powered advice
+
+### Database & Storage
+- **PostgreSQL**: Primary database for production
+- **SQLite**: Development database
+- **UUID Primary Keys**: Distributed-system ready
+- **JSON Fields**: Flexible data storage for skills and preferences
 
 ## 📁 Project Structure
 
 ```
-nextstep/
-├── backend/                 # FastAPI backend application
-│   ├── server.py           # Main API server with endpoints
-│   └── requirements.txt    # Python dependencies
-├── frontend/               # React frontend application
-│   ├── src/
-│   │   ├── App.js         # Main React application
-│   │   └── App.css        # Application styles
-│   ├── public/            # Static assets
-│   └── package.json       # Node.js dependencies
-├── processors/             # Job processing pipeline
-│   ├── pipeline2.py       # Advanced job processing algorithms
-│   └── models.py          # Data models and validation
-├── scrapers/              # Web scraping modules
-│   ├── base_scraper.py    # Base scraper class
-│   ├── linkedin_scraper.py # LinkedIn job scraper
-│   ├── indeed_scraper.py   # Indeed job scraper
-│   └── brighter_monday_scraper.py # BrighterMonday scraper
-├── models/                # Database models
-│   ├── user.py           # User profile models
-│   ├── job.py            # Job data models
-│   └── career.py         # Career guidance models
-├── api/                   # API route modules
-│   └── routes/           # Organized API endpoints
-├── advisory_engine/       # Career advisory algorithms
-│   ├── career_matcher.py  # Job-profile matching
-│   ├── skill_analyser.py  # Skills analysis
-│   └── recommendation_engine.py # Career recommendations
-└── jobmate/              # UI/UX reference templates
-    ├── assets/           # CSS, JS, and image assets
-    └── *.html           # HTML template pages
+nextstep_cms/
+├── nextstep_cms/              # Django project settings
+│   ├── settings/
+│   │   ├── base.py           # Base settings
+│   │   └── dev.py            # Development settings
+│   ├── urls.py               # Main URL configuration
+│   └── celery.py             # Celery configuration
+├── website/                   # Wagtail CRX website app
+│   ├── models.py             # Page models and content types
+│   ├── templates/            # Wagtail templates
+│   │   ├── pages/           # Page templates
+│   │   └── blocks/          # Custom block templates
+│   └── management/          # Django management commands
+├── profiles/                  # User profile management
+│   ├── models.py            # Profile, skills, experience models
+│   └── api/                 # Profile API endpoints
+├── jobs/                     # Job management system
+│   ├── models.py            # Job, company, matching models
+│   ├── tasks.py             # Celery background tasks
+│   └── api/                 # Job API endpoints
+├── career/                   # Career guidance engine
+│   ├── models.py            # Career paths, advice, goals
+│   └── api/                 # Career guidance APIs
+├── ai_engine/                # AI processing and analytics
+│   ├── models.py            # AI configurations and analytics
+│   └── api/                 # AI processing endpoints
+└── requirements.txt          # Python dependencies
 ```
 
 ## 🔧 Installation & Setup
 
 ### Prerequisites
-- Python 3.8+
-- Node.js 14+
-- MongoDB
+- Python 3.11+
+- PostgreSQL 13+ (optional - SQLite works for development)
+- Redis (optional - for production Celery/caching)
 - OpenAI API Key (for AI features)
 
-### Backend Setup
+### Quick Start (Development)
+
 ```bash
 # Clone the repository
 git clone https://github.com/Simonwafula/Nextstepjobs.git
-cd Nextstepjobs
+cd Nextstepjobs/nextstep_cms
 
-# Install Python dependencies
-cd backend
+# Create virtual environment
+python -m venv venv
+source venv/bin/activate  # On Windows: venv\Scripts\activate
+
+# Install dependencies
 pip install -r requirements.txt
 
 # Set up environment variables
 cp .env.example .env
 # Edit .env with your configuration:
-# - MONGO_URL=mongodb://localhost:27017/nextstep
 # - OPENAI_API_KEY=your_openai_api_key
-# - ENVIRONMENT=production
+# - DEBUG=True
+# - DB_NAME=nextstep_db.sqlite3 (for SQLite development)
 
-# Start the backend server
-uvicorn server:app --host 0.0.0.0 --port 8001
+# Run migrations
+python manage.py migrate
+
+# Create superuser
+python manage.py createsuperuser
+
+# Setup initial data
+python manage.py setup_initial_data
+
+# Start development server
+python manage.py runserver 0.0.0.0:8001
 ```
 
-### Frontend Setup
+### Production Setup (PostgreSQL)
+
 ```bash
-# Install Node.js dependencies
-cd frontend
-yarn install
-
-# Set up environment variables
-cp .env.example .env
-# Edit .env with your backend URL:
-# REACT_APP_BACKEND_URL=https://your-domain.com/api
-
-# Build for production
-yarn build
-
-# Or start development server
-yarn start
-```
-
-### Database Setup
-```bash
-# MongoDB setup (Ubuntu/Debian)
+# Install PostgreSQL
 sudo apt update
-sudo apt install mongodb
+sudo apt install postgresql postgresql-contrib
 
-# Start MongoDB
-sudo systemctl start mongodb
-sudo systemctl enable mongodb
+# Create database
+sudo -u postgres createdb nextstep_db
+sudo -u postgres createuser nextstep_user
+sudo -u postgres psql -c "ALTER USER nextstep_user WITH PASSWORD 'your_password';"
+sudo -u postgres psql -c "GRANT ALL PRIVILEGES ON DATABASE nextstep_db TO nextstep_user;"
 
-# Create database and collections (automatic on first run)
+# Update .env for production
+DB_NAME=nextstep_db
+DB_USER=nextstep_user
+DB_PASSWORD=your_password
+DB_HOST=localhost
+DB_PORT=5432
+DEBUG=False
+
+# Run production migrations
+python manage.py migrate
+python manage.py collectstatic --noinput
 ```
 
-## 🚀 Production Deployment (VPS)
+### Celery Setup (Background Tasks)
 
-### Using Nginx + PM2 (Recommended)
-
-#### 1. Server Preparation
 ```bash
-# Update system
-sudo apt update && sudo apt upgrade -y
+# Install and start Redis
+sudo apt install redis-server
+sudo systemctl start redis-server
 
-# Install required packages
-sudo apt install nginx python3-pip nodejs npm mongodb -y
+# Start Celery worker (in separate terminal)
+celery -A nextstep_cms worker --loglevel=info
 
-# Install PM2 for process management
-sudo npm install -g pm2
-
-# Install yarn
-sudo npm install -g yarn
+# Start Celery beat (for scheduled tasks)
+celery -A nextstep_cms beat --loglevel=info
 ```
 
-#### 2. Application Deployment
+## 🌐 Access Points
+
+After starting the server, you can access:
+
+- **Main Website**: http://localhost:8001/
+- **Wagtail Admin**: http://localhost:8001/admin/ (superuser login)
+- **Django Admin**: http://localhost:8001/django-admin/
+- **API Documentation**: http://localhost:8001/api/
+- **Career Advice**: http://localhost:8001/career-advice/
+- **Job Search**: http://localhost:8001/jobs/
+- **Profile Builder**: http://localhost:8001/profile/
+
+## 📊 API Documentation
+
+### Core API Endpoints
+
+#### User Profile Management
 ```bash
-# Clone and setup application
-git clone https://github.com/Simonwafula/Nextstepjobs.git /var/www/nextstep
-cd /var/www/nextstep
+# Create user profile
+POST /api/profiles/
+{
+  "name": "John Doe",
+  "email": "john@example.com",
+  "education_level": "bachelors",
+  "experience_years": 3,
+  "current_role": "Software Engineer"
+}
 
-# Setup backend
-cd backend
-pip3 install -r requirements.txt
+# Get user profile
+GET /api/profiles/{profile_id}/
 
-# Setup frontend
-cd ../frontend
-yarn install
-yarn build
-
-# Setup environment variables
-sudo nano /var/www/nextstep/backend/.env
-# Add your production configurations
+# Update user profile
+PUT /api/profiles/{profile_id}/
 ```
 
-#### 3. PM2 Configuration
+#### Career Guidance
 ```bash
-# Create PM2 ecosystem file
-sudo nano /var/www/nextstep/ecosystem.config.js
-```
+# Get AI career advice
+POST /api/career-advice/
+{
+  "user_id": "uuid",
+  "query": "How do I transition from marketing to data science?",
+  "session_type": "career_change"
+}
 
-```javascript
-module.exports = {
-  apps: [
-    {
-      name: 'nextstep-api',
-      script: 'uvicorn',
-      args: 'server:app --host 0.0.0.0 --port 8001',
-      cwd: '/var/www/nextstep/backend',
-      instances: 'max',
-      exec_mode: 'cluster',
-      env: {
-        NODE_ENV: 'production'
-      }
-    }
-  ]
+# Anonymous career search
+POST /api/anonymous-search/
+{
+  "query": "What skills do I need for AI engineering?",
+  "search_type": "skills"
 }
 ```
 
-#### 4. Nginx Configuration
+#### Job Analysis
 ```bash
-sudo nano /etc/nginx/sites-available/nextstep
+# Analyze job description
+POST /api/analyze-job/
+{
+  "user_id": "uuid",
+  "job_description": "...",
+  "job_title": "Senior Data Scientist",
+  "company_name": "Tech Corp"
+}
+
+# Search jobs
+POST /api/jobs/search/
+{
+  "keywords": ["python", "data science"],
+  "location": "San Francisco",
+  "experience_level": "mid",
+  "remote_only": false
+}
 ```
+
+#### Skills & Career Development
+```bash
+# Skill gap analysis
+POST /api/skill-gap-analysis/
+{
+  "user_id": "uuid",
+  "target_roles": ["Data Scientist", "ML Engineer"]
+}
+
+# Get career recommendations
+GET /api/career-recommendations/{user_id}/
+```
+
+## 🛠️ Environment Configuration
+
+### Backend Environment Variables (.env)
+
+```bash
+# Database (PostgreSQL)
+DB_NAME=nextstep_db
+DB_USER=nextstep_user
+DB_PASSWORD=your_password
+DB_HOST=localhost
+DB_PORT=5432
+
+# Database (SQLite for development)
+# DB_NAME=nextstep_db.sqlite3
+
+# AI Integration
+OPENAI_API_KEY=your_openai_api_key
+
+# Celery (Production)
+CELERY_BROKER_URL=redis://localhost:6379/0
+CELERY_RESULT_BACKEND=redis://localhost:6379/0
+
+# Cache (Production)
+REDIS_URL=redis://127.0.0.1:6379/1
+
+# Django
+DEBUG=False
+SECRET_KEY=your_secret_key_here
+ALLOWED_HOSTS=your-domain.com,localhost
+```
+
+## 🚀 Production Deployment
+
+### Using Docker (Recommended)
+
+```dockerfile
+# Docker deployment
+FROM python:3.11-slim
+
+WORKDIR /app
+COPY requirements.txt .
+RUN pip install -r requirements.txt
+
+COPY . .
+RUN python manage.py collectstatic --noinput
+
+EXPOSE 8001
+CMD ["gunicorn", "nextstep_cms.wsgi:application", "--bind", "0.0.0.0:8001"]
+```
+
+### Using Nginx + Gunicorn
 
 ```nginx
 server {
     listen 80;
     server_name your-domain.com;
 
-    # Frontend
-    location / {
-        root /var/www/nextstep/frontend/build;
-        index index.html;
-        try_files $uri $uri/ /index.html;
+    location /static/ {
+        alias /path/to/nextstep_cms/static/;
     }
 
-    # Backend API
-    location /api {
-        proxy_pass http://localhost:8001;
-        proxy_http_version 1.1;
-        proxy_set_header Upgrade $http_upgrade;
-        proxy_set_header Connection 'upgrade';
+    location /media/ {
+        alias /path/to/nextstep_cms/media/;
+    }
+
+    location / {
+        proxy_pass http://127.0.0.1:8001;
         proxy_set_header Host $host;
         proxy_set_header X-Real-IP $remote_addr;
         proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
         proxy_set_header X-Forwarded-Proto $scheme;
-        proxy_cache_bypass $http_upgrade;
     }
 }
 ```
 
-#### 5. SSL Configuration (Optional but Recommended)
-```bash
-# Install Certbot
-sudo apt install certbot python3-certbot-nginx -y
+## 🎨 Content Management
 
-# Obtain SSL certificate
-sudo certbot --nginx -d your-domain.com
+### Wagtail CRX Features
 
-# Auto-renewal setup
-sudo crontab -e
-# Add: 0 12 * * * /usr/bin/certbot renew --quiet
-```
+- **Rich Page Editor**: Visual page building with custom blocks
+- **Blog Management**: Complete blogging system for career content
+- **SEO Optimization**: Built-in SEO tools and meta management
+- **User Management**: Role-based access control
+- **Form Builder**: Custom forms for user engagement
+- **Analytics**: Integrated analytics and reporting
 
-#### 6. Start Services
-```bash
-# Enable and start services
-sudo systemctl enable nginx mongodb
-sudo systemctl start nginx mongodb
+### Custom Blocks Available
 
-# Start application with PM2
-cd /var/www/nextstep
-pm2 start ecosystem.config.js
-pm2 save
-pm2 startup
-```
+- **Career Advice Block**: Interactive AI career guidance widget
+- **Job Search Block**: Advanced job search with filtering
+- **Profile Builder Block**: User profile creation interface
+- **AI Analysis Block**: Job description analysis tool
 
-### Using Docker (Alternative)
+## 📈 Background Tasks
 
-```dockerfile
-# Dockerfile for production
-FROM node:16-alpine AS frontend-build
-WORKDIR /app/frontend
-COPY frontend/package*.json ./
-RUN yarn install
-COPY frontend/ ./
-RUN yarn build
+### Celery Tasks
 
-FROM python:3.9-slim AS backend
-WORKDIR /app
-COPY backend/requirements.txt ./
-RUN pip install -r requirements.txt
-COPY backend/ ./
-COPY --from=frontend-build /app/frontend/build ./static
+- **Job Scraping**: Automated job collection from multiple sources
+- **AI Processing**: Background job analysis and processing
+- **User Matching**: Calculate job-user compatibility scores
+- **Data Cleanup**: Regular maintenance and optimization tasks
 
-EXPOSE 8001
-CMD ["uvicorn", "server:app", "--host", "0.0.0.0", "--port", "8001"]
-```
+## 🔒 Security Features
 
-## 📊 API Documentation
+- **CSRF Protection**: Built-in Django CSRF protection
+- **SQL Injection Prevention**: Django ORM protection
+- **XSS Protection**: Template auto-escaping
+- **Authentication**: Session-based authentication
+- **Permission System**: Django's robust permission framework
 
-### Core Endpoints
+## 📋 Migration Notes
 
-#### User Management
-- `POST /api/profiles` - Create user profile
-- `GET /api/profiles/{user_id}` - Get user profile
-- `PUT /api/profiles/{user_id}` - Update user profile
+This version represents a complete architectural migration from:
+- **FastAPI** → **Django + Wagtail CRX**
+- **MongoDB** → **PostgreSQL**
+- **Basic React SPA** → **Wagtail CRX with React blocks**
+- **Manual processing** → **Celery background tasks**
 
-#### Job Analysis
-- `POST /api/analyze-job` - Analyze job description
-- `POST /api/jobs/search` - Search processed jobs
-- `POST /api/jobs/recommendations/{user_id}` - Get personalized recommendations
+All previous functionality has been preserved and enhanced with enterprise-grade features.
 
-#### Career Guidance
-- `POST /api/career-advice` - Get personalized career advice
-- `POST /api/search` - Anonymous career search
-- `GET /api/popular-topics` - Get trending career topics
+## 🤝 Contributing
 
-#### Job Intelligence
-- `POST /api/jobs/scrape` - Scrape jobs from multiple sources
-- `POST /api/market/analysis` - Analyze job market trends
-- `POST /api/analysis/skills-gap/{user_id}` - Skills gap analysis
+1. Fork the repository
+2. Create a feature branch (`git checkout -b feature/AmazingFeature`)
+3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
+4. Push to the branch (`git push origin feature/AmazingFeature`)
+5. Open a Pull Request
 
-#### Educational Pathways
-- `GET /api/degree-programs` - Get degree-to-career mappings
-- `POST /api/degree-career-search` - Search degree-related careers
-- `GET /api/market-insights/{field}` - Get industry insights
+## 📄 License
 
-## 🛠️ Environment Configuration
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
-### Required Environment Variables
+## 📞 Support
 
-#### Backend (.env)
-```bash
-# Database
-MONGO_URL=mongodb://localhost:27017/nextstep
+For support, email support@nextstep.co.ke or join our Slack channel.
 
-# AI Integration
-OPENAI_API_KEY=your_openai_api_key
+## 🙏 Acknowledgments
 
-# Application
-ENVIRONMENT=production
-DEBUG=false
-SECRET_KEY=your_secret_key
+- Django and Wagtail communities for excellent frameworks
+- CodeRed Corp for Wagtail CRX
+- OpenAI for GPT integration capabilities
+- The open-source community for various tools and libraries
 
-# CORS (for production)
-ALLOWED_ORIGINS=https://your-domain.com
-```
+---
 
-#### Frontend (.env)
-```bash
-# API Configuration
-REACT_APP_BACKEND_URL=https://your-domain.com/api
-
-# Application
-NODE_ENV=production
-```
-
-## 📋 TODO - Unfinished Features
-
-### High Priority
-- [ ] **User Authentication & Authorization**
-  - JWT token implementation
-  - User registration/login system
-  - Role-based access control (user, admin)
-  - Password reset functionality
-
-- [ ] **Enhanced Job Scraping**
-  - Complete LinkedIn scraper integration
-  - Add more job sources (Glassdoor, AngelList)
-  - Implement rate limiting and proxy rotation
-  - Real-time job alerts via email/SMS
-
-- [ ] **Advanced Analytics Dashboard**
-  - Real-time job market analytics
-  - Personal career progress tracking
-  - Industry trend visualizations
-  - Salary comparison tools
-
-### Medium Priority
-- [ ] **Resume Management**
-  - Resume upload and parsing
-  - AI-powered resume optimization
-  - Multiple resume versions
-  - Resume-job matching score
-
-- [ ] **Company Intelligence**
-  - Company profile database
-  - Employee reviews integration
-  - Company culture analysis
-  - Hiring pattern insights
-
-- [ ] **Networking Features**
-  - Professional networking recommendations
-  - Mentor-mentee matching
-  - Industry expert connections
-  - Career events and webinars
-
-### Low Priority
-- [ ] **Mobile Application**
-  - React Native mobile app
-  - Push notifications
-  - Offline functionality
-  - Mobile-optimized UI
-
-- [ ] **Advanced AI Features**
-  - Interview question generation
-  - Salary negotiation guidance
-  - Career path simulation
-  - Personality-based recommendations
-
-- [ ] **Integration & APIs**
-  - LinkedIn API integration
-  - Google Calendar integration
-  - Slack/Teams bot
-  - Third-party ATS integration
-
-### Infrastructure & DevOps
-- [ ] **Monitoring & Logging**
-  - Application performance monitoring
-  - Error tracking and alerting
-  - User analytics and insights
-  - Server health monitoring
-
-- [ ] **Security Enhancements**
-  - API rate limiting
-  - Input validation and sanitization
-  - Security headers implementation
-  - Regular security audits
-
-- [ ] **Scalability Improvements**
-  - Database optimization and indexing
-  - Caching layer implementation
-  - Load balancing setup
-  - Microservices architecture
+**Built with ❤️ by the NextStep Team**
 
 ## 🤝 Contributing
 

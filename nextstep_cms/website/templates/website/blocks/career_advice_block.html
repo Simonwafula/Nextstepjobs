@@ -1,0 +1,133 @@
+{% load wagtailcore_tags %}
+
+<div class="career-advice-block bg-gradient-to-br from-blue-50 to-indigo-100 py-16 px-6">
+    <div class="max-w-6xl mx-auto">
+        {% if self.title %}
+            <h2 class="text-4xl font-bold text-gray-900 text-center mb-6">{{ self.title }}</h2>
+        {% endif %}
+        
+        {% if self.description %}
+            <p class="text-xl text-gray-700 text-center mb-12 max-w-3xl mx-auto">{{ self.description }}</p>
+        {% endif %}
+        
+        <div class="grid md:grid-cols-2 gap-12 items-center">
+            <!-- Content -->
+            <div>
+                <div class="space-y-6">
+                    <div class="flex items-center space-x-4">
+                        <div class="bg-blue-600 text-white p-3 rounded-lg">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/>
+                            </svg>
+                        </div>
+                        <div>
+                            <h3 class="text-lg font-semibold text-gray-900">AI-Powered Insights</h3>
+                            <p class="text-gray-600">Get personalized career advice based on your unique profile and goals</p>
+                        </div>
+                    </div>
+                    
+                    <div class="flex items-center space-x-4">
+                        <div class="bg-green-600 text-white p-3 rounded-lg">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/>
+                            </svg>
+                        </div>
+                        <div>
+                            <h3 class="text-lg font-semibold text-gray-900">Instant Guidance</h3>
+                            <p class="text-gray-600">Ask any career question and get expert advice immediately</p>
+                        </div>
+                    </div>
+                    
+                    <div class="flex items-center space-x-4">
+                        <div class="bg-purple-600 text-white p-3 rounded-lg">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
+                            </svg>
+                        </div>
+                        <div>
+                            <h3 class="text-lg font-semibold text-gray-900">Market Insights</h3>
+                            <p class="text-gray-600">Stay updated with the latest industry trends and opportunities</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="mt-8">
+                    <a href="/career-advice/" class="inline-flex items-center px-6 py-3 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 transition duration-200">
+                        Get Career Advice
+                        <svg class="ml-2 w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+                        </svg>
+                    </a>
+                </div>
+            </div>
+            
+            <!-- Interactive Demo Area -->
+            <div class="bg-white rounded-2xl shadow-lg p-8">
+                <h3 class="text-2xl font-bold text-gray-900 mb-6">Ask NextStep AI</h3>
+                <div id="career-advice-demo" class="space-y-4">
+                    <div class="relative">
+                        <textarea 
+                            id="advice-query" 
+                            placeholder="Ask any career question..."
+                            class="w-full p-4 border border-gray-300 rounded-lg resize-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                            rows="3"
+                        ></textarea>
+                    </div>
+                    <button 
+                        onclick="getCareerAdvice()"
+                        class="w-full bg-gradient-to-r from-blue-600 to-purple-600 text-white py-3 rounded-lg font-semibold hover:shadow-lg transition duration-200"
+                    >
+                        Get AI Advice
+                    </button>
+                    <div id="advice-response" class="hidden bg-gray-50 p-4 rounded-lg">
+                        <div class="text-sm text-gray-600">AI Response will appear here...</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+async function getCareerAdvice() {
+    const query = document.getElementById('advice-query').value;
+    const responseDiv = document.getElementById('advice-response');
+    
+    if (!query.trim()) {
+        alert('Please enter a career question');
+        return;
+    }
+    
+    responseDiv.classList.remove('hidden');
+    responseDiv.innerHTML = '<div class="text-sm text-gray-600">Getting AI advice...</div>';
+    
+    try {
+        const response = await fetch('/api/anonymous-search/', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value
+            },
+            body: JSON.stringify({
+                query: query,
+                search_type: 'general'
+            })
+        });
+        
+        const data = await response.json();
+        
+        if (data.response) {
+            responseDiv.innerHTML = `
+                <div class="prose prose-sm max-w-none">
+                    <h4 class="text-lg font-semibold text-gray-900 mb-2">AI Career Advice:</h4>
+                    <div class="text-gray-700">${data.response}</div>
+                </div>
+            `;
+        } else {
+            responseDiv.innerHTML = '<div class="text-red-600">Sorry, there was an error getting advice. Please try again.</div>';
+        }
+    } catch (error) {
+        responseDiv.innerHTML = '<div class="text-red-600">Sorry, there was an error getting advice. Please try again.</div>';
+    }
+}
+</script>

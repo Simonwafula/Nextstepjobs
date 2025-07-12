@@ -1,0 +1,212 @@
+{% load wagtailcore_tags %}
+
+<div class="job-search-block bg-gradient-to-br from-green-50 to-emerald-100 py-16 px-6">
+    <div class="max-w-6xl mx-auto">
+        {% if self.title %}
+            <h2 class="text-4xl font-bold text-gray-900 text-center mb-6">{{ self.title }}</h2>
+        {% endif %}
+        
+        {% if self.description %}
+            <p class="text-xl text-gray-700 text-center mb-12 max-w-3xl mx-auto">{{ self.description }}</p>
+        {% endif %}
+        
+        <div class="grid lg:grid-cols-2 gap-12 items-center">
+            <!-- Job Search Interface -->
+            <div class="bg-white rounded-2xl shadow-lg p-8">
+                <h3 class="text-2xl font-bold text-gray-900 mb-6">Find Your Perfect Job</h3>
+                
+                <div id="job-search-form" class="space-y-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Job Title or Keywords</label>
+                        <input 
+                            type="text" 
+                            id="job-keywords"
+                            placeholder="e.g., Software Engineer, Data Scientist"
+                            class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                        >
+                    </div>
+                    
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Location</label>
+                        <input 
+                            type="text" 
+                            id="job-location"
+                            placeholder="e.g., San Francisco, Remote"
+                            class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                        >
+                    </div>
+                    
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Experience Level</label>
+                            <select id="experience-level" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500">
+                                <option value="">Any Level</option>
+                                <option value="entry">Entry Level</option>
+                                <option value="junior">Junior</option>
+                                <option value="mid">Mid Level</option>
+                                <option value="senior">Senior</option>
+                            </select>
+                        </div>
+                        
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Job Type</label>
+                            <select id="job-type" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500">
+                                <option value="">Any Type</option>
+                                <option value="full_time">Full-time</option>
+                                <option value="part_time">Part-time</option>
+                                <option value="contract">Contract</option>
+                                <option value="remote">Remote</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="flex items-center">
+                        <input type="checkbox" id="remote-only" class="h-4 w-4 text-green-600 focus:ring-green-500 border-gray-300 rounded">
+                        <label for="remote-only" class="ml-2 block text-sm text-gray-700">Remote jobs only</label>
+                    </div>
+                    
+                    <button 
+                        onclick="searchJobs()"
+                        class="w-full bg-gradient-to-r from-green-600 to-emerald-600 text-white py-3 rounded-lg font-semibold hover:shadow-lg transition duration-200"
+                    >
+                        Search Jobs with AI
+                    </button>
+                </div>
+                
+                <div id="job-results" class="hidden mt-6">
+                    <h4 class="text-lg font-semibold text-gray-900 mb-4">Job Results</h4>
+                    <div id="jobs-list" class="space-y-3">
+                        <!-- Jobs will be populated here -->
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Features -->
+            <div class="space-y-8">
+                <div class="text-center lg:text-left">
+                    <h3 class="text-2xl font-bold text-gray-900 mb-4">AI-Powered Job Matching</h3>
+                    <p class="text-gray-600 mb-6">Our intelligent system analyzes thousands of jobs to find the perfect matches for your skills and career goals.</p>
+                </div>
+                
+                <div class="grid grid-cols-1 gap-6">
+                    <div class="flex items-start space-x-4">
+                        <div class="bg-green-600 text-white p-3 rounded-lg flex-shrink-0">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+                            </svg>
+                        </div>
+                        <div>
+                            <h4 class="text-lg font-semibold text-gray-900">Smart Search</h4>
+                            <p class="text-gray-600">Advanced filters and AI matching to find relevant opportunities</p>
+                        </div>
+                    </div>
+                    
+                    <div class="flex items-start space-x-4">
+                        <div class="bg-blue-600 text-white p-3 rounded-lg flex-shrink-0">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
+                            </svg>
+                        </div>
+                        <div>
+                            <h4 class="text-lg font-semibold text-gray-900">Match Scoring</h4>
+                            <p class="text-gray-600">See how well each job matches your profile and experience</p>
+                        </div>
+                    </div>
+                    
+                    <div class="flex items-start space-x-4">
+                        <div class="bg-purple-600 text-white p-3 rounded-lg flex-shrink-0">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                            </svg>
+                        </div>
+                        <div>
+                            <h4 class="text-lg font-semibold text-gray-900">Real-time Updates</h4>
+                            <p class="text-gray-600">Get notified about new jobs that match your criteria</p>
+                        </div>
+                    </div>
+                </div>
+                
+                {% if self.featured_industries %}
+                <div class="bg-white p-6 rounded-lg shadow-md">
+                    <h4 class="text-lg font-semibold text-gray-900 mb-4">Popular Industries</h4>
+                    <div class="flex flex-wrap gap-2">
+                        {% for industry in self.featured_industries|split:"," %}
+                            <span class="px-3 py-1 bg-green-100 text-green-800 rounded-full text-sm">{{ industry|trim }}</span>
+                        {% endfor %}
+                    </div>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+async function searchJobs() {
+    const keywords = document.getElementById('job-keywords').value;
+    const location = document.getElementById('job-location').value;
+    const experienceLevel = document.getElementById('experience-level').value;
+    const jobType = document.getElementById('job-type').value;
+    const remoteOnly = document.getElementById('remote-only').checked;
+    
+    const resultsDiv = document.getElementById('job-results');
+    const jobsList = document.getElementById('jobs-list');
+    
+    resultsDiv.classList.remove('hidden');
+    jobsList.innerHTML = '<div class="text-center">Searching for jobs...</div>';
+    
+    try {
+        const response = await fetch('/api/jobs/search/', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value
+            },
+            body: JSON.stringify({
+                keywords: keywords ? keywords.split(',').map(k => k.trim()) : [],
+                location: location,
+                experience_level: experienceLevel,
+                job_type: jobType,
+                remote_only: remoteOnly,
+                page_size: 5
+            })
+        });
+        
+        const data = await response.json();
+        
+        if (data.jobs && data.jobs.length > 0) {
+            jobsList.innerHTML = data.jobs.map(job => `
+                <div class="border border-gray-200 rounded-lg p-4 hover:shadow-md transition duration-200">
+                    <div class="flex justify-between items-start">
+                        <div class="flex-1">
+                            <h5 class="font-semibold text-gray-900">${job.title}</h5>
+                            <p class="text-gray-600">${job.company.name}</p>
+                            <p class="text-sm text-gray-500">${job.location || 'Location not specified'}</p>
+                            ${job.processed_data ? `<div class="text-xs text-green-600 mt-1">Match Score: ${Math.round(job.processed_data.overall_match_score * 100)}%</div>` : ''}
+                        </div>
+                        <div class="flex flex-col items-end text-sm text-gray-500">
+                            <span>${job.job_type}</span>
+                            <span>${job.experience_level || 'Any level'}</span>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+            
+            if (data.total > 5) {
+                jobsList.innerHTML += `
+                    <div class="text-center mt-4">
+                        <a href="/jobs/?${new URLSearchParams({keywords, location, experience_level: experienceLevel, job_type: jobType}).toString()}" 
+                           class="text-green-600 hover:text-green-700 font-medium">
+                            View all ${data.total} jobs →
+                        </a>
+                    </div>
+                `;
+            }
+        } else {
+            jobsList.innerHTML = '<div class="text-center text-gray-500">No jobs found. Try adjusting your search criteria.</div>';
+        }
+    } catch (error) {
+        jobsList.innerHTML = '<div class="text-center text-red-600">Error searching jobs. Please try again.</div>';
+    }
+}
+</script>

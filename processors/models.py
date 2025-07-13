@@ -1,60 +1,76 @@
 # processors/models.py
-from pydantic import BaseModel, constr, conint
+"""Data models used in the legacy job processing pipeline.
+
+These were previously implemented using ``pydantic.BaseModel`` but the
+project has since migrated to a Django/Wagtail CRX architecture.  To avoid
+requiring Pydantic while still providing simple structured data containers,
+the models are now lightweight ``dataclasses``.
+"""
+
+from dataclasses import dataclass, field
 from typing import List, Optional
 
-class EducationRequirement(BaseModel):
-    level: constr(pattern=r'^(diploma|certificate|associate|bachelor|master|phd|professional_license|none_specified)$')
+@dataclass
+class EducationRequirement:
+    level: str
     field: str
-    requirement_type: constr(pattern=r'^(required|preferred|equivalent_experience_accepted)$')
-    years_experience_in_lieu: Optional[conint(ge=0)] = None
+    requirement_type: str
+    years_experience_in_lieu: Optional[int] = None
 
-class SkillProficiency(BaseModel):
+@dataclass
+class SkillProficiency:
     skill: str
-    level: constr(pattern=r'^(beginner|intermediate|advanced|expert)$')
-    years_required: Optional[conint(ge=0)] = None
-    requirement_type: constr(pattern=r'^(required|preferred)$')
+    level: str
+    years_required: Optional[int] = None
+    requirement_type: str
 
-class Certification(BaseModel):
+@dataclass
+class Certification:
     name: str
     issuing_body: str
-    requirement_type: constr(pattern=r'^(required|preferred)$')
-    expiry_consideration: constr(pattern=r'^(must_be_current|no_expiry_mentioned)$')
+    requirement_type: str
+    expiry_consideration: str
 
-class JobClassification(BaseModel):
+@dataclass
+class JobClassification:
     job_title_raw: str
     job_title_normalized: str
     job_function: str
     seniority_level: str
-    experience_years_min: Optional[conint(ge=0)] = None
-    experience_years_max: Optional[conint(ge=0)] = None
+    experience_years_min: Optional[int] = None
+    experience_years_max: Optional[int] = None
     industry_sector: str
 
-class LocationWork(BaseModel):
+@dataclass
+class LocationWork:
     work_location_type: str
     travel_requirements: str
     geographic_scope: str
 
-class SkillsTaxonomy(BaseModel):
-    programming_languages: List[str] = []
-    software_tools: List[str] = []
-    frameworks_libraries: List[str] = []
-    databases: List[str] = []
-    cloud_platforms: List[str] = []
-    methodologies: List[str] = []
-    domain_specific_tools: List[str] = []
-    soft_skills: List[str] = []
-    skill_proficiencies: List[SkillProficiency] = []
+@dataclass
+class SkillsTaxonomy:
+    programming_languages: List[str] = field(default_factory=list)
+    software_tools: List[str] = field(default_factory=list)
+    frameworks_libraries: List[str] = field(default_factory=list)
+    databases: List[str] = field(default_factory=list)
+    cloud_platforms: List[str] = field(default_factory=list)
+    methodologies: List[str] = field(default_factory=list)
+    domain_specific_tools: List[str] = field(default_factory=list)
+    soft_skills: List[str] = field(default_factory=list)
+    skill_proficiencies: List[SkillProficiency] = field(default_factory=list)
 
-class CareerProgression(BaseModel):
+@dataclass
+class CareerProgression:
     career_stage: str
     advancement_potential: str
-    prerequisite_roles: List[str] = []
-    next_level_roles: List[str] = []
+    prerequisite_roles: List[str] = field(default_factory=list)
+    next_level_roles: List[str] = field(default_factory=list)
     career_transition_friendly: bool
 
-class CompensationBenefits(BaseModel):
-    salary_min: Optional[conint(ge=0)] = None
-    salary_max: Optional[conint(ge=0)] = None
+@dataclass
+class CompensationBenefits:
+    salary_min: Optional[int] = None
+    salary_max: Optional[int] = None
     salary_currency: str
     salary_type: str
     equity_mentioned: bool
@@ -62,21 +78,24 @@ class CompensationBenefits(BaseModel):
     benefits_quality: str
     professional_development_budget: bool
 
-class MarketIntelligence(BaseModel):
+@dataclass
+class MarketIntelligence:
     urgency_indicators: str
     demand_signals: str
     company_growth_stage: str
     automation_risk: str
     remote_work_maturity: str
 
-class WorkEnvironment(BaseModel):
-    team_size: Optional[conint(ge=0)] = None
+@dataclass
+class WorkEnvironment:
+    team_size: Optional[int] = None
     collaboration_level: str
     client_interaction: str
     decision_making_level: str
     work_pace: str
 
-class JobStructured(BaseModel):
+@dataclass
+class JobStructured:
     id: int
     company_name: str
     location: str

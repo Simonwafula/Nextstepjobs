@@ -7,4 +7,3 @@ celery
 redis
 python-decouple
 django-extensions
-emergentintegrations
